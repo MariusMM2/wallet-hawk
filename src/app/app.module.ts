@@ -1,22 +1,23 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
+import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HeaderComponent} from './core/components/header/header.component';
-import {FooterComponent} from './core/components/footer/footer.component';
-import {SidebarComponent} from './core/components/sidebar/sidebar.component';
+import {MdbModule} from 'mdb-angular-ui-kit';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CoreModule} from './core/core.module';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        SidebarComponent
+        AppComponent
     ],
     imports: [
-        BrowserModule
+        BrowserModule,
+        AppRoutingModule,
+        MdbModule,
+        BrowserAnimationsModule,
+        CoreModule
     ],
-    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule {

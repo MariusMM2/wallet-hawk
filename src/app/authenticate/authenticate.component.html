@@ -1,0 +1,10 @@
+<p>authenticate works!</p>
+
+<p>currently on {{authMethod}}</p>
+
+<auth-login *ngIf="authMethod === 'login'"
+            (switch)="switch('register')">
+</auth-login>
+<auth-register *ngIf="authMethod === 'register'"
+               (switch)="switch('login')">
+</auth-register>
