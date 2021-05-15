@@ -14,14 +14,26 @@ const routes: Routes = [
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
         canActivate: [AuthGuard]
     },
-    {path: 'home/gallery', loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule), canActivate: [AuthGuard]},
+    {
+        path: 'home/gallery',
+        loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule),
+        canActivate: [AuthGuard]
+    },
     {
         path: 'home/statistics',
         loadChildren: () => import('./statistics/statistics.module').then(m => m.StatisticsModule),
         canActivate: [AuthGuard]
     },
-    {path: 'home/settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule), canActivate: [AuthGuard]},
-    {path: 'home/search', loadChildren: () => import('./search/search.module').then(m => m.SearchModule), canActivate: [AuthGuard]},
+    {
+        path: 'home/settings',
+        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'home/search',
+        loadChildren: () => import('./search/search.module').then(m => m.SearchModule),
+        canActivate: [AuthGuard]
+    },
     {
         path: 'home/recurrence',
         loadChildren: () => import('./recurrence/recurrence.module').then(m => m.RecurrenceModule),
