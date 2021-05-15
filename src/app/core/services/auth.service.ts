@@ -1,26 +1,50 @@
 import {Injectable} from '@angular/core';
+import {ObservableStore} from '../../shared/utilities/observable-store';
+import {CoreState} from '../core.store';
+import {HttpClient} from '@angular/common/http';
+import {User} from '../models/user';
 
-/**
- * Copy pasted from https://edupala.com/angular-route-guard-auth-guard/
- * Double check
- */
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-
-    isAuthenticate = false;
-
-    login(user: string, password: string): boolean {
-        if (user === 'admin' && password === 'admin') {
-            this.isAuthenticate = true;
-            return this.isAuthenticate;
-        }
-        this.isAuthenticate = false;
-        return this.isAuthenticate;
+    constructor(
+        private redux: ObservableStore<CoreState>,
+        private httpClient: HttpClient) {
     }
 
-    checkAuthenticationAsPromise(): Promise<boolean> {
-        return new Promise((resolve) => resolve(false));
+    /**
+     * TODO implement
+     * Sends a server request to log a user using the provided
+     * credentials.
+     * @param username
+     * @param password
+     */
+    async login(username: string, password: string): Promise<User | boolean> {
+        return;
+    }
+
+    /**
+     * TODO implement
+     * Sends a server request to log the user out. (or not)
+     */
+    async logout(): Promise<void> {
+        return;
+    }
+
+    /**
+     * TODO implement
+     * Sends a server request to create a user account using the provided
+     * credentials.
+     * @param username
+     * @param password
+     */
+    async register(username: string, password: string): Promise<boolean> {
+        //httpclient stuff
+        return;
+    }
+
+    async isLoggedIn(): Promise<boolean> {
+        return this.redux.getState(state => state.auth).user !== null;
     }
 }

@@ -1,4 +1,4 @@
-import {AnyAction, Store} from 'redux';
+import {AnyAction, createStore, PreloadedState, Reducer, Store, StoreEnhancer} from 'redux';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 
@@ -16,16 +16,25 @@ export type Comparator = (x: any, y: any) => boolean;
  * enable selection
  */
 @Injectable({providedIn: 'root'})
-export class ObservableStore<StateType> {
+export class ObservableStore<RootState> {
 
-    private reduxStore: Store<StateType> | undefined = undefined;
-    private state$: BehaviorSubject<StateType>;
+    private reduxStore: Store<RootState> | undefined = undefined;
+    private state$: BehaviorSubject<RootState>;
 
     constructor(private ngZone: NgZone) {
-        this.state$ = new BehaviorSubject<StateType>({} as StateType);
+        this.state$ = new BehaviorSubject<RootState>({} as RootState);
     }
 
-    provideStore(store: Store<StateType>) {
+    configureStore(
+        reducer: Reducer<RootState>,
+        initState: PreloadedState<RootState>,
+        enhancer?: StoreEnhancer<RootState>) {
+        this.reduxStore = createStore(reducer, initState, enhancer);
+        this.state$.next(this.reduxStore.getState());
+        this.reduxStore.subscribe(() => this.state$.next(this.reduxStore.getState()));
+    }
+
+    provideStore(store: Store<RootState>) {
         this.reduxStore = store;
         this.state$.next(this.reduxStore.getState());
         this.reduxStore.subscribe(() => this.state$.next(this.reduxStore.getState()));
@@ -34,14 +43,14 @@ export class ObservableStore<StateType> {
     /**
      * This method can be used to get some part of the redux state synchronously
      */
-    getState<SelectedType>(selector?: (state: StateType) => SelectedType): SelectedType {
+    getState<SelectedType>(selector?: (state: RootState) => SelectedType): SelectedType {
         return selector(this.reduxStore.getState());
     }
 
     /**
      * This method can be used to get some part of the redux state asynchronously
      */
-    select<SelectedType>(selector?: (state: StateType) => SelectedType, comparator?: Comparator): Observable<SelectedType> {
+    select<SelectedType>(selector?: (state: RootState) => SelectedType, comparator?: Comparator): Observable<SelectedType> {
         return this.state$.asObservable().pipe(
             distinctUntilChanged(),
             map(state => selector(state)),

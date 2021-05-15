@@ -13,13 +13,12 @@ export class AuthGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) {
     }
 
-    // noinspection JSUnusedLocalSymbols
     async canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Promise<boolean> {
         console.log('AuthWithRedirectGuard.canActivate');
-        const authenticated = await this.authService.checkAuthenticationAsPromise();
+        const authenticated = await this.authService.isLoggedIn();
         console.log('canActivate await value: ' + authenticated);
 
         if (!authenticated) {

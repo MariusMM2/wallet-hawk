@@ -1,19 +1,26 @@
-import {createStore} from 'redux';
+import {combineReducers} from 'redux';
+import {authReducer} from './reducers/auth.reducer';
+import {dataReducer} from './reducers/data.reducer';
 import {User} from './models/user';
-import {Gallery} from './models/gallery';
-import {Category} from './models/category';
-import {BudgetItem} from './models/budgetItem';
-import {Recurrence} from './models/recurrence';
-import {coreReducer} from './reducers/core.reducer';
-import {Receipt} from './models/receipt';
 
-export interface CoreState {
+export interface AuthState {
     user: User | null;
-    categoryList: Category[] | null;
-    galleryList: Gallery[] | null;
-    receipts: Receipt[] | null;
-    budgetItemList: BudgetItem[] | null;
-    recurrenceList: Recurrence[] | null;
 }
 
-export const AppStore = createStore(coreReducer);
+export interface DataState {
+    categoryList: null,
+    galleryList: null,
+    receipts: null,
+    budgetItemList: null,
+    recurrenceList: null
+}
+
+export interface CoreState {
+    auth?: AuthState,
+    data?: DataState
+}
+
+export const rootReducer = combineReducers<CoreState>({
+    auth: authReducer,
+    data: dataReducer
+});

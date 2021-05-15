@@ -3,7 +3,7 @@ import {CoreState} from '../core.store';
 import {ObservableStore} from '../../shared/utilities/observable-store';
 
 @Injectable({providedIn: 'root'})
-export class CoreActions {
+export class TemplateActions {
     constructor(private redux: ObservableStore<CoreState>) {
     }
 
@@ -13,12 +13,12 @@ export class CoreActions {
     static ACTION_TYPE = 'ACTION_TYPE';
 
     /**
-     * TODO remove template when done
+     * TODO remove template when done implementing
      * @param parameters
      */
     action(...parameters): void {
         this.redux.dispatch({
-            type: CoreActions.ACTION_TYPE,
+            type: TemplateActions.ACTION_TYPE,
             payload: 'payload'
         });
     }
