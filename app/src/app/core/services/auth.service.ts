@@ -17,10 +17,10 @@ export class AuthService {
      * TODO implement
      * Sends a server request to log a user using the provided
      * credentials.
-     * @param username
+     * @param email
      * @param password
      */
-    async login(username: string, password: string): Promise<User | boolean> {
+    async login(email: string, password: string): Promise<User | boolean> {
         return;
     }
 
@@ -36,10 +36,10 @@ export class AuthService {
      * TODO implement
      * Sends a server request to create a user account using the provided
      * credentials.
-     * @param username
+     * @param email
      * @param password
      */
-    async register(username: string, password: string): Promise<boolean> {
+    async register(email: string, password: string): Promise<boolean> {
         //httpclient stuff
         return;
     }

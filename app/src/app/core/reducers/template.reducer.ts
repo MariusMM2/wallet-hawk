@@ -2,6 +2,7 @@ import {CoreState} from '../core.store';
 import {tassign} from 'tassign';
 import {TemplateActions} from '../actions/template.actions';
 
+// noinspection JSUnusedGlobalSymbols
 export function templateReducer(state: CoreState, action: any) {
     /**
      * TODO remove template when done implementing

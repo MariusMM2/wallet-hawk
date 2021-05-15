@@ -15,13 +15,13 @@ export class AuthActions {
     /**
      * TODO implement
      * Attempts to log the user using the provided
-     * username and password.
-     * @param username
+     * email and password.
+     * @param email
      * @param password
      * @returns promised boolean on operation success/failure
      */
-    async attemptLogin(username, password): Promise<boolean> {
-        const user = await this.service.login(username, password);
+    async attemptLogin(email, password): Promise<boolean> {
+        const user = await this.service.login(email, password);
         this.redux.dispatch({
             type: AuthActions.SET,
             payload: user
@@ -45,13 +45,13 @@ export class AuthActions {
     /**
      * TODO implement
      * Attempts to register the user using the provided
-     * username and password. Afterwards the user will be logged in.
-     * @param username
+     * email and password. Afterwards the user will be logged in.
+     * @param email
      * @param password
      * @returns promised boolean on operation success/failure
      */
-    async attemptRegister(username: string, password: string): Promise<boolean> {
-        await this.service.register(username, password);
-        return await this.attemptLogin(username, password);
+    async attemptRegister(email: string, password: string): Promise<boolean> {
+        await this.service.register(email, password);
+        return await this.attemptLogin(email, password);
     }
 }

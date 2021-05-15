@@ -1,0 +1,78 @@
+version: '3.3'
+services:
+  #  app:
+  #    build:
+  #      context: "./app"
+  #    ports:
+  #      - "3000:3000"
+  #    environment:
+  #      - PORT=3000
+  #    command: "TODO"
+  #
+  #  api-server:
+  #    build:
+  #      context: "./api-server"
+  #    ports:
+  #      - "3001:3001"
+  #    environment:
+  #      - PORT=3001
+  #    networks:
+  #      - backend
+  #    command: 'npm start'
+  #
+  #  file-server:
+  #    build:
+  #      context: "./file-server"
+  #    ports:
+  #      - "3002:3002"
+  #    environment:
+  #      - PORT=3002
+  #    networks:
+  #      - backend
+  #    command: 'npm start'
+
+  sql-server:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=wallet-hawk
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - backend
+    volumes:
+      - wallet-hawk-db:/data/db
+
+#  api:
+#    build:
+#      context: "./server"
+#    ports:
+#      - "3001:3001"
+#    environment:
+#      - PORT=3001
+#      - DB_CONNECTIONSTRING=mongodb://mongo:27017/hotel
+#      - NODE_ENV=production
+#    networks:
+#      - backend
+#    command: "npm start"
+
+#  mongo:
+#    image: mongo
+#    expose:
+#      - "27017"
+#    networks:
+#      - backend
+#    volumes:
+#      - mongodb:/data/db
+#      - mongodb_config:/data/configdb
+
+networks:
+  backend:
+
+volumes:
+  wallet-hawk-db:
