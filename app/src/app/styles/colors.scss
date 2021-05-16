@@ -7,7 +7,8 @@ $primary-text-color: #212121;
 $secondary-text-color: #757575;
 $divider-color: #BDBDBD;
 
-$primary: $primary-color !important;
-$secondary: $accent-color !important;
-$light: $primary-color-text !important;
-$dark: $primary-text-color !important;
+$primary: $primary-color;
+$secondary: $accent-color;
+$accent: $accent-color;
+$light: $primary-color-text;
+$dark: $primary-text-color;

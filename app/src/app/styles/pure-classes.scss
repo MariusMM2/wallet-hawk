@@ -1,0 +1,24 @@
+.shadow-12 {
+  box-shadow: 0 12px 17px rgba(0, 0, 0, 0.14),
+  0 5px 22px rgba(0, 0, 0, 0.12),
+  0 7px 8px rgba(0, 0, 0, 0.2);
+}
+
+.shadow-12-reversed {
+  box-shadow: 0 -12px 17px rgba(0, 0, 0, 0.14),
+  0 -5px 22px rgba(0, 0, 0, 0.12),
+  0 -7px 8px rgba(0, 0, 0, 0.2);
+}
+
+mat-error {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+
+  mat-icon {
+    margin-right: 4px;
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+}

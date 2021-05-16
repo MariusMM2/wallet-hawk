@@ -3,7 +3,15 @@
  * related to input validation and sanitization.
  */
 import {check, CustomValidator, ValidationChain, validationResult} from 'express-validator';
-import {dateFormat, locale} from '../app.config';
+import {
+    dateFormat,
+    emailMaximumLength,
+    emailMinimumLength,
+    locale,
+    passwordMaximumLength,
+    passwordMinimumLength,
+    passwordRegExp
+} from '../app.config';
 import {MinMaxOptions} from 'express-validator/src/options';
 import {NextFunction, Request, Response} from 'express';
 
@@ -147,7 +155,7 @@ export function parseUrl(field: string | undefined, optional = false) {
  * @returns {ValidationChain} - the current Validation chain instance
  */
 export function parseEmail(field = 'email', optional = false) {
-    return parseString(field, {min: 10, max: 250}, optional)
+    return parseString(field, {min: emailMinimumLength, max: emailMaximumLength}, optional)
         // Validation
         .isEmail({allow_utf8_local_part: false}).withMessage('must be a valid email').bail();
     // Sanitization
@@ -162,10 +170,34 @@ export function parseEmail(field = 'email', optional = false) {
  * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
  * @returns {ValidationChain} - the current Validation chain instance
  */
-export function parsePassword(field = 'password', optional = false) {
-    return parseString(field, {min: 5, max: 50}, optional)
+export function parseAlphanumericPassword(field = 'password', optional = false) {
+    return parseString(field, {min: passwordMinimumLength, max: passwordMaximumLength}, optional)
         // Validation
         .isAlphanumeric(locale).withMessage('must only contain letters and numbers').bail();
+    // Sanitization
+    // none
+}
+
+/**
+ * Function that returns a {@link ValidationChain} used to
+ * ensure the 'field' attribute in the given request object
+ * is a valid alphanumeric password.
+ * @param {string} field - Attribute to be validated
+ * @param pattern
+ * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
+ * @returns {ValidationChain} - the current Validation chain instance
+ */
+export function parsePassword(field = 'password', pattern: RegExp = passwordRegExp, optional = false) {
+    return parseString(field, {min: passwordMinimumLength, max: passwordMaximumLength}, optional)
+        // Validation
+        .isStrongPassword({
+            minLength: passwordMinimumLength,
+            minLowercase: 0,
+            minUppercase: 0,
+            minNumbers: 1,
+            minSymbols: 1
+        }).withMessage('must contain at least a number and a special character').bail()
+        .matches(pattern).withMessage('must only contain letters, numbers and special characters').bail();
     // Sanitization
     // none
 }

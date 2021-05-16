@@ -7,7 +7,11 @@ const INITIAL_STATE: DataState = {
     galleryList: null,
     receipts: null,
     budgetItemList: null,
-    recurrenceList: null
+    recurrenceList: null,
+    user: {
+        budgetItems: null,
+        goal: null
+    }
 };
 
 export function dataReducer(state: DataState = INITIAL_STATE, action: any) {
@@ -18,7 +22,8 @@ export function dataReducer(state: DataState = INITIAL_STATE, action: any) {
                 galleryList: action.payload.galleryList,
                 receipts: action.payload.receipts,
                 budgetItemList: action.payload.budgetItemList,
-                recurrenceList: action.payload.recurrenceList
+                recurrenceList: action.payload.recurrenceList,
+                user: action.payload.user
             });
         default:
             return state;

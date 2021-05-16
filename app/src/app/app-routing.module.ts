@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SidebarComponent} from './core/components/sidebar/sidebar.component';
-import {FooterComponent} from './core/components/footer/footer.component';
 import {AuthGuard} from './core/guards/auth.guard';
-import {NotFoundComponent} from './core/components/not-found/not-found.component';
+import {NotFoundComponent} from './shared/components/not-found/not-found.component';
+import {FooterComponent} from './shared/components/footer/footer.component';
 
 const routes: Routes = [
     {path: 'sidebar', component: SidebarComponent},

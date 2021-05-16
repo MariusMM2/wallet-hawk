@@ -1,4 +1,17 @@
-<header></header>
-<sidebar></sidebar>
-<router-outlet></router-outlet>
-<footer></footer>
+<div class="vh-100 d-flex flex-column">
+  <app-header [(sidebarOpen)]="sidebarOpen"></app-header>
+
+  <mat-sidenav-container class="flex-fill">
+
+    <mat-sidenav mode="side" [opened]="sidebarOpen">
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <div class="container-fluid h-100">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <app-footer></app-footer>
+</div>

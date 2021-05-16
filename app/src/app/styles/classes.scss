@@ -1,0 +1,10 @@
+@import "src/styles";
+
+.app-bar {
+  z-index: 10;
+  position: relative;
+
+  .spacer {
+    @extend .flex-fill;
+  }
+}

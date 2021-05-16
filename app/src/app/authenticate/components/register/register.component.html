@@ -1,4 +1,37 @@
-<p>register works!</p>
+<form class="w-100" [formGroup]="authForm" (ngSubmit)="onSubmit($event)">
+  <mat-card-content class="mb-0">
+    <mat-form-field class="w-100" appearance="outline" color="accent">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" required>
+      <mat-error *ngIf="authForm.controls.email.hasError('email')">
+        <mat-icon>error</mat-icon>
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="authForm.controls.email.hasError('required')">
+        <mat-icon>error</mat-icon>
+        <span>Email is <strong>required</strong></span>
+      </mat-error>
+    </mat-form-field>
 
-<app-button (click)="onLoginClick()">Already have an account</app-button>
+    <mat-form-field class="w-100" appearance="outline" color="accent">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput formControlName="password" required>
+      <mat-error *ngIf="authForm.controls.password.hasError('required')">
+        <mat-icon>error</mat-icon>
+        <span>Password is <strong>required</strong></span>
+      </mat-error>
+      <mat-error *ngIf="authForm.controls.password.hasError('minlength')">
+        <mat-icon>error</mat-icon>
+        Password must be at least {{passwordLength}} characters long
+      </mat-error>
+      <mat-error *ngIf="authForm.controls.password.hasError('pattern')">
+        <mat-icon>error</mat-icon>
+        Password must be a mix of letters, digits and symbols
+      </mat-error>
+    </mat-form-field>
 
+    <mat-card-actions align="end" class="py-0 px-2">
+      <button mat-raised-button color="accent" type="submit">Login</button>
+    </mat-card-actions>
+  </mat-card-content>
+</form>

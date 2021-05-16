@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
         console.log('canActivate await value: ' + authenticated);
 
         if (!authenticated) {
-            await this.router.navigate(['/login']);
+            await this.router.navigate(['login']);
         }
         return false;
     }

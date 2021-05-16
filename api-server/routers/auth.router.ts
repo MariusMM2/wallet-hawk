@@ -38,7 +38,7 @@ authRouter.post('/login',
 
         req.session.userId = user!.id;
 
-        res.json({message: 'login successful', user});
+        res.json(user);
     });
 
 /**

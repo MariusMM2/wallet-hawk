@@ -8,6 +8,7 @@ import createMemoryStore from 'memorystore';
 import {port, sessionExpiryMillis, sessionSecret} from './app.config';
 import {rootRouter} from './app.routes';
 import {dbInstance} from './database';
+import {tryUntilSuccessful} from './utils/misc.utils';
 
 const MemoryStore = createMemoryStore(session);
 
@@ -34,9 +35,12 @@ app.use(session({
 
 app.use('/', rootRouter);
 
-// reset the database instance on start/refresh
-dbInstance.sync({force: true}).then(() => {
+// noinspection JSIgnoredPromiseFromCall
+tryUntilSuccessful(async () => {
+    // reset the database instance on start/refresh
+    await dbInstance.sync({force: true});
+
     app.listen(port, () => {
-        console.log('The application is listening on port hello 3000!');
+        console.log(`The application is listening on port ${port}!`);
     });
-});
+}, 1000, true);

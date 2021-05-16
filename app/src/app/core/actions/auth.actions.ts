@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {CoreState} from '../core.store';
 import {ObservableStore} from '../../shared/utilities/observable-store';
 import {AuthService} from '../services/auth.service';
+import {LoginForm} from '../../authenticate/types/loginForm';
+import {RegisterForm} from '../../authenticate/types/registerForm';
 
 @Injectable({providedIn: 'root'})
 export class AuthActions {
@@ -10,24 +12,31 @@ export class AuthActions {
         private service: AuthService) {
     }
 
-    static SET = 'Auth.SET';
+    static SET_USER = 'Auth.SET_USER';
+    static SET_ERRORS = 'Auth.SET_ERRORS';
 
     /**
      * TODO implement
      * Attempts to log the user using the provided
      * email and password.
-     * @param email
-     * @param password
+     * @param {LoginForm} loginForm
      * @returns promised boolean on operation success/failure
      */
-    async attemptLogin(email, password): Promise<boolean> {
-        const user = await this.service.login(email, password);
-        this.redux.dispatch({
-            type: AuthActions.SET,
-            payload: user
-        });
+    async attemptLogin(loginForm: LoginForm): Promise<void> {
+        try {
+            const user = await this.service.login(loginForm);
 
-        return;
+            this.redux.dispatch({
+                type: AuthActions.SET_USER,
+                payload: user
+            });
+        } catch (errors) {
+            console.log(errors);
+            // this.redux.dispatch({
+            //     type: AuthActions.SET_ERRORS,
+            //     payload: errors
+            // })
+        }
     }
 
     /**
@@ -37,7 +46,7 @@ export class AuthActions {
     async logout(): Promise<void> {
         await this.service.logout();
         this.redux.dispatch({
-            type: AuthActions.SET,
+            type: AuthActions.SET_USER,
             payload: null
         });
     }
@@ -46,12 +55,11 @@ export class AuthActions {
      * TODO implement
      * Attempts to register the user using the provided
      * email and password. Afterwards the user will be logged in.
-     * @param email
-     * @param password
+     * @param {RegisterForm} registerForm
      * @returns promised boolean on operation success/failure
      */
-    async attemptRegister(email: string, password: string): Promise<boolean> {
-        await this.service.register(email, password);
-        return await this.attemptLogin(email, password);
+    async attemptRegister(registerForm: RegisterForm): Promise<void> {
+        await this.service.register(registerForm);
+        return await this.attemptLogin(registerForm);
     }
 }

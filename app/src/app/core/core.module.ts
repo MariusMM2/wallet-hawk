@@ -1,29 +1,23 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FooterComponent} from './components/footer/footer.component';
-import {HeaderComponent} from './components/header/header.component';
-import {NotFoundComponent} from './components/not-found/not-found.component';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
 import {AuthService} from './services/auth.service';
 import {ObservableStore} from '../shared/utilities/observable-store';
 import {CoreState, rootReducer} from './core.store';
 import {RouterModule} from '@angular/router';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
     declarations: [
-        HeaderComponent,
-        FooterComponent,
-        SidebarComponent,
-        NotFoundComponent
+        SidebarComponent
     ],
     imports: [
         CommonModule,
+        SharedModule,
         RouterModule
     ],
     exports: [
-        FooterComponent,
-        HeaderComponent,
         SidebarComponent
     ],
     providers: [
@@ -33,6 +27,7 @@ import {RouterModule} from '@angular/router';
 })
 export class CoreModule {
     constructor(private redux: ObservableStore<CoreState>) {
-        this.redux.configureStore(rootReducer, {});
+        // @ts-ignore
+        this.redux.configureStore(rootReducer, {}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
     }
 }
