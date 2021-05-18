@@ -6,6 +6,9 @@ const routes: Routes = [
     {path: '', component: AuthenticateComponent}
 ];
 
+/**
+ * Angular Module that holds navigation routes related to authentication.
+ */
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]

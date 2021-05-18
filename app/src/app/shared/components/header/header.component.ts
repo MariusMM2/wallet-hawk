@@ -1,5 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
+/**
+ * Angular Component that manages the page header.
+ *
+ * @input {boolean} sidebarOpen Whether the sidebar is currently open or not
+ * @output {boolean} sidebarOpenChange The new open state of the sidebar
+ */
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',

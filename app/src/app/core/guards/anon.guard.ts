@@ -5,23 +5,24 @@ import {RouterService} from '../services/router.service';
 
 /**
  * Prevents the user from visiting routes that
- * require authentication.
+ * require anonymity (lack of authentication).
  */
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AnonGuard implements CanActivate {
     constructor(private authService: AuthService, private routerService: RouterService) {
     }
 
     async canActivate(): Promise<boolean | UrlTree> {
         const authenticated = await this.authService.isLoggedIn();
 
-        if (!authenticated) {
-            console.log('authGuard denied');
-            return this.routerService.loginUrl;
+        if (authenticated) {
+            console.log('anonGuard denied');
+            return this.routerService.homeUrl;
         }
-        console.log('authGuard approved');
+
+        console.log('anonGuard approved');
         return true;
     }
 }

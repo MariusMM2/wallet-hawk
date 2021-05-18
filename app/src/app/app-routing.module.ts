@@ -4,11 +4,16 @@ import {SidebarComponent} from './core/components/sidebar/sidebar.component';
 import {AuthGuard} from './core/guards/auth.guard';
 import {NotFoundComponent} from './shared/components/not-found/not-found.component';
 import {FooterComponent} from './shared/components/footer/footer.component';
+import {AnonGuard} from './core/guards/anon.guard';
 
 const routes: Routes = [
     {path: 'sidebar', component: SidebarComponent},
     {path: 'footer', component: FooterComponent},
-    {path: 'login', loadChildren: () => import('./authenticate/authenticate.module').then(m => m.AuthenticateModule)},
+    {
+        path: 'login',
+        loadChildren: () => import('./authenticate/authenticate.module').then(m => m.AuthenticateModule),
+        canActivate: [AnonGuard]
+    },
     {
         path: 'home/dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
@@ -39,10 +44,14 @@ const routes: Routes = [
         loadChildren: () => import('./recurrence/recurrence.module').then(m => m.RecurrenceModule),
         canActivate: [AuthGuard]
     },
+    {path: 'home', redirectTo: '/home/dashboard', pathMatch: 'full'},
     {path: '', redirectTo: '/home/dashboard', pathMatch: 'full'},
     {path: '**', component: NotFoundComponent}
 ];
 
+/**
+ * Angular Module that holds application-wide navigation routes.
+ */
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]

@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * Angular Component that manages customisable searching.
+ */
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',

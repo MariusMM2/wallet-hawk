@@ -33,6 +33,10 @@ export interface CoreState {
     data?: DataState
 }
 
+/**
+ * Redux Reduces that combines all other reducers to form the
+ * root state.
+ */
 export const rootReducer = combineReducers<CoreState>({
     auth: authReducer,
     data: dataReducer

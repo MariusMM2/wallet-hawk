@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * Angular Component that manages the application sidebar.
+ */
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',

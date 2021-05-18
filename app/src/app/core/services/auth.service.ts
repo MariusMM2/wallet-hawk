@@ -1,12 +1,17 @@
 import {Injectable} from '@angular/core';
-import {ObservableStore} from '../../shared/utilities/observable-store';
+import {ObservableStore} from '../../shared/utilities/redux.utils';
 import {CoreState} from '../core.store';
 import {HttpClient} from '@angular/common/http';
 import {User} from '../models/user';
 import {LoginForm} from '../../authenticate/types/loginForm';
 import {RegisterForm} from '../../authenticate/types/registerForm';
-import {API_BASE} from '../../shared/utilities/backend-bootstrap';
+import {API_BASE} from '../../shared/constants';
+import {parseErrorArray} from '../../shared/utilities/string.utils';
 
+/**
+ * Angular Service responsible for communicating with the backend
+ * in regards to user authentication.
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -17,8 +22,7 @@ export class AuthService {
     }
 
     /**
-     * TODO implement
-     * Sends a server request to log a user using the provided
+     * Sends a server request to login a user using the provided
      * credentials.
      * @param form
      */
@@ -32,22 +36,12 @@ export class AuthService {
         } catch (response) {
             console.log(response);
             if (response.status === 403) {
-                throw [response.message];
+                throw [response.error.error];
+            } else if (response.status === 400) {
+                throw parseErrorArray(response.error.errors);
             }
-            throw {};
+            throw Error(`Unhandled exception for response: ${response.toString()}`);
         }
-
-        return new Promise<User>((resolve, reject) => {
-            this.http.post(url, form)
-                .subscribe(function(value) {
-                        console.log(value);
-                        resolve(value as User);
-                    },
-                    function(response) {
-                        console.log(response);
-                        reject(response);
-                    });
-        });
     }
 
     /**
@@ -64,12 +58,21 @@ export class AuthService {
      * credentials.
      * @param form
      */
-    async register(form: RegisterForm): Promise<boolean | string> {
-        //httpclient stuff
-        return;
+    async register(form: RegisterForm): Promise<void> {
+        const url = `${API_BASE}/auth/register`;
+        console.log(url);
+        try {
+            await this.http.post<void>(url, form).toPromise();
+        } catch (response) {
+            console.log(response);
+            if (response.status === 400) {
+                throw parseErrorArray(response.error.errors);
+            }
+            throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
+        }
     }
 
-    async isLoggedIn(): Promise<boolean> {
+    isLoggedIn(): boolean {
         return this.redux.getState(state => state.auth).user !== null;
     }
 }

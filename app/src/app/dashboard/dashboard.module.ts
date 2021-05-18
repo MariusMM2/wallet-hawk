@@ -4,7 +4,9 @@ import {CommonModule} from '@angular/common';
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {DashboardComponent} from './dashboard.component';
 
-
+/**
+ * Angular Module that contains features related to budget overviews.
+ */
 @NgModule({
     declarations: [
         DashboardComponent

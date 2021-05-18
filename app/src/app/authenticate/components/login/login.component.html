@@ -1,33 +1,45 @@
-<form class="w-100" [formGroup]="authForm" (ngSubmit)="onSubmit($event)">
-  <mat-card-content class="mb-0">
-    <mat-form-field class="w-100" appearance="outline" color="accent">
-      <mat-label>Email</mat-label>
-      <input type="email" matInput formControlName="email" required>
-      <mat-error *ngIf="authForm.controls.email.hasError('email')">
-        <mat-icon>error</mat-icon>
-        Please enter a valid email address
-      </mat-error>
-      <mat-error *ngIf="authForm.controls.email.hasError('required')">
-        <mat-icon>error</mat-icon>
-        <span>Email is <strong>required</strong></span>
-      </mat-error>
-    </mat-form-field>
+<form [formGroup]="authForm" (ngSubmit)="onSubmit($event)">
+  <mat-card-content class="container-fluid">
+    <div class="row">
+      <mat-form-field appearance="outline" color="accent">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email" required>
+        <mat-error *ngIf="authForm.controls.email.hasError('required')">
+          <mat-icon>error</mat-icon>
+          Must be provided
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.password.hasError('maxlength')">
+          <mat-icon>error</mat-icon>
+          Must be at most {{maxEmailLength}} characters long
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.email.hasError('email')">
+          <mat-icon>error</mat-icon>
+          Invalid email format
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field class="w-100" appearance="outline" color="accent">
-      <mat-label>Password</mat-label>
-      <input type="password" matInput formControlName="password" required>
-      <mat-error *ngIf="authForm.controls.password.hasError('required')">
-        <mat-icon>error</mat-icon>
-        <span>Password is <strong>required</strong></span>
-      </mat-error>
-      <mat-error *ngIf="authForm.controls.password.hasError('minlength')">
-        <mat-icon>error</mat-icon>
-        Password must be at least {{passwordLength}} characters long
-      </mat-error>
-    </mat-form-field>
+    <div class="row">
+      <mat-form-field appearance="outline" color="accent">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput formControlName="password" required>
+        <mat-error *ngIf="authForm.controls.password.hasError('required')">
+          <mat-icon>error</mat-icon>
+          Must be provided
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.password.hasError('minlength')">
+          <mat-icon>error</mat-icon>
+          Must be at least {{minPasswordLength}} characters long
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.password.hasError('maxlength')">
+          <mat-icon>error</mat-icon>
+          Must be at most {{maxPasswordLength}} characters long
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-card-actions align="end" class="py-0 px-2">
-      <button mat-raised-button color="accent" type="submit">Login</button>
-    </mat-card-actions>
+    <div class="row justify-content-end">
+      <app-submit-button [disabled]="authForm.invalid" [isSubmitting]="isLoading">Login</app-submit-button>
+    </div>
   </mat-card-content>
 </form>

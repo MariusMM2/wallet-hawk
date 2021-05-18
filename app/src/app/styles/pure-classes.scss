@@ -10,7 +10,7 @@
   0 -7px 8px rgba(0, 0, 0, 0.2);
 }
 
-mat-error {
+.field-hint {
   display: flex;
   align-items: center;
   font-size: 10px;
@@ -21,4 +21,12 @@ mat-error {
     width: 14px;
     height: 14px;
   }
+}
+
+mat-error {
+  @extend .field-hint;
+}
+
+mat-hint {
+  @extend .field-hint;
 }

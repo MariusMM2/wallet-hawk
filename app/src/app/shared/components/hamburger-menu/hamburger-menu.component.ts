@@ -1,5 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
+/**
+ * Angular Component that manages a toggle-like button stylized as a
+ * 'hamburger menu'.
+ *
+ * @input {boolean} active Whether the button is currently activated.
+ * @output {boolean} activeChange The new active state
+ */
 @Component({
     selector: 'app-hamburger-menu',
     templateUrl: './hamburger-menu.component.html',

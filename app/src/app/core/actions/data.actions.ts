@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CoreState} from '../core.store';
-import {ObservableStore} from '../../shared/utilities/observable-store';
+import {ObservableStore} from '../../shared/utilities/redux.utils';
 import {DataService} from '../services/data.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class DataActions {
         private service: DataService) {
     }
 
-    static INITIALIZE_DATA = 'Data.INITIALIZE_DATA';
+    static readonly INITIALIZE_DATA = 'Data.INITIALIZE_DATA';
 
     /**
      * TODO implement

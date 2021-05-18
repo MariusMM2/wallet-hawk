@@ -1,11 +1,11 @@
 import {TestBed} from '@angular/core/testing';
 
-import {AuthGuard} from './auth.guard';
+import {AnonGuard} from './anon.guard';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 
-describe('AuthGuard', () => {
-    let guard: AuthGuard;
+describe('AnonGuard', () => {
+    let guard: AnonGuard;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -14,7 +14,7 @@ describe('AuthGuard', () => {
                 RouterModule.forRoot([])
             ]
         });
-        guard = TestBed.inject(AuthGuard);
+        guard = TestBed.inject(AnonGuard);
     });
 
     it('should be created', () => {

@@ -7,6 +7,7 @@ import {
     dateFormat,
     emailMaximumLength,
     emailMinimumLength,
+    emailRegExp,
     locale,
     passwordMaximumLength,
     passwordMinimumLength,
@@ -149,15 +150,33 @@ export function parseUrl(field: string | undefined, optional = false) {
 /**
  * Function that returns a {@link ValidationChain} used to
  * ensure the 'field' attribute in the given request object
+ * matches a given email RegExp.
+ * @param {string} field - Attribute to be validated
+ * @param {RegExp} pattern - RegExp to test against
+ * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
+ * @returns {ValidationChain} - the current Validation chain instance
+ */
+export function parseEmail(field = 'email', pattern: RegExp = emailRegExp, optional = false) {
+    return parseString(field, {min: emailMinimumLength, max: emailMaximumLength}, optional)
+        // Validation
+        // TODO revisit pattern when a more uniform email validation is settled across the app and api
+        .matches(pattern).withMessage('must be a valid address').bail();
+    // Sanitization
+    // none
+}
+
+/**
+ * Function that returns a {@link ValidationChain} used to
+ * ensure the 'field' attribute in the given request object
  * is a valid email string.
  * @param {string} field - Attribute to be validated
  * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
  * @returns {ValidationChain} - the current Validation chain instance
  */
-export function parseEmail(field = 'email', optional = false) {
-    return parseString(field, {min: emailMinimumLength, max: emailMaximumLength}, optional)
-        // Validation
-        .isEmail({allow_utf8_local_part: false}).withMessage('must be a valid email').bail();
+export function parseBasicEmail(field = 'email', optional = false) {
+    return parseString(field, {min: emailMinimumLength, max: emailMaximumLength}, optional);
+    // Validation
+    // none
     // Sanitization
     // none
 }
@@ -181,23 +200,39 @@ export function parseAlphanumericPassword(field = 'password', optional = false) 
 /**
  * Function that returns a {@link ValidationChain} used to
  * ensure the 'field' attribute in the given request object
- * is a valid alphanumeric password.
+ * is a valid password string.
  * @param {string} field - Attribute to be validated
- * @param pattern
+ * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
+ * @returns {ValidationChain} - the current Validation chain instance
+ */
+export function parseBasicPassword(field = 'password', optional = false) {
+    return parseString(field, {min: passwordMinimumLength, max: passwordMaximumLength}, optional);
+    // Validation
+    // none
+    // Sanitization
+    // none
+}
+
+/**
+ * Function that returns a {@link ValidationChain} used to
+ * ensure the 'field' attribute in the given request object
+ * matches a given password RegExp.
+ * @param {string} field - Attribute to be validated
+ * @param {RegExp} pattern - RegExp to test against
  * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
  * @returns {ValidationChain} - the current Validation chain instance
  */
 export function parsePassword(field = 'password', pattern: RegExp = passwordRegExp, optional = false) {
     return parseString(field, {min: passwordMinimumLength, max: passwordMaximumLength}, optional)
         // Validation
-        .isStrongPassword({
-            minLength: passwordMinimumLength,
-            minLowercase: 0,
-            minUppercase: 0,
-            minNumbers: 1,
-            minSymbols: 1
-        }).withMessage('must contain at least a number and a special character').bail()
-        .matches(pattern).withMessage('must only contain letters, numbers and special characters').bail();
+        // .isStrongPassword({
+        //     minLength: passwordMinimumLength,
+        //     minLowercase: 0,
+        //     minUppercase: 0,
+        //     minNumbers: 1,
+        //     minSymbols: 1
+        // }).withMessage('must contain at least a number and a special character').bail()
+        .matches(pattern).withMessage('must contain letters, numbers and special characters').bail();
     // Sanitization
     // none
 }

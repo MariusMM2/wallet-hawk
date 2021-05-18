@@ -2,10 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {isLoginForm, LoginForm} from './types/loginForm';
 import {RegisterForm} from './types/registerForm';
 import {AuthActions} from '../core/actions/auth.actions';
-import {ObservableStore} from '../shared/utilities/observable-store';
+import {ObservableStore} from '../shared/utilities/redux.utils';
 import {CoreState} from '../core/core.store';
 import {Observable} from 'rxjs';
+import {AuthService} from '../core/services/auth.service';
+import {RouterService} from '../core/services/router.service';
 
+/**
+ * Angular Component that handles login and registration of a user.
+ */
 @Component({
     selector: 'app-authenticate',
     templateUrl: './authenticate.component.html',
@@ -16,26 +21,48 @@ export class AuthenticateComponent implements OnInit {
 
     submitErrors$: Observable<Array<String>>;
 
+    isLoading: boolean = false;
+
     constructor(
         private actions: AuthActions,
-        private store: ObservableStore<CoreState>) {
+        private service: AuthService,
+        private store: ObservableStore<CoreState>,
+        private routerService: RouterService) {
     }
 
     ngOnInit(): void {
         this.submitErrors$ = this.store.select(state => state.auth.errors);
     }
 
-    submitForm(authForm: LoginForm | RegisterForm) {
+    async submitForm(authForm: LoginForm | RegisterForm) {
+        if (this.isLoading) {
+            return;
+        }
+
+        this.isLoading = true;
         console.log(authForm);
         if (isLoginForm(authForm)) {
-            this.actions.attemptLogin(authForm);
+            await this.actions.attemptLogin(authForm);
         } else {
-            this.actions.attemptRegister(authForm);
+            await this.actions.attemptRegister(authForm);
+        }
+
+        this.isLoading = false;
+
+        if (this.service.isLoggedIn()) {
+            await this.routerService.home();
         }
     }
 
+
     toggleAuthMethod() {
+        if (this.isLoading) {
+            return;
+        }
+
         this.authMethod = this.authMethod === 'login' ? 'register' : 'login';
+
+        this.actions.clearErrors();
     }
 
     get isLoginMethod() {

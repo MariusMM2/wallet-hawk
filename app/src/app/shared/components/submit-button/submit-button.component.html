@@ -1,0 +1,9 @@
+<button mat-raised-button color="accent" type="submit"
+        [disabled]="isSubmitting || disabled">
+        <span class="row align-items-center justify-content-center px-2">
+          <mat-spinner class="my-2" *ngIf="isSubmitting" color="accent" [diameter]="20"></mat-spinner>
+          <span *ngIf="!isSubmitting">
+            <ng-content></ng-content>
+          </span>
+        </span>
+</button>

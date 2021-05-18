@@ -72,10 +72,12 @@ User.init({
             allowNull: false
         },
         firstName: {
-            type: new DataTypes.STRING(255)
+            type: new DataTypes.STRING(255),
+            defaultValue: ''
         },
         lastName: {
-            type: new DataTypes.STRING(255)
+            type: new DataTypes.STRING(255),
+            defaultValue: ''
         }
     },
     {

@@ -24,6 +24,7 @@
     "@angular/router": "~11.2.12",
     "@ng-bootstrap/ng-bootstrap": "^9.1.1",
     "bootstrap": "^4.5.0",
+    "change-case": "^4.1.2",
     "chart.js": "^3.1.1",
     "redux": "^4.1.0",
     "rxjs": "~6.6.0",

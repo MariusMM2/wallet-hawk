@@ -1,35 +1,41 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {LoginForm} from '../../types/loginForm';
-import {passwordMaximumLength, passwordMinimumLength} from '../../../app.config';
+import {emailMaximumLength, passwordMaximumLength, passwordMinimumLength} from '../../../app.config';
 
+/**
+ * Angular Component that handles the fields of a user login form.
+ *
+ * @input {boolean} isLoading Whether a request is currently ongoing
+ * @output {LoginForm} formValidated The submitted form
+ */
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    readonly passwordLength = passwordMinimumLength;
+    readonly maxEmailLength = emailMaximumLength;
+    readonly minPasswordLength = passwordMinimumLength;
+    readonly maxPasswordLength = passwordMaximumLength;
+
+    @Input() isLoading: boolean;
 
     @Output() formValidated = new EventEmitter<LoginForm>();
 
     authForm: FormGroup;
-
-    emailFormControl = new FormControl('', [
-        Validators.required,
-        Validators.email
-    ]);
 
     constructor(private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {
         this.authForm = this.formBuilder.group({
-            email: ['', [
+            email: ['asd1@asdf', [
                 Validators.required,
+                Validators.maxLength(emailMaximumLength),
                 Validators.email
             ]],
-            password: ['', [
+            password: ['asd1@asdf', [
                 Validators.required,
                 Validators.minLength(passwordMinimumLength),
                 Validators.maxLength(passwordMaximumLength)

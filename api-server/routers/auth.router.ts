@@ -1,5 +1,5 @@
 import Router from 'express';
-import {inputValidator, parseEmail, parsePassword} from '../middleware/inputValidators';
+import {inputValidator, parseBasicEmail, parseBasicPassword, parseEmail, parsePassword} from '../middleware/inputValidators';
 import {authGuard} from '../middleware/auth';
 import {FullRequest} from '../types/request';
 import {UserDAO} from '../database';
@@ -13,9 +13,9 @@ export const authRouter = Router();
  */
 authRouter.post('/login',
     // 'email' body attribute
-    parseEmail(),
+    parseBasicEmail(),
     // 'password' body attribute
-    parsePassword(),
+    parseBasicPassword(),
     // validate above attributes
     inputValidator,
     async (req: FullRequest, res) => {
@@ -28,7 +28,7 @@ authRouter.post('/login',
         });
 
         if (user === null || !user.validPassword(password)) {
-            return res.status(403).json({message: 'Incorrect email or password'});
+            return res.status(403).json({error: 'Invalid email & password combination'});
         }
 
         // authentication is successful, retrieve full user
@@ -36,9 +36,13 @@ authRouter.post('/login',
             where: {email}
         });
 
-        req.session.userId = user!.id;
+        if (user) {
+            req.session.userId = user!.id;
 
-        res.json(user);
+            res.json(user);
+        } else {
+            res.sendStatus(500);
+        }
     });
 
 /**
@@ -65,14 +69,14 @@ authRouter.post('/register',
     async (req, res) => {
         try {
             await UserDAO.create(req.body, {
-                fields: ['email', 'password']
+                fields: ['firstName', 'lastName', 'email', 'password']
             });
         } catch (e) {
             console.log(e);
             return res.status(500).json(e);
         }
 
-        res.sendStatus(201);
+        res.sendStatus(204);
     }
 );
 

@@ -1,20 +1,22 @@
 <div class="row h-100 align-items-center justify-content-center">
   <mat-card>
-    <mat-card-title class="text-center">
+    <mat-card-title class="text-center mb-4">
       {{isLoginMethod ? 'Login' : 'Register'}}
     </mat-card-title>
     <mat-card-subtitle>
-      <div *ngIf="submitErrors$ | async as submitErrors">
-        <mat-error *ngFor="let submitError of submitErrors">
-          <mat-icon>error</mat-icon>
-          {{submitError}}
-        </mat-error>
-      </div>
+      <ng-container *ngIf="!isLoading">
+        <ng-container *ngIf="submitErrors$ | async as submitErrors">
+          <mat-error *ngFor="let submitError of submitErrors">
+            <mat-icon>error</mat-icon>
+            {{submitError}}
+          </mat-error>
+        </ng-container>
+      </ng-container>
     </mat-card-subtitle>
-    <app-login *ngIf="isLoginMethod" (formValidated)="submitForm($event)"></app-login>
-    <app-register *ngIf="isRegisterMethod" (formValidated)="submitForm($event)"></app-register>
+    <app-login *ngIf="isLoginMethod" [isLoading]="isLoading" (formValidated)="submitForm($event)"></app-login>
+    <app-register *ngIf="isRegisterMethod" [isLoading]="isLoading" (formValidated)="submitForm($event)"></app-register>
     <mat-card-footer>
-      <button mat-button color="primary" (click)="toggleAuthMethod()">
+      <button mat-button color="primary" [disabled]="isLoading" (click)="toggleAuthMethod()">
         {{isLoginMethod ? 'I don\'t have an account' : 'I already have an account'}}
       </button>
     </mat-card-footer>

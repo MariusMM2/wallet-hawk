@@ -1,17 +1,20 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ButtonComponent} from './components/button/button.component';
+
 import {FooterComponent} from './components/footer/footer.component';
 import {HeaderComponent} from './components/header/header.component';
 import {NotFoundComponent} from './components/not-found/not-found.component';
 import {MatModule} from './mat.module';
 import {HamburgerMenuComponent} from './components/hamburger-menu/hamburger-menu.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
 
-
+/**
+ * Angular module that contains miscellaneous or small, contained features used by other modules.
+ */
 @NgModule({
     declarations: [
-        ButtonComponent,
+        SubmitButtonComponent,
         HeaderComponent,
         FooterComponent,
         HamburgerMenuComponent,
@@ -23,7 +26,7 @@ import {ReactiveFormsModule} from '@angular/forms';
         ReactiveFormsModule
     ],
     exports: [
-        ButtonComponent,
+        SubmitButtonComponent,
         HeaderComponent,
         FooterComponent,
         NotFoundComponent,

@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * Angular Component that manages the top-level elements in the application.
+ */
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',

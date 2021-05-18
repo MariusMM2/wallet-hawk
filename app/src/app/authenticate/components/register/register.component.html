@@ -1,37 +1,105 @@
 <form class="w-100" [formGroup]="authForm" (ngSubmit)="onSubmit($event)">
-  <mat-card-content class="mb-0">
-    <mat-form-field class="w-100" appearance="outline" color="accent">
-      <mat-label>Email</mat-label>
-      <input type="email" matInput formControlName="email" required>
-      <mat-error *ngIf="authForm.controls.email.hasError('email')">
-        <mat-icon>error</mat-icon>
-        Please enter a valid email address
-      </mat-error>
-      <mat-error *ngIf="authForm.controls.email.hasError('required')">
-        <mat-icon>error</mat-icon>
-        <span>Email is <strong>required</strong></span>
-      </mat-error>
-    </mat-form-field>
+  <mat-card-content class="container-fluid">
+    <div class="row">
+      <div class="col pl-0 pr-2">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>First Name</mat-label>
+          <input type="text" matInput formControlName="firstName">
+          <mat-error *ngIf="authForm.controls.firstName.hasError('maxlength')">
+            <mat-icon>error</mat-icon>
+            Must be at most {{maxNameLength}} characters long
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <mat-form-field class="w-100" appearance="outline" color="accent">
-      <mat-label>Password</mat-label>
-      <input type="password" matInput formControlName="password" required>
-      <mat-error *ngIf="authForm.controls.password.hasError('required')">
-        <mat-icon>error</mat-icon>
-        <span>Password is <strong>required</strong></span>
-      </mat-error>
-      <mat-error *ngIf="authForm.controls.password.hasError('minlength')">
-        <mat-icon>error</mat-icon>
-        Password must be at least {{passwordLength}} characters long
-      </mat-error>
-      <mat-error *ngIf="authForm.controls.password.hasError('pattern')">
-        <mat-icon>error</mat-icon>
-        Password must be a mix of letters, digits and symbols
-      </mat-error>
-    </mat-form-field>
+      <div class="col pl-2 pr-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput formControlName="lastName">
+          <mat-error *ngIf="authForm.controls.lastName.hasError('maxlength')">
+            <mat-icon>error</mat-icon>
+            Must be at most {{maxNameLength}} characters long
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
 
-    <mat-card-actions align="end" class="py-0 px-2">
-      <button mat-raised-button color="accent" type="submit">Login</button>
-    </mat-card-actions>
+    <div class="row">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email" required>
+        <mat-hint class="success" *ngIf="authForm.controls.email.valid && !authForm.pending">
+          <mat-icon>check_circle</mat-icon>
+          Email is available
+        </mat-hint>
+        <!--        <mat-hint class="info" *ngIf="authForm.pending">-->
+        <!--          <mat-spinner class="my-2 mr-1" [diameter]="14"></mat-spinner>-->
+        <!--          Checking email availability-->
+        <!--        </mat-hint>-->
+        <!--        <mat-error *ngIf="authForm.controls.email.hasError('emailIsAvailable')">-->
+        <!--          <mat-icon>error</mat-icon>-->
+        <!--          Email is already in use-->
+        <!--        </mat-error>-->
+        <mat-error *ngIf="authForm.controls.email.hasError('required')">
+          <mat-icon>error</mat-icon>
+          Must be provided
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.email.hasError('maxlength')">
+          <mat-icon>error</mat-icon>
+          Must be at most {{maxEmailLength}} characters long
+        </mat-error>
+        <mat-error *ngIf="authForm.controls.email.hasError('pattern')">
+          <mat-icon>error</mat-icon>
+          Invalid email format
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="col pl-0 pr-2">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput formControlName="password" required>
+          <mat-error *ngIf="authForm.controls.password.hasError('required')">
+            <mat-icon>error</mat-icon>
+            Must be provided
+          </mat-error>
+          <mat-error *ngIf="authForm.controls.password.hasError('minlength')">
+            <mat-icon>error</mat-icon>
+            Must be at least {{minPasswordLength}} characters long
+          </mat-error>
+          <mat-error *ngIf="authForm.controls.password.hasError('maxlength')">
+            <mat-icon>error</mat-icon>
+            Must be at most {{maxPasswordLength}} characters long
+          </mat-error>
+          <mat-error *ngIf="authForm.controls.password.hasError('pattern')">
+            <mat-icon>error</mat-icon>
+            Must be a mix of letters, digits and symbols
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col pl-2 pr-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Confirm Password</mat-label>
+          <input type="password" matInput formControlName="confirmPassword" required>
+          <mat-error *ngIf="authForm.controls.confirmPassword.hasError('required')">
+            <mat-icon>error</mat-icon>
+            Must be provided
+          </mat-error>
+          <mat-error *ngIf="authForm.controls.confirmPassword.hasError('mustMatch')">
+            <mat-icon>error</mat-icon>
+            Must match the Password field
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+    </div>
+
+    <div class="row justify-content-end">
+      <app-submit-button [disabled]="authForm.invalid" [isSubmitting]="isLoading">Register</app-submit-button>
+    </div>
   </mat-card-content>
 </form>

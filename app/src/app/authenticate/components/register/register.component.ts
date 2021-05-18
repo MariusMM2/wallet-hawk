@@ -1,40 +1,70 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RegisterForm} from '../../types/registerForm';
-import {passwordMaximumLength, passwordMinimumLength, passwordRegExp} from '../../../app.config';
+import {
+    emailMaximumLength,
+    emailMinimumLength,
+    emailRegExp,
+    nameMaximumLength,
+    passwordMaximumLength,
+    passwordMinimumLength,
+    passwordRegExp
+} from '../../../app.config';
+import {emailAvailable, mustMatch} from '../../../shared/utilities/validators.utils';
 
+/**
+ * Angular Component that handles the fields of a user register form.
+ *
+ * @input {boolean} isLoading Whether a request is currently ongoing
+ * @output {RegisterForm} formValidated The submitted form
+ */
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-    readonly passwordLength = passwordMinimumLength;
+    readonly maxNameLength = nameMaximumLength;
+    readonly minEmailLength = emailMinimumLength;
+    readonly maxEmailLength = emailMaximumLength;
+    readonly minPasswordLength = passwordMinimumLength;
+    readonly maxPasswordLength = passwordMaximumLength;
+
+    @Input() isLoading: boolean;
 
     @Output() formValidated = new EventEmitter<RegisterForm>();
 
     authForm: FormGroup;
-
-    emailFormControl = new FormControl('', [
-        Validators.required,
-        Validators.email
-    ]);
 
     constructor(private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {
         this.authForm = this.formBuilder.group({
+            firstName: ['', [
+                Validators.maxLength(nameMaximumLength)
+            ]],
+            lastName: ['', [
+                Validators.maxLength(nameMaximumLength)
+            ]],
             email: ['', [
                 Validators.required,
-                Validators.email]],
+                Validators.maxLength(emailMaximumLength),
+                Validators.pattern(emailRegExp)
+            ], [
+                emailAvailable // async validators must be the third parameter of a form control
+            ]],
             password: ['', [
                 Validators.required,
                 Validators.minLength(passwordMinimumLength),
-                Validators.pattern(passwordRegExp),
-                Validators.maxLength(passwordMaximumLength)
+                Validators.maxLength(passwordMaximumLength),
+                Validators.pattern(passwordRegExp)
             ]],
-            confirmPassword: ['', [Validators.required]],
+            confirmPassword: ['', [
+                Validators.required
+            ]]
+        }, {
+            validators: mustMatch('password', 'confirmPassword')
         });
     }
 

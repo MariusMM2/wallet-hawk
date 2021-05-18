@@ -9,6 +9,9 @@ import {SharedModule} from './shared/shared.module';
 import {HttpClientModule} from '@angular/common/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
+/**
+ * Angular Module for the root of the application.
+ */
 @NgModule({
     declarations: [
         AppComponent

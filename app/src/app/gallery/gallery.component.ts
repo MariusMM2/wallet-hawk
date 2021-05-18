@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * Angular Component that manages receipt galleries.
+ */
 @Component({
     selector: 'app-gallery',
     templateUrl: './gallery.component.html',

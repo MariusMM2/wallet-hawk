@@ -48,3 +48,12 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+mat-form-field {
+  width: 150px;
+
+  //noinspection CssUnusedSymbol
+  .mat-form-field-subscript-wrapper {
+    position: relative;
+  }
+}

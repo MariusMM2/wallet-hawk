@@ -3,9 +3,11 @@ export const locale = 'da-DK';
 export const dateFormat = 'YYYY/MM/DD';
 export const passwordMinimumLength = 8;
 export const passwordMaximumLength = 50;
+export const passwordRegExp = /^(?=.{8,}$)(?=.*[\w])(?=.*[\W,_])(?!.*\s).*$/;
 export const emailMinimumLength = 1;
 export const emailMaximumLength = 250;
-export const passwordRegExp = /^(?=.{8,}$)(?=.*[\w])(?=.*[0-9])(?=.*[\W,_])(?!.*\s).*$/;
+export const emailRegExp = /^(?=.{8,}$)(?=.*[\w])(?=.*[\W,_])(?!.*\s).*$/;
+export const nameMaximumLength = 250;
 
 // create a file 'session.config.ts' that exports a 'secret' string
 export {secret as sessionSecret} from './session.config';

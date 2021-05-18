@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * Angular Component that manages budget overviews.
+ */
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
