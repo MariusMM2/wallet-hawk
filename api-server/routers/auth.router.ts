@@ -83,7 +83,7 @@ authRouter.post('/register',
 /**
  * Logs the user out by destroying the session.
  */
-authRouter.post('/logout',
+authRouter.get('/logout',
     authGuard,
     (req, res) => {
         req.session.destroy((err) => {

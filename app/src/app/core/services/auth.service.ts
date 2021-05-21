@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {ObservableStore} from '../../shared/utilities/redux.utils';
 import {CoreState} from '../core.store';
-import {HttpClient} from '@angular/common/http';
 import {User} from '../models/user';
 import {LoginForm} from '../../authenticate/types/loginForm';
 import {RegisterForm} from '../../authenticate/types/registerForm';
 import {API_BASE} from '../../shared/constants';
 import {parseErrorArray} from '../../shared/utilities/string.utils';
+import {HttpService} from './http.service';
+import {Unsubscribable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /**
  * Angular Service responsible for communicating with the backend
@@ -18,7 +20,7 @@ import {parseErrorArray} from '../../shared/utilities/string.utils';
 export class AuthService {
     constructor(
         private redux: ObservableStore<CoreState>,
-        private http: HttpClient) {
+        private http: HttpService) {
     }
 
     /**
@@ -30,7 +32,7 @@ export class AuthService {
         const url = `${API_BASE}/auth/login`;
         console.log(url);
         try {
-            const user = await this.http.post<User>(url, form).toPromise();
+            const user = await this.http.post<User>(url, form);
             console.log(user);
             return user;
         } catch (response) {
@@ -45,15 +47,19 @@ export class AuthService {
     }
 
     /**
-     * TODO implement
-     * Sends a server request to log the user out. (or not)
+     * Sends a server request to log the user out.
      */
     async logout(): Promise<void> {
-        return;
+        const url = `${API_BASE}/auth/logout`;
+        console.log(url);
+        try {
+            await this.http.get(url);
+        } catch (response) {
+            console.log(response);
+        }
     }
 
     /**
-     * TODO implement
      * Sends a server request to create a user account using the provided
      * credentials.
      * @param form
@@ -62,7 +68,7 @@ export class AuthService {
         const url = `${API_BASE}/auth/register`;
         console.log(url);
         try {
-            await this.http.post<void>(url, form).toPromise();
+            await this.http.post<void>(url, form);
         } catch (response) {
             console.log(response);
             if (response.status === 400) {
@@ -74,5 +80,12 @@ export class AuthService {
 
     isLoggedIn(): boolean {
         return this.redux.getState(state => state.auth).user !== null;
+    }
+
+    subscribeLoggedIn(next?: (value: boolean) => void, error?: (error: any) => void, complete?: () => void): Unsubscribable {
+        return this.redux.select(state => state.auth.user)
+            .pipe(
+                map(user => user !== null)
+            ).subscribe(next, error, complete);
     }
 }

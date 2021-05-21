@@ -38,7 +38,6 @@ export class AuthActions {
     }
 
     /**
-     * TODO implement
      * Logs the user out.
      */
     async logout(): Promise<void> {

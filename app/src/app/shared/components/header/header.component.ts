@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 /**
  * Angular Component that manages the page header.
@@ -11,7 +11,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
     private _sidebarOpen: boolean;
     @Input()
     set sidebarOpen(value: boolean) {
@@ -23,12 +23,7 @@ export class HeaderComponent implements OnInit {
         return this._sidebarOpen;
     }
 
-    @Output()
-    sidebarOpenChange = new EventEmitter<boolean>();
+    @Output() sidebarOpenChange = new EventEmitter<boolean>();
 
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
+    @Input() sidebarEnabled: boolean;
 }

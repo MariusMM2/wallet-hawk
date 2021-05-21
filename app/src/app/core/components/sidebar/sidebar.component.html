@@ -1,3 +1,12 @@
 <div class="sidebar h-100 shadow-lg mr-4">
   <p>sidebar works!</p>
+  <mat-divider class="my-3"></mat-divider>
+  <div class="container-fluid">
+    <app-sidebar-item *ngFor="let route of router.routes;trackBy: routesTrackBy"
+                      [isActive]="activeUrl === route.url"
+                      (click)="onClick(route.url)">
+      <mat-icon class="material-icons-outlined">{{route.icon}}</mat-icon>
+      {{route.label}}
+    </app-sidebar-item>
+  </div>
 </div>

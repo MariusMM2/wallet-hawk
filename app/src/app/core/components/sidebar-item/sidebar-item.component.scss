@@ -1,0 +1,13 @@
+@import "src/app/styles/colors";
+
+.sidebar-item-container {
+  cursor: pointer;
+  padding: 12px 64px 12px 32px;
+  user-select: none;
+
+  &.active {
+    cursor: default;
+    background-color: $accent;
+    color: $light;
+  }
+}

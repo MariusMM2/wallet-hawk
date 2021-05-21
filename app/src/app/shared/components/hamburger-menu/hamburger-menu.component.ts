@@ -13,19 +13,23 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
     styleUrls: ['./hamburger-menu.component.scss']
 })
 export class HamburgerMenuComponent implements OnInit {
-    @Input() active: boolean;
+    private _active: boolean;
+    @Input()
+    set active(value: boolean) {
+        this.svgElement.classList.toggle('active');
+        this._active = value;
+    }
+
+    @Input() sidebarEnabled: boolean;
     @Output() activeChange = new EventEmitter<boolean>();
 
-    private svgElement: any;
+    private svgElement: HTMLElement;
 
     ngOnInit(): void {
         this.svgElement = document.querySelector('.ham.ham2');
-        if (this.active) {
-            this.svgElement.classList.add('active');
-        }
     }
 
     onClick() {
-        this.activeChange.emit(!this.active);
+        this.activeChange.emit(!this._active);
     }
 }

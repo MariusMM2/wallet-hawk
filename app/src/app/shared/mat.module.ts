@@ -8,6 +8,7 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatDividerModule} from '@angular/material/divider';
 
 /**
  * Angular Module that contains imports for Material Design features used in the application.
@@ -22,7 +23,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
         MatProgressSpinnerModule,
         MatRippleModule,
         MatSidenavModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatDividerModule
     ]
 })
 export class MatModule {

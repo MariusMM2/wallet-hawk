@@ -1,11 +1,11 @@
 @import "src/app/styles/pure-classes";
 
 mat-hint {
-  .success {
+  &.success {
     color: green;
   }
 
-  .info {
+  &.info {
     color: dodgerblue;
   }
 }

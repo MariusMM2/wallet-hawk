@@ -8,13 +8,16 @@ import {CoreState, rootReducer} from './core.store';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {RouterService} from './services/router.service';
+import {HttpService} from './services/http.service';
+import {SidebarItemComponent} from './components/sidebar-item/sidebar-item.component';
 
 /**
  * Angular Module that contains core features shared across other modules.
  */
 @NgModule({
     declarations: [
-        SidebarComponent
+        SidebarComponent,
+        SidebarItemComponent
     ],
     imports: [
         CommonModule,
@@ -27,7 +30,8 @@ import {RouterService} from './services/router.service';
     providers: [
         AuthService,
         ObservableStore,
-        RouterService
+        RouterService,
+        HttpService
     ]
 })
 export class CoreModule {

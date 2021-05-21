@@ -18,7 +18,12 @@ app.use(morgan('dev'));
 app.use(fileUpload({createParentPath: true}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:4200'
+    ],
+    credentials: true
+}));
 app.use(cookieParser(sessionSecret));
 app.use(session({
     secret: sessionSecret,
