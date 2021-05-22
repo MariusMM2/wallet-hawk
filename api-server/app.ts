@@ -6,9 +6,9 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import createMemoryStore from 'memorystore';
 import {port, sessionExpiryMillis, sessionSecret} from './app.config';
-import {rootRouter} from './app.routes';
-import {dbInstance} from './database';
+import {BudgetItemDAO, CategoryDAO, dbInstance, GalleryDAO, UserDAO} from './database';
 import {tryUntilSuccessful} from './utils/misc.utils';
+import {rootRouter} from './app.routes';
 
 const MemoryStore = createMemoryStore(session);
 
@@ -45,7 +45,100 @@ tryUntilSuccessful(async () => {
     // reset the database instance on start/refresh
     await dbInstance.sync({force: true});
 
-    app.listen(port, () => {
+    const user = await UserDAO.create({
+        email: 'asd1@asdf',
+        password: 'asd1@asdf'
+    }, {
+        include: [GalleryDAO]
+    });
+
+    console.log('user', user);
+
+    const gallery = await user.createGallery({
+        name: 'Foetex'
+    });
+
+    console.log('gallery', gallery);
+
+    const receipt = await gallery.createReceipt({
+        description: 'week 20, 2021'
+    });
+
+    console.log('receipt', receipt);
+
+    const budgetItem = await receipt.createBudgetItem({
+        totalPrice: 10000,
+        quantity: 10
+    });
+
+    console.log('budgetItem', budgetItem);
+
+    const creator = await budgetItem.getCreator();
+
+    console.log('creator', creator);
+
+    const budgetItem2 = await user.createBudgetItem({
+        totalPrice: 1000,
+        quantity: 1
+    });
+
+    console.log('budgetItem2', budgetItem2);
+
+    const creator2 = await budgetItem2.getCreator();
+
+    console.log('creator2', creator2);
+
+    console.log('user budget items', await user.getBudgetItems());
+
+    const categories = await CategoryDAO.bulkCreate([
+        {
+            label: 'Home'
+        },
+        {
+            label: 'Hygiene'
+        },
+        {
+            label: 'Electronics'
+        },
+        {
+            label: 'Groceries'
+        },
+        {
+            label: 'Fast Food'
+        }
+    ]);
+
+    console.log(categories);
+
+    await budgetItem.addCategories(
+        categories.map(category => category.id)
+    );
+
+    // const scopedCategories = await budgetItem.getCategories({
+    //     attributes: {
+    //         exclude: ['label']
+    //     }
+    // });
+    //
+    // console.log('budget item categories', scopedCategories);
+
+    const scopedCategories2 = await (await BudgetItemDAO.findOne({
+        where: {
+            totalPrice: 10000
+        }
+    }))?.getCategories();
+
+    const scopedCategories3 = await (await BudgetItemDAO.findOne({
+        where: {
+            totalPrice: 10000
+        }
+    }))?.getStrippedCategories();
+
+    console.log('full categories', scopedCategories2);
+    console.log('stripped categories', scopedCategories3);
+
+    // noinspection JSIgnoredPromiseFromCall
+    await app.listen(port, () => {
         console.log(`The application is listening on port ${port}!`);
     });
 }, 1000, true);

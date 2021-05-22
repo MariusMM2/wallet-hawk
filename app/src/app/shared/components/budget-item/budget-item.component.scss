@@ -1,6 +1,11 @@
 @import "src/app/styles/colors";
 @import "src/app/styles/pure-classes";
 
+$category-item-height: 28px;
+$category-item-vertical-margin: 4px;
+$item-header-padding-top: 4px;
+$item-header-height: $category-item-height + $category-item-vertical-margin * 2 + $item-header-padding-top;
+
 mat-card {
   width: 350px;
   height: 83px;
@@ -9,22 +14,27 @@ mat-card {
   padding-top: 0;
   padding-bottom: 0;
 
-  .category-column {
-    padding: 0;
+  .item-header {
+    padding-top: $item-header-padding-top;
+    height: $item-header-height;
 
-    .category-item {
-      @extend .shadow-4;
-      padding: 0 8px;
-      margin: 4px 2.5px;
-      height: 28px;
-      font-size: 12px;
+    .category-column {
+      padding: 0;
 
-      border-style: solid;
-      border-radius: 14px;
-      border-color: $accent;
-      border-width: 3px;
+      .category-item {
+        @extend .shadow-4;
+        padding: 0 8px;
+        margin: $category-item-vertical-margin 2.5px;
+        height: $category-item-height;
+        font-size: 12px;
 
-      user-select: none;
+        border-style: solid;
+        border-radius: $category-item-height / 2;
+        border-color: $accent;
+        border-width: 3px;
+
+        user-select: none;
+      }
     }
   }
 

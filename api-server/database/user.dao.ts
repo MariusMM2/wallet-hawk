@@ -1,6 +1,29 @@
-import {DataTypes, Model, Optional} from 'sequelize';
+import {
+    HasManyCreateAssociationMixin,
+    HasManyGetAssociationsMixin,
+    HasOneCreateAssociationMixin,
+    HasOneGetAssociationMixin,
+    Optional
+} from 'sequelize';
+import {
+    AllowNull,
+    BeforeCreate,
+    Column,
+    DataType,
+    Default,
+    DefaultScope,
+    HasMany,
+    HasOne,
+    Model,
+    PrimaryKey,
+    Scopes,
+    Table,
+    Unique
+} from 'sequelize-typescript';
+import {Gallery} from './gallery.dao';
+import {Goal} from './goal.dao';
 import {confirmHash, generateHash} from '../utils/crypto.utils';
-import {dbInstance} from './index';
+import {BudgetItem} from './budgetItem.dao';
 
 /**
  * These are all the attributes in the User model.
@@ -22,83 +45,73 @@ interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'firstN
 /**
  * This is the Model Data Access Object itself.
  */
+@DefaultScope(() => ({
+    attributes: {
+        exclude: ['password']
+    }
+}))
+@Scopes(() => ({
+    authentication: {
+        attributes: {
+            include: ['email', 'password']
+        }
+    }
+}))
+@Table({tableName: 'user'})
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+    @PrimaryKey
+    @Default(DataType.UUIDV4)
+    @Column(DataType.UUID)
     public id!: string;
+
+    @AllowNull(false)
+    @Unique
+    @Column(DataType.STRING(254))
     public email!: string;
+
+    @AllowNull(false)
+    @Column(DataType.STRING(60))
     public password!: string;
+
+    @Column(DataType.STRING(255))
     public firstName!: string | null;
+
+    @Column(DataType.STRING(255))
     public lastName!: string | null;
+
+    @HasOne(() => Goal)
+    public goal?: Goal | null;
 
     // Since TS cannot determine model association at compile time
     // we have to declare them here purely virtually
     // these will not exist until `Model.init` was called.
-    // public getBudgetItems!: HasManyGetAssociationsMixin<BudgetItem>; // Note the null assertions!
-    // public addBudgetItem!: HasManyAddAssociationMixin<BudgetItem, number>;
-    // public hasBudgetItem!: HasManyHasAssociationMixin<BudgetItem, number>;
-    // public countBudgetItems!: HasManyCountAssociationsMixin;
-    // public createProject!: HasManyCreateAssociationMixin<BudgetItem>;
+    public getGoal!: HasOneGetAssociationMixin<Goal>;
+    public createGoal!: HasOneCreateAssociationMixin<Goal>;
 
-    // You can also pre-declare possible inclusions, these will only be populated if you
-    // actively include a relation.
-    // public readonly budgetItems?: BudgetItem[]; // Note this is optional since it's only populated when explicitly requested in code
+    @HasMany(() => Gallery)
+    public galleries?: Array<Gallery>;
 
-    // public static associations: {
-    //     projects: Association<User, BudgetItem>;
-    // };
+    public createGallery!: HasManyCreateAssociationMixin<Gallery>;
+    public getGalleries!: HasManyGetAssociationsMixin<Gallery>;
 
-    public static generateHash(password: string) {
-        return generateHash(password);
-    }
+    @HasMany(() => BudgetItem, {
+        foreignKey: 'creatorId',
+        constraints: false,
+        scope: {
+            creatorType: 'user'
+        }
+    })
+    public budgetItems?: Array<BudgetItem>;
+
+    public createBudgetItem!: HasManyCreateAssociationMixin<BudgetItem>;
+    public getBudgetItems!: HasManyGetAssociationsMixin<BudgetItem>;
 
     public validPassword(password: string) {
         return confirmHash(password, this.password);
     }
-}
 
-// initialize the model
-User.init({
-        id: {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            defaultValue: DataTypes.UUIDV4
-        },
-        email: {
-            type: new DataTypes.STRING(254),
-            allowNull: false,
-            unique: true
-        },
-        password: {
-            type: new DataTypes.STRING(60),
-            allowNull: false
-        },
-        firstName: {
-            type: new DataTypes.STRING(255),
-            defaultValue: ''
-        },
-        lastName: {
-            type: new DataTypes.STRING(255),
-            defaultValue: ''
-        }
-    },
-    {
-        sequelize: dbInstance,
-        tableName: 'user',
-        defaultScope: {
-            attributes: {
-                exclude: ['password']
-            }
-        },
-        scopes: {
-            authentication: {
-                attributes: {
-                    include: ['email', 'password']
-                }
-            }
-        }
+    @BeforeCreate
+    static hashPassword(instance: User) {
+        instance.password = generateHash(instance.password);
     }
-);
-
-// hash the password before insertion in the database
-User.beforeCreate(function(model) {
-    model.password = User.generateHash(model.password);
-});
+}

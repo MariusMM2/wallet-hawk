@@ -9,6 +9,7 @@ import StringUtils from '../../shared/utilities/string.utils';
 import {HttpService} from './http.service';
 import {Unsubscribable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
 
 /**
  * Angular Service responsible for communicating with the backend
@@ -37,12 +38,7 @@ export class AuthService {
             console.log(user);
         } catch (response) {
             console.log(response);
-            if (response.status === 403) {
-                throw [response.error.error];
-            } else if (response.status === 400) {
-                throw StringUtils.parseErrorArray(response.error.errors);
-            }
-            throw Error(`Unhandled exception for response: ${response.toString()}`);
+            throw AuthService.handleGenericErrors(response);
         }
 
         return user;
@@ -59,11 +55,7 @@ export class AuthService {
         try {
             await this.http.post<void>(url, form);
         } catch (response) {
-            console.log(response);
-            if (response.status === 400) {
-                throw StringUtils.parseErrorArray(response.error.errors);
-            }
-            throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
+            throw AuthService.handleGenericErrors(response);
         }
     }
 
@@ -80,6 +72,9 @@ export class AuthService {
         }
     }
 
+    /**
+     * Sends a server request to retrieve the user for the current session, if any.
+     */
     async isSessionLoggedIn(): Promise<User | boolean> {
         const url = `${API_BASE}/auth/authenticated-user`;
         console.log(url);
@@ -87,11 +82,12 @@ export class AuthService {
         try {
             user = await this.http.get<User>(url);
         } catch (response) {
-            console.log(response);
             if (response.status === 401) {
                 return false;
             }
-            throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
+
+            console.log(response);
+            throw AuthService.handleGenericErrors(response);
         }
 
         return user;
@@ -105,5 +101,26 @@ export class AuthService {
         return this.redux.select(state => state.auth.user)
             .pipe(map(user => user !== null))
             .subscribe(next, error, complete);
+    }
+
+    /**
+     * Handles various standard error responses and throws a corresponding error message.
+     * @param {HttpErrorResponse} response
+     * @private
+     */
+    private static handleGenericErrors(response: HttpErrorResponse): Array<string> {
+        if (response.status === 0) {
+            // Connection failed
+            throw ['Unable to connect to the server. Please try again later.'];
+        } else if (response.status === 403) {
+            // Invalid credentials
+            throw [response.error.error];
+        } else if (response.status === 400) {
+            // Input errors
+            throw StringUtils.parseErrorArray(response.error.errors);
+        }
+
+        // Unhandled
+        throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
     }
 }

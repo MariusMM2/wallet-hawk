@@ -1,13 +1,12 @@
 <mat-card class="container-fluid">
-  <div class="row align-items-center font-weight-medium pt-1">
-    <div class="col-auto category-column" *ngFor="let label of item.categoryList | limitLabels">
+  <div class="row align-items-center font-weight-medium item-header">
+    <div *ngFor="let label of item.categoryList | limitLabels" class="col-auto category-column">
       <div class="category-item">
         {{label}}
       </div>
-
     </div>
 
-    <div class="col d-flex justify-content-end">
+    <div class="col p-0 d-flex justify-content-end">
       <mat-icon class="mr-1" (click)="menuClicked.emit(item.id)">more_vertical</mat-icon>
     </div>
   </div>

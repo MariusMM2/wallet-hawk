@@ -1,9 +1,15 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-auto">
-      <app-budget-item *ngFor="let budgetItem of budgetItems$ | async as budgetItems;trackBy: trackItems"
-                       [item]="budgetItem"
-      ></app-budget-item>
+      <ng-container *ngIf="budgetItems$ | async else loading">
+        <app-budget-item *ngFor="let budgetItem of budgetItems$ | async as budgetItems;trackBy: trackItems"
+                         [item]="budgetItem"
+        ></app-budget-item>
+      </ng-container>
+
+      <ng-template #loading>
+        <mat-spinner></mat-spinner>
+      </ng-template>
     </div>
   </div>
 </div>
