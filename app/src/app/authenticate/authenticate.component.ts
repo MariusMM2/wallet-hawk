@@ -6,7 +6,6 @@ import {ObservableStore} from '../shared/utilities/redux.utils';
 import {CoreState} from '../core/core.store';
 import {Observable} from 'rxjs';
 import {AuthService} from '../core/services/auth.service';
-import {RouterService} from '../core/services/router.service';
 
 /**
  * Angular Component that handles login and registration of a user.
@@ -26,8 +25,7 @@ export class AuthenticateComponent implements OnInit {
     constructor(
         private actions: AuthActions,
         private service: AuthService,
-        private store: ObservableStore<CoreState>,
-        private routerService: RouterService) {
+        private store: ObservableStore<CoreState>) {
     }
 
     ngOnInit(): void {
@@ -48,10 +46,6 @@ export class AuthenticateComponent implements OnInit {
         }
 
         this.isLoading = false;
-
-        if (this.service.isLoggedIn()) {
-            await this.routerService.home();
-        }
     }
 
 

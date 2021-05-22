@@ -77,8 +77,28 @@ authRouter.post('/register',
         }
 
         res.sendStatus(204);
-    }
-);
+    });
+
+/**
+ * Checks if the user's session is currently active.
+ */
+authRouter.get('/authenticated-user',
+    authGuard,
+    async (req: FullRequest, res) => {
+        const id = req.session.userId;
+
+        const user = await UserDAO.findOne({
+            where: {id}
+        });
+
+        if (user) {
+            req.session.resetMaxAge();
+
+            res.json(user);
+        } else {
+            res.sendStatus(500);
+        }
+    });
 
 /**
  * Logs the user out by destroying the session.

@@ -5,7 +5,7 @@ import {User} from '../models/user';
 import {LoginForm} from '../../authenticate/types/loginForm';
 import {RegisterForm} from '../../authenticate/types/registerForm';
 import {API_BASE} from '../../shared/constants';
-import {parseErrorArray} from '../../shared/utilities/string.utils';
+import StringUtils from '../../shared/utilities/string.utils';
 import {HttpService} from './http.service';
 import {Unsubscribable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -31,18 +31,39 @@ export class AuthService {
     async login(form: LoginForm): Promise<User> {
         const url = `${API_BASE}/auth/login`;
         console.log(url);
+        let user;
         try {
-            const user = await this.http.post<User>(url, form);
+            user = await this.http.post<User>(url, form);
             console.log(user);
-            return user;
         } catch (response) {
             console.log(response);
             if (response.status === 403) {
                 throw [response.error.error];
             } else if (response.status === 400) {
-                throw parseErrorArray(response.error.errors);
+                throw StringUtils.parseErrorArray(response.error.errors);
             }
             throw Error(`Unhandled exception for response: ${response.toString()}`);
+        }
+
+        return user;
+    }
+
+    /**
+     * Sends a server request to create a user account using the provided
+     * credentials.
+     * @param form
+     */
+    async register(form: RegisterForm): Promise<void> {
+        const url = `${API_BASE}/auth/register`;
+        console.log(url);
+        try {
+            await this.http.post<void>(url, form);
+        } catch (response) {
+            console.log(response);
+            if (response.status === 400) {
+                throw StringUtils.parseErrorArray(response.error.errors);
+            }
+            throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
         }
     }
 
@@ -59,23 +80,21 @@ export class AuthService {
         }
     }
 
-    /**
-     * Sends a server request to create a user account using the provided
-     * credentials.
-     * @param form
-     */
-    async register(form: RegisterForm): Promise<void> {
-        const url = `${API_BASE}/auth/register`;
+    async isSessionLoggedIn(): Promise<User | boolean> {
+        const url = `${API_BASE}/auth/authenticated-user`;
         console.log(url);
+        let user;
         try {
-            await this.http.post<void>(url, form);
+            user = await this.http.get<User>(url);
         } catch (response) {
             console.log(response);
-            if (response.status === 400) {
-                throw parseErrorArray(response.error.errors);
+            if (response.status === 401) {
+                return false;
             }
             throw Error(`Unhandled exception for response: ${JSON.stringify(response)}`);
         }
+
+        return user;
     }
 
     isLoggedIn(): boolean {
@@ -84,8 +103,7 @@ export class AuthService {
 
     subscribeLoggedIn(next?: (value: boolean) => void, error?: (error: any) => void, complete?: () => void): Unsubscribable {
         return this.redux.select(state => state.auth.user)
-            .pipe(
-                map(user => user !== null)
-            ).subscribe(next, error, complete);
+            .pipe(map(user => user !== null))
+            .subscribe(next, error, complete);
     }
 }

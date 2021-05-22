@@ -21,6 +21,7 @@ export class DataActions {
      */
     async initializeProperties(): Promise<void> {
         // httpclient request
+        // noinspection UnnecessaryLocalVariableJS
         const response = this.service;
 
         this.redux.dispatch({

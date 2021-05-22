@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * Angular Component that manages recurrent budget items.
@@ -8,12 +8,5 @@ import {Component, OnInit} from '@angular/core';
     templateUrl: './recurrence.component.html',
     styleUrls: ['./recurrence.component.scss']
 })
-export class RecurrenceComponent implements OnInit {
-
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
+export class RecurrenceComponent {
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * Angular Component that manages budget statistics and exports.
@@ -8,12 +8,5 @@ import {Component, OnInit} from '@angular/core';
     templateUrl: './statistics.component.html',
     styleUrls: ['./statistics.component.scss']
 })
-export class StatisticsComponent implements OnInit {
-
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
+export class StatisticsComponent {
 }

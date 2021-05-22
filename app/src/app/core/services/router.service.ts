@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {NavigationBehaviorOptions, Router, UrlTree} from '@angular/router';
 import {AuthActions} from '../actions/auth.actions';
+import {AuthService} from './auth.service';
 
 /**
  * Angular Service that is responsible for managing
@@ -31,7 +32,7 @@ export class RouterService {
     public readonly settingsUrl: UrlTree;
     public readonly logoutUrl: UrlTree;
 
-    constructor(private router: Router, private actions: AuthActions) {
+    constructor(private router: Router, private actions: AuthActions, private service: AuthService) {
         this.homeUrl = router.parseUrl(RouterService.HOME);
         this.loginUrl = router.parseUrl(RouterService.LOGIN);
 
@@ -42,6 +43,14 @@ export class RouterService {
         this.statisticsUrl = router.parseUrl(`${RouterService.HOME}/${RouterService.STATISTICS}`);
         this.settingsUrl = router.parseUrl(`${RouterService.HOME}/${RouterService.SETTINGS}`);
         this.logoutUrl = router.parseUrl(`${RouterService.HOME}/${RouterService.LOGOUT}`);
+
+        this.service.subscribeLoggedIn(async isLoggedIn => {
+            if (isLoggedIn) {
+                await this.home();
+            } else {
+                await this.login();
+            }
+        });
     }
 
     /**
@@ -150,6 +159,5 @@ export class RouterService {
      */
     async logout(): Promise<void> {
         await this.actions.logout();
-        await this.login();
     }
 }

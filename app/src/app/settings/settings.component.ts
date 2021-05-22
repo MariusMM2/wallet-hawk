@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * Angular Component that manages application and user settings.
@@ -8,12 +8,5 @@ import {Component, OnInit} from '@angular/core';
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
-
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
+export class SettingsComponent {
 }

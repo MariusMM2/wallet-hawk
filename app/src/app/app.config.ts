@@ -1,5 +1,5 @@
 export const locale = 'da-DK';
-export const dateFormat = 'YYYY/MM/DD';
+export const dateFormat = 'YYYY/MM/dd';
 export const passwordMinimumLength = 8;
 export const passwordMaximumLength = 50;
 export const passwordRegExp = /^(?=.{8,}$)(?=.*[\w])(?=.*[\W,_])(?!.*\s).*$/;

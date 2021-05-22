@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterService} from '../../services/router.service';
 import {UrlTree} from '@angular/router';
+import {AuthActions} from '../../actions/auth.actions';
 
 /**
  * Angular Component that manages the application sidebar.
@@ -10,19 +11,18 @@ import {UrlTree} from '@angular/router';
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
 
-    activeUrl: UrlTree = this.router.searchUrl;
+    activeUrl: UrlTree = this.router.dashboardUrl;
 
-    constructor(public router: RouterService) {
-    }
-
-    ngOnInit(): void {
+    constructor(
+        public router: RouterService,
+        private actions: AuthActions) {
     }
 
     async onClick(nextUrl: UrlTree) {
         if (nextUrl === this.router.logoutUrl) {
-            return await this.router.logout();
+            return await this.actions.logout();
         }
 
         if (this.activeUrl === nextUrl) {

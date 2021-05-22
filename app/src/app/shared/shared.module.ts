@@ -8,6 +8,9 @@ import {MatModule} from './mat.module';
 import {HamburgerMenuComponent} from './components/hamburger-menu/hamburger-menu.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SubmitButtonComponent} from './components/submit-button/submit-button.component';
+import {BudgetItemComponent} from './components/budget-item/budget-item.component';
+import {AbsolutePipe} from './pipes/absolute.pipe';
+import {LimitLabelsPipe} from './pipes/limit-labels.pipe';
 
 /**
  * Angular module that contains miscellaneous or small, contained features used by other modules.
@@ -18,7 +21,10 @@ import {SubmitButtonComponent} from './components/submit-button/submit-button.co
         HeaderComponent,
         FooterComponent,
         HamburgerMenuComponent,
-        NotFoundComponent
+        NotFoundComponent,
+        BudgetItemComponent,
+        AbsolutePipe,
+        LimitLabelsPipe
     ],
     imports: [
         CommonModule,
@@ -31,7 +37,10 @@ import {SubmitButtonComponent} from './components/submit-button/submit-button.co
         FooterComponent,
         NotFoundComponent,
         MatModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        BudgetItemComponent,
+        AbsolutePipe,
+        LimitLabelsPipe
     ]
 })
 export class SharedModule {

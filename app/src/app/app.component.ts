@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './core/services/auth.service';
+import {AuthActions} from './core/actions/auth.actions';
 
 /**
  * Angular Component that manages the top-level elements in the application.
@@ -13,11 +14,15 @@ export class AppComponent implements OnInit {
     sidebarOpen = false;
     sidebarEnabled = false;
 
-    constructor(private auth: AuthService) {
+    constructor(
+        private service: AuthService,
+        private actions: AuthActions) {
     }
 
-    ngOnInit() {
-        this.auth.subscribeLoggedIn(isLoggedIn => {
+    async ngOnInit() {
+        await this.actions.setSessionUser();
+
+        this.service.subscribeLoggedIn(isLoggedIn => {
             return this.sidebarOpen = this.sidebarEnabled = isLoggedIn;
         });
     }

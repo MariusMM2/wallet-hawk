@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 
 /**
  * Angular Component that manages a toggle-like button stylized as a
@@ -12,24 +12,25 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
     templateUrl: './hamburger-menu.component.html',
     styleUrls: ['./hamburger-menu.component.scss']
 })
-export class HamburgerMenuComponent implements OnInit {
-    private _active: boolean;
-    @Input()
-    set active(value: boolean) {
-        this.svgElement.classList.toggle('active');
-        this._active = value;
-    }
-
+export class HamburgerMenuComponent implements OnInit, OnChanges {
+    @Input() private active: boolean;
     @Input() sidebarEnabled: boolean;
     @Output() activeChange = new EventEmitter<boolean>();
 
-    private svgElement: HTMLElement;
+    private svgElement: SVGElement;
 
     ngOnInit(): void {
-        this.svgElement = document.querySelector('.ham.ham2');
+        this.svgElement = document.querySelector('svg');
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        const active = changes['active'];
+        if (active && active.previousValue !== active.currentValue) {
+            this.svgElement?.classList.toggle('active');
+        }
     }
 
     onClick() {
-        this.activeChange.emit(!this._active);
+        this.activeChange.emit(!this.active);
     }
 }

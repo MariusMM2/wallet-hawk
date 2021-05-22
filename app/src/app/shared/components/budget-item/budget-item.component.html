@@ -1,0 +1,32 @@
+<mat-card class="container-fluid">
+  <div class="row align-items-center font-weight-medium pt-1">
+    <div class="col-auto category-column" *ngFor="let label of item.categoryList | limitLabels">
+      <div class="category-item">
+        {{label}}
+      </div>
+
+    </div>
+
+    <div class="col d-flex justify-content-end">
+      <mat-icon class="mr-1" (click)="menuClicked.emit(item.id)">more_vertical</mat-icon>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="item-price col-4 p-0 align-self-center text-right font-weight-medium"
+         [class.positive]="item.totalPrice > 0">
+      {{(item.totalPrice / 100) | absolute | currency : 'DKK' : 'symbol-narrow' : '1.2-2' : 'da'}}
+    </div>
+
+    <mat-divider class="mx-2" vertical></mat-divider>
+
+    <div class="col font-weight-medium item-info">
+      <div class="row item-name">
+        {{item.name}}
+      </div>
+      <div class="row item-date">
+        {{item.date | date : dateFormat}}
+      </div>
+    </div>
+  </div>
+</mat-card>

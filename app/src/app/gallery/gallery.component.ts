@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * Angular Component that manages receipt galleries.
@@ -8,12 +8,5 @@ import {Component, OnInit} from '@angular/core';
     templateUrl: './gallery.component.html',
     styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent implements OnInit {
-
-    constructor() {
-    }
-
-    ngOnInit(): void {
-    }
-
+export class GalleryComponent {
 }

@@ -21,30 +21,21 @@ export class AuthActions {
      * @param {LoginForm} loginForm
      */
     async attemptLogin(loginForm: LoginForm): Promise<void> {
+        let user;
         try {
-            const user = await this.service.login(loginForm);
-
-            this.redux.dispatch({
-                type: AuthActions.SET_USER,
-                payload: user
-            });
+            user = await this.service.login(loginForm);
         } catch (errors) {
             console.log(errors);
             this.redux.dispatch({
                 type: AuthActions.SET_ERRORS,
                 payload: errors
             });
+            return;
         }
-    }
 
-    /**
-     * Logs the user out.
-     */
-    async logout(): Promise<void> {
-        await this.service.logout();
         this.redux.dispatch({
             type: AuthActions.SET_USER,
-            payload: null
+            payload: user
         });
     }
 
@@ -65,6 +56,40 @@ export class AuthActions {
                 payload: errors
             });
         }
+    }
+
+    /**
+     * Logs the user out.
+     */
+    async logout(): Promise<void> {
+        await this.service.logout();
+        this.redux.dispatch({
+            type: AuthActions.SET_USER,
+            payload: null
+        });
+    }
+
+    async setSessionUser(): Promise<boolean> {
+        if (this.service.isLoggedIn()) {
+            return true;
+        }
+
+        let user;
+        try {
+            user = await this.service.isSessionLoggedIn();
+        } catch (errors) {
+            console.log(errors);
+        }
+
+        if (user) {
+            this.redux.dispatch({
+                type: AuthActions.SET_USER,
+                payload: user
+            });
+            return true;
+        }
+
+        return false;
     }
 
     /**

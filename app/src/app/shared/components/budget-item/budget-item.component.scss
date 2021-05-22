@@ -1,0 +1,54 @@
+@import "src/app/styles/colors";
+@import "src/app/styles/pure-classes";
+
+mat-card {
+  width: 350px;
+  height: 83px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  .category-column {
+    padding: 0;
+
+    .category-item {
+      @extend .shadow-4;
+      padding: 0 8px;
+      margin: 4px 2.5px;
+      height: 28px;
+      font-size: 12px;
+
+      border-style: solid;
+      border-radius: 14px;
+      border-color: $accent;
+      border-width: 3px;
+
+      user-select: none;
+    }
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+
+  .item-price {
+    color: $negative;
+
+    &.positive {
+      color: $positive;
+    }
+  }
+
+  .item-info {
+
+    .item-name {
+      color: $primary-text-color;
+    }
+
+    .item-date {
+      color: $secondary-text-color;
+      font-size: 10px;
+    }
+  }
+}
