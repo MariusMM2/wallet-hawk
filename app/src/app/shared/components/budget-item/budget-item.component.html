@@ -20,11 +20,11 @@
     <mat-divider class="mx-2" vertical></mat-divider>
 
     <div class="col font-weight-medium item-info">
-      <div class="row item-name">
-        {{item.name}}
+      <div class="row item-name" [class.empty]="!item.name">
+        {{item.name || 'No title'}}
       </div>
-      <div class="row item-date">
-        {{item.date | date : dateFormat}}
+      <div class="row item-date" [class.empty]="!item.date">
+        {{(item.date | date : dateFormat) || 'No date'}}
       </div>
     </div>
   </div>

@@ -6,9 +6,11 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import createMemoryStore from 'memorystore';
 import {port, sessionExpiryMillis, sessionSecret} from './app.config';
-import {BudgetItemDAO, CategoryDAO, dbInstance, GalleryDAO, UserDAO} from './database';
+import {BudgetItemDAO, CategoryDAO, dbInstance, ReceiptDAO, UserDAO} from './database';
 import {tryUntilSuccessful} from './utils/misc.utils';
 import {rootRouter} from './app.routes';
+import {Transaction} from 'sequelize';
+import {categories, galleries, receipts, users} from './bulk.data';
 
 const MemoryStore = createMemoryStore(session);
 
@@ -45,99 +47,123 @@ tryUntilSuccessful(async () => {
     // reset the database instance on start/refresh
     await dbInstance.sync({force: true});
 
-    const user = await UserDAO.create({
-        email: 'asd1@asdf',
-        password: 'asd1@asdf'
-    }, {
-        include: [GalleryDAO]
-    });
+    // users
+    const currentUser: UserDAO = (await UserDAO.bulkCreate(users,))[0];
 
-    console.log('user', user);
+    // categories
+    const globalCategories: Array<CategoryDAO> = await CategoryDAO.bulkCreate(categories,);
 
-    const gallery = await user.createGallery({
-        name: 'Foetex'
-    });
+    // TODO reuse in receipt creation for bulk budget items
+    // ..and if user creates multiple at once?
+    let transaction: Transaction = await dbInstance.transaction();
 
-    console.log('gallery', gallery);
-
-    const receipt = await gallery.createReceipt({
-        description: 'week 20, 2021'
-    });
-
-    console.log('receipt', receipt);
-
-    const budgetItem = await receipt.createBudgetItem({
-        totalPrice: 10000,
-        quantity: 10
-    });
-
-    console.log('budgetItem', budgetItem);
-
-    const creator = await budgetItem.getCreator();
-
-    console.log('creator', creator);
-
-    const budgetItem2 = await user.createBudgetItem({
-        totalPrice: 1000,
-        quantity: 1
-    });
-
-    console.log('budgetItem2', budgetItem2);
-
-    const creator2 = await budgetItem2.getCreator();
-
-    console.log('creator2', creator2);
-
-    console.log('user budget items', await user.getBudgetItems());
-
-    const categories = await CategoryDAO.bulkCreate([
-        {
-            label: 'Home'
-        },
-        {
-            label: 'Hygiene'
-        },
-        {
-            label: 'Electronics'
-        },
-        {
-            label: 'Groceries'
-        },
-        {
-            label: 'Fast Food'
+    async function budgetItemsGenerator(creator: UserDAO | ReceiptDAO, transaction: Transaction, max = 100) {
+        let creatorTag;
+        if (creator instanceof UserDAO) {
+            creatorTag = creator.email;
+        } else {
+            creatorTag = creator.description;
         }
-    ]);
 
-    console.log(categories);
-
-    await budgetItem.addCategories(
-        categories.map(category => category.id)
-    );
-
-    // const scopedCategories = await budgetItem.getCategories({
-    //     attributes: {
-    //         exclude: ['label']
-    //     }
-    // });
-    //
-    // console.log('budget item categories', scopedCategories);
-
-    const scopedCategories2 = await (await BudgetItemDAO.findOne({
-        where: {
-            totalPrice: 10000
+        for (let i = 0; i < max; i++) {
+            const random = Math.random();
+            await creator.createBudgetItem({
+                totalPrice: random * 10000 - 5000,
+                quantity: random * 100,
+                description: `${creatorTag}.no. ${i}`
+            }, {transaction, logging: false});
         }
-    }))?.getCategories();
+    }
 
-    const scopedCategories3 = await (await BudgetItemDAO.findOne({
-        where: {
-            totalPrice: 10000
+    // budget items for current user
+    try {
+        await budgetItemsGenerator(currentUser, transaction);
+
+        await transaction.commit();
+    } catch (e) {
+        await transaction.rollback();
+    }
+
+    // galleries for current user
+    transaction = await dbInstance.transaction();
+
+    try {
+        for (const gallery of galleries) {
+            await currentUser.createGallery(gallery, {transaction, logging: false});
         }
-    }))?.getStrippedCategories();
 
-    console.log('full categories', scopedCategories2);
-    console.log('stripped categories', scopedCategories3);
+        await transaction.commit();
+    } catch (e) {
+        await transaction.rollback();
+    }
 
-    // noinspection JSIgnoredPromiseFromCall
+    // receipts for galleries of current user
+    const userGalleries = await currentUser.getGalleries();
+
+    transaction = await dbInstance.transaction();
+
+    try {
+        for (const userGallery of userGalleries) {
+            const galleryReceipts = receipts.map((receipt) => {
+                return {
+                    description: `${userGallery.name}.${receipt.description}`
+                };
+            });
+
+            for (const galleryReceipt of galleryReceipts) {
+                await userGallery.createReceipt(galleryReceipt, {transaction, logging: false});
+            }
+        }
+
+        await transaction.commit();
+    } catch (e) {
+        await transaction.rollback();
+    }
+
+    // budget items for receipts for galleries of current user
+    transaction = await dbInstance.transaction();
+
+    try {
+        const receipts = await ReceiptDAO.findAll();
+        for (const receipt of receipts) {
+            await budgetItemsGenerator(receipt, transaction, 5);
+        }
+
+        await transaction.commit();
+    } catch (e) {
+        await transaction.rollback();
+    }
+
+    // categories for budget items for current user and for receipts for galleries of current user
+    const budgetItems = await BudgetItemDAO.findAll();
+    const globalCategoryIds = globalCategories.map(category => category.id);
+    transaction = await dbInstance.transaction();
+
+    try {
+        for (const budgetItem of budgetItems) {
+            const randomNCategories = Math.floor(Math.random() * globalCategoryIds.length + 0.5);
+
+            const itemCategories = [];
+
+            for (let i = 0; i < randomNCategories; i++) {
+                const randomCategoryIndex = Math.floor(Math.random() * (globalCategoryIds.length - 1) + 0.5);
+                itemCategories.push(globalCategoryIds[randomCategoryIndex]);
+            }
+
+            const deduplicatedItemCategories: Array<string> = new Array(...new Set(itemCategories));
+
+
+            await budgetItem.addCategories(deduplicatedItemCategories, {transaction, logging: false});
+        }
+
+        await transaction.commit();
+    } catch (e) {
+        console.log(e);
+        await transaction.rollback();
+    }
+
+    // await dbInstance.sync();
+
     await app.listen(port, () => {
         console.log(`The application is listening on port ${port}!`);
     });

@@ -17,14 +17,14 @@ export interface AuthState {
 export interface DataState {
     categoryList: Array<Category> | null,
     galleryList: Array<Gallery> | null,
-    receipts: Array<Receipt> | null,
+    receiptList: Array<Receipt> | null,
     budgetItemList: Array<BudgetItem> | null,
     recurrenceList: Array<Recurrence> | null,
     user: UserDataState
 }
 
 interface UserDataState {
-    budgetItems: Array<BudgetItem> | null,
+    budgetItemList: Array<BudgetItem> | null,
     goal: Goal | null
 }
 

@@ -7,5 +7,6 @@ export interface BudgetItem extends Identifiable {
     totalPrice: number;
     quantity: number;
     date: Date;
-    categoryList: Category[];
+    categoryList?: Array<Category>;
+    categoryIds?: Array<string>;
 }

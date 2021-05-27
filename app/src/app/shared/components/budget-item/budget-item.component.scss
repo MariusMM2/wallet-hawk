@@ -54,11 +54,19 @@ mat-card {
 
     .item-name {
       color: $primary-text-color;
+
+      &.empty {
+        font-style: italic;
+      }
     }
 
     .item-date {
       color: $secondary-text-color;
       font-size: 10px;
+
+      &.empty {
+        font-style: italic;
+      }
     }
   }
 }

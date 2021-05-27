@@ -21,11 +21,17 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit(): void {
         const receiptBudgetItems = this.store.select(state => state.data.budgetItemList);
-        const userBudgetItems = this.store.select(state => state.data.user.budgetItems);
+        const userBudgetItems = this.store.select(state => state.data.user.budgetItemList);
         this.budgetItems$ = combineLatest([receiptBudgetItems, userBudgetItems])
             .pipe(
                 map(([receiptItems, userItems]) => {
-                    return [...receiptItems, ...userItems];
+                    if (receiptItems === null || userItems === null) {
+                        return null;
+                    }
+                    return [
+                        ...(receiptItems),
+                        ...(userItems)
+                    ];
                 }));
     }
 

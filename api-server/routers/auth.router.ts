@@ -1,7 +1,7 @@
 import Router from 'express';
 import {inputValidator, parseBasicEmail, parseBasicPassword, parseEmail, parsePassword} from '../middleware/inputValidators';
 import {authGuard} from '../middleware/auth';
-import {FullRequest} from '../types/request';
+import {RequestSession} from '../types/request';
 import {UserDAO} from '../database';
 
 export const authRouter = Router();
@@ -18,7 +18,7 @@ authRouter.post('/login',
     parseBasicPassword(),
     // validate above attributes
     inputValidator,
-    async (req: FullRequest, res) => {
+    async (req: RequestSession, res) => {
         // gets email and password from request body
         const {email, password} = req.body;
 
@@ -84,7 +84,7 @@ authRouter.post('/register',
  */
 authRouter.get('/authenticated-user',
     authGuard,
-    async (req: FullRequest, res) => {
+    async (req: RequestSession, res) => {
         const id = req.session.userId;
 
         const user = await UserDAO.findOne({

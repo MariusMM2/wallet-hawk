@@ -108,7 +108,7 @@ export class AuthService {
      * @param {HttpErrorResponse} response
      * @private
      */
-    private static handleGenericErrors(response: HttpErrorResponse): Array<string> {
+    static handleGenericErrors(response: HttpErrorResponse): Array<string> {
         if (response.status === 0) {
             // Connection failed
             throw ['Unable to connect to the server. Please try again later.'];

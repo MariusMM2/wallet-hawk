@@ -8,7 +8,7 @@ import {BudgetItem} from './budgetItem.dao';
 import {Category} from './category.dao';
 import {BudgetItemCategory} from './budgetItemCategory.bridge';
 
-export const sequelize = new Sequelize('mysql://user:password@localhost:3306/wallet-hawk', {
+const sequelize = new Sequelize('mysql://user:password@localhost:3306/wallet-hawk', {
     define: {
         freezeTableName: true,
         timestamps: false
@@ -23,25 +23,6 @@ export const sequelize = new Sequelize('mysql://user:password@localhost:3306/wal
         BudgetItemCategory
     ],
 });
-
-// const userGalleryOptions = {
-//     onDelete: 'CASCADE',
-//     foreignKey: {
-//         name: 'userId',
-//         allowNull: false
-//     }
-// };
-// User.hasMany(Gallery, userGalleryOptions);
-//
-// const galleryReceiptOptions = {
-//     onDelete: 'CASCADE',
-//     foreignKey: {
-//         name: 'galleryId',
-//         allowNull: false
-//     }
-// };
-// Gallery.hasMany(Receipt, galleryReceiptOptions);
-
 
 export {sequelize as dbInstance};
 export {User as UserDAO};

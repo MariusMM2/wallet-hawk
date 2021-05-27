@@ -2,7 +2,7 @@
  * This file contains various middleware functions
  * related to input validation and sanitization.
  */
-import {check, CustomValidator, ValidationChain, validationResult} from 'express-validator';
+import {check, CustomValidator, Meta, ValidationChain, validationResult} from 'express-validator';
 import {
     dateFormat,
     emailMaximumLength,
@@ -46,14 +46,14 @@ export function parseField(field: string | undefined, optional: boolean) {
  * ensure the 'field' attribute in the request object
  * is a valid UUID string.
  * @param {string} field - Attribute to be validated, defaults to 'id'
- * @param {boolean} optional - Whether or not the field must be present, defaults to 'false'
+ * @param {boolean} optional - Whether or not the field is optional, defaults to 'false'
  * @returns {ValidationChain} - the current Validation chain instance
  */
 export function parseUUID(field: string = 'id', optional: boolean = false) {
     return parseField(field, optional)
         // Validation
         // check if is a valid UUID string
-        .isUUID().withMessage('must be a valid MongoDB ObjectId string').bail();
+        .isUUID().withMessage('must be a valid UUID string').bail();
     // Sanitization
     // none
 }
@@ -292,8 +292,10 @@ export function inputValidator(req: Request, res: Response, next: NextFunction) 
  * @param req - The Request object
  * @returns {Error|boolean} True if the id matches the current user, throws Error otherwise
  */
-export const isCurrentUser: CustomValidator = function(id, {req}) {
-    if (id.equals(req.session.userId)) {
+export function isCurrentUser(id: any, {req}: Meta) {
+    console.log(id);
+    console.log(req.session.userId);
+    if (id === req.session?.userId) {
         return true;
     } else {
         throw new Error('must be the id of the user making the request');

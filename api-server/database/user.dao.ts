@@ -7,6 +7,7 @@ import {
 } from 'sequelize';
 import {
     AllowNull,
+    BeforeBulkCreate,
     BeforeCreate,
     Column,
     DataType,
@@ -111,7 +112,14 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     }
 
     @BeforeCreate
-    static hashPassword(instance: User) {
-        instance.password = generateHash(instance.password);
+    @BeforeBulkCreate
+    static hashPassword(instance: Array<User> | User) {
+        if (!Array.isArray(instance)) {
+            instance = [instance];
+        }
+
+        for (const user of instance) {
+            user.password = generateHash(user.password);
+        }
     }
 }

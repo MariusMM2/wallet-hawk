@@ -50,7 +50,7 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     public description!: string | null;
 
     @AllowNull(false)
-    @Column(DataType.INTEGER.UNSIGNED)
+    @Column(DataType.INTEGER)
     public totalPrice!: number;
 
     @AllowNull(false)
@@ -63,20 +63,22 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     public date!: Date;
 
     @BelongsToMany(() => Category, () => BudgetItemCategory)
-    public categories?: Array<Category>;
+    public categories?: Array<Category & { BudgetItemCategory?: BudgetItemCategory } | string>;
 
     public getCategories!: BelongsToManyGetAssociationsMixin<Category>;
     public addCategory!: BelongsToManyAddAssociationMixin<Category, string>;
     public addCategories!: BelongsToManyAddAssociationsMixin<Category, string>;
 
-    public getStrippedCategories(options?: BelongsToManyGetAssociationsMixinOptions): Promise<Array<Category>> {
-        return this.getCategories({
+    public async getStrippedCategories(options?: BelongsToManyGetAssociationsMixinOptions): Promise<Array<string>> {
+        return (await this.getCategories({
             attributes: {
                 exclude: ['label']
             },
             ...options
-        });
+        })).map(category => category.id);
     }
+
+    public categoryIds?: Array<string>;
 
     @AllowNull(false)
     @Column(DataType.UUID)
@@ -131,13 +133,14 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     }
 
     @AfterFind
-    static stripCategories(findResult: Array<BudgetItem> | BudgetItem) {
+    static async stripCategories(findResult: Array<BudgetItem> | BudgetItem) {
         if (!Array.isArray(findResult)) {
             findResult = [findResult];
         }
 
         for (const budgetItem of findResult) {
-            console.log('categories to strip', budgetItem.categories);
+            // @ts-ignore
+            budgetItem.dataValues.categoryIds = await budgetItem.getStrippedCategories();
         }
     }
 }
