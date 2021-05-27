@@ -1,16 +1,45 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-auto">
-      <ng-container *ngIf="budgetItems$ | async else loading">
-        length: {{(budgetItems$ | async).length}}
-        <app-budget-item *ngFor="let budgetItem of budgetItems$ | async as budgetItems;trackBy: trackItems"
-                         [item]="budgetItem"
-        ></app-budget-item>
-      </ng-container>
+<div class="container-fluid h-100 px-0 pt-3">
+  <div class="row h-100">
+    <ng-container *ngIf="budgetItems$ | async as budgetItems else loading">
+      <div class="col col-lg-auto h-100">
+        <div class="row h-25 w-100 justify-content-center">
+          <app-line-chart class="row w-100"
+                          [toggleableDatasets]="false"
+                          [budgetItemDataPoints]="[{
+              label: currentMonth,
+              data: budgetItems | month : currentMonth | dataPoints
+              }]"></app-line-chart>
+        </div>
+        <div class="row h-75">
+          <div class="col h-100 vertical-overflow">
+            <app-budget-item *ngFor="let budgetItem of budgetItems$ | async;trackBy: trackItems"
+                             [item]="budgetItem"
+            ></app-budget-item>
+          </div>
+        </div>
+      </div>
+      <div class="col h-100 vertical-overflow">
+        <div class="row m-0 chart-row">
+          <span>2021</span>
+          <app-line-chart class="row large-chart w-100"
+                          [budgetItemDataPoints]="budgetItems | divideByMonth"></app-line-chart>
+          <span>2020</span>
+          <app-line-chart class="row large-chart w-100"
+                          [budgetItemDataPoints]="budgetItems | divideByMonth"></app-line-chart>
+        </div>
+        <div class="row">
+          <app-pie-chart class="row large-chart w-100"
+                         [labels]="categories$ | async | labelArray"
+                         [budgetItemDataPoints]="[{
+                          label: currentMonth,
+                          data: budgetItems | month : currentMonth | categoryPoints : (categories$ | async)
+                          }]"></app-pie-chart>
+        </div>
+      </div>
+    </ng-container>
 
-      <ng-template #loading>
-        <mat-spinner></mat-spinner>
-      </ng-template>
-    </div>
+    <ng-template #loading>
+      <mat-spinner></mat-spinner>
+    </ng-template>
   </div>
 </div>

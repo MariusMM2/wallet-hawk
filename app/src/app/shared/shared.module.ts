@@ -11,6 +11,17 @@ import {SubmitButtonComponent} from './components/submit-button/submit-button.co
 import {BudgetItemComponent} from './components/budget-item/budget-item.component';
 import {AbsolutePipe} from './pipes/absolute.pipe';
 import {LimitLabelsPipe} from './pipes/limit-labels.pipe';
+import {LineChartComponent} from './components/line-chart/line-chart.component';
+import {MonthPipe} from './pipes/month.pipe';
+import {DataPointsPipe} from './pipes/data-points.pipe';
+import {DivideByMonthPipe} from './pipes/divide-by-month.pipe';
+
+import {Chart, registerables} from 'chart.js';
+import {PieChartComponent} from './components/pie-chart/pie-chart.component';
+import {CategoryPointsPipe} from './pipes/category-points.pipe';
+import {LabelArrayPipe} from './pipes/label-array.pipe';
+
+Chart.register(...registerables);
 
 /**
  * Angular module that contains miscellaneous or small, contained features used by other modules.
@@ -24,7 +35,14 @@ import {LimitLabelsPipe} from './pipes/limit-labels.pipe';
         NotFoundComponent,
         BudgetItemComponent,
         AbsolutePipe,
-        LimitLabelsPipe
+        LimitLabelsPipe,
+        MonthPipe,
+        DataPointsPipe,
+        CategoryPointsPipe,
+        DivideByMonthPipe,
+        LabelArrayPipe,
+        LineChartComponent,
+        PieChartComponent
     ],
     imports: [
         CommonModule,
@@ -40,7 +58,18 @@ import {LimitLabelsPipe} from './pipes/limit-labels.pipe';
         ReactiveFormsModule,
         BudgetItemComponent,
         AbsolutePipe,
-        LimitLabelsPipe
+        LimitLabelsPipe,
+        MonthPipe,
+        DataPointsPipe,
+        CategoryPointsPipe,
+        DivideByMonthPipe,
+        LabelArrayPipe,
+        LineChartComponent,
+        PieChartComponent
+    ],
+    providers: [
+        DataPointsPipe,
+        MonthPipe
     ]
 })
 export class SharedModule {

@@ -8,7 +8,7 @@ const CHIP_WIDTH = 2.5 * 2 + 3 * 2 + 8 * 2;
 const MAX_WIDTH = 350 - 2 - 24 - 4;// 320
 
 /**
- * Angular Pipe that
+ * Angular Pipe that filters how many category label fit in the width of a budget item. The rest will be shown as '+n' chips.
  */
 @Pipe({
     name: 'limitLabels'

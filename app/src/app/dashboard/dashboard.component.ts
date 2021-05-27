@@ -4,6 +4,8 @@ import {ObservableStore} from '../shared/utilities/redux.utils';
 import {CoreState} from '../core/core.store';
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import ChartUtils, {DateMonth} from '../shared/utilities/chart.utils';
+import {Category} from '../core/models/category';
 
 /**
  * Angular Component that manages budget overviews.
@@ -14,7 +16,10 @@ import {map} from 'rxjs/operators';
     styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-    budgetItems$: Observable<BudgetItem[]>;
+    budgetItems$: Observable<Array<BudgetItem>>;
+    categories$: Observable<Array<Category>>;
+
+    readonly currentMonth: DateMonth = ChartUtils.getCurrentMonth();
 
     constructor(private store: ObservableStore<CoreState>) {
     }
@@ -33,6 +38,8 @@ export class DashboardComponent implements OnInit {
                         ...(userItems)
                     ];
                 }));
+
+        this.categories$ = this.store.select(state => state.data.categoryList);
     }
 
     trackItems(_index: number, item: BudgetItem) {

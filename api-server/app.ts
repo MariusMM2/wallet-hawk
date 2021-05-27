@@ -48,10 +48,10 @@ tryUntilSuccessful(async () => {
     await dbInstance.sync({force: true});
 
     // users
-    const currentUser: UserDAO = (await UserDAO.bulkCreate(users,))[0];
+    const currentUser: UserDAO = (await UserDAO.bulkCreate(users))[0];
 
     // categories
-    const globalCategories: Array<CategoryDAO> = await CategoryDAO.bulkCreate(categories,);
+    const globalCategories: Array<CategoryDAO> = await CategoryDAO.bulkCreate(categories);
 
     // TODO reuse in receipt creation for bulk budget items
     // ..and if user creates multiple at once?
@@ -66,11 +66,18 @@ tryUntilSuccessful(async () => {
         }
 
         for (let i = 0; i < max; i++) {
-            const random = Math.random();
+            // const random = Math.random();
+            // const dateRandom = Math.random();
+            const date = new Date();
+            // TODO find better implementation
+            // Random month that intentionally overflow, to end up changing the year
+            date.setMonth(Math.floor(Math.random() * 28));
+            date.setDate(Math.floor(Math.random() * 31));
             await creator.createBudgetItem({
-                totalPrice: random * 10000 - 5000,
-                quantity: random * 100,
-                description: `${creatorTag}.no. ${i}`
+                totalPrice: Math.random() * 10000 - 5000,
+                quantity: Math.random() * 100,
+                description: `${creatorTag}.no. ${i}`,
+                date
             }, {transaction, logging: false});
         }
     }
@@ -78,6 +85,15 @@ tryUntilSuccessful(async () => {
     // budget items for current user
     try {
         await budgetItemsGenerator(currentUser, transaction);
+
+        const date = new Date();
+        date.setDate(1);
+        // dummy item for the salary at the beginning of a month
+        await currentUser.createBudgetItem({
+            totalPrice: 30000,
+            quantity: 1,
+            date
+        }, {transaction, logging: false});
 
         await transaction.commit();
     } catch (e) {

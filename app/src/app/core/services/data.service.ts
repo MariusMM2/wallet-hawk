@@ -33,11 +33,18 @@ export class DataService {
     async getUserBudgetItems(userId: string): Promise<Array<BudgetItem>> {
         const url = `${API_BASE}/data/user/${userId}/budget-item`;
         console.log(url);
+        let budgetItems: Array<BudgetItem> = null;
         try {
-            return await this.http.get<Array<BudgetItem>>(url);
+            budgetItems = await this.http.get<Array<BudgetItem>>(url);
         } catch (response) {
             console.log(response);
             throw AuthService.handleGenericErrors(response);
         }
+
+        for (let budgetItem of budgetItems) {
+            budgetItem.date = new Date(budgetItem.date);
+        }
+
+        return budgetItems;
     }
 }
