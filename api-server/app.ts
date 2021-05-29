@@ -57,7 +57,7 @@ tryUntilSuccessful(async () => {
     // ..and if user creates multiple at once?
     let transaction: Transaction = await dbInstance.transaction();
 
-    async function budgetItemsGenerator(creator: UserDAO | ReceiptDAO, transaction: Transaction, max = 100) {
+    async function budgetItemsGenerator(creator: UserDAO | ReceiptDAO, transaction: Transaction, max = 500) {
         let creatorTag;
         if (creator instanceof UserDAO) {
             creatorTag = creator.email;
@@ -65,14 +65,18 @@ tryUntilSuccessful(async () => {
             creatorTag = creator.description;
         }
 
+        const currentYear = 2021;
+
         for (let i = 0; i < max; i++) {
             // const random = Math.random();
             // const dateRandom = Math.random();
             const date = new Date();
             // TODO find better implementation
             // Random month that intentionally overflow, to end up changing the year
-            date.setMonth(Math.floor(Math.random() * 28));
-            date.setDate(Math.floor(Math.random() * 31));
+
+            date.setFullYear(Math.floor(Math.random() * 2) + currentYear - 1);
+            date.setMonth(Math.floor(Math.random() * 12));
+            date.setDate(Math.floor(Math.random() * 31) + 1);
             await creator.createBudgetItem({
                 totalPrice: Math.random() * 10000 - 5000,
                 quantity: Math.random() * 100,
