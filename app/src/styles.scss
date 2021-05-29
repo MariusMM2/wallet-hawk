@@ -34,6 +34,7 @@ $wallethawk-theme: mat-light-theme((
 
 /* You can add global styles to this file, and also import other style files */
 @import "/src/app/styles/colors";
+@import "/src/app/styles/variables";
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
@@ -47,6 +48,29 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+//noinspection CssUnknownProperty
+* {
+  // Scrollbar styling for Firefox
+  scrollbar-width: thin;
+  scrollbar-color: $secondary-text-color $divider-color;
+
+  // Scrollbar styling for Webkit (Chrome, Edge, Safari)
+  &::-webkit-scrollbar {
+    width: $scrollbarWidth;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+    background: $secondary-text-color;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 1rem;
+    background: $divider-color;
+    margin: 12px 0;
+  }
 }
 
 mat-form-field {

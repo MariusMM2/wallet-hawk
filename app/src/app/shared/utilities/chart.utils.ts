@@ -1,45 +1,14 @@
 import {BudgetItem} from '../../core/models/budgetItem';
 import {Category} from '../../core/models/category';
 
-export type DateMonth =
-    'January'
-    | 'February'
-    | 'March'
-    | 'April'
-    | 'May'
-    | 'June'
-    | 'July'
-    | 'August'
-    | 'September'
-    | 'October'
-    | 'November'
-    | 'December';
-
 export interface Dataset {
-    label: string;
+    label?: string;
     backgroundColor?: string;
     borderColor?: string,
     data: Array<number>;
 }
 
 export default class ChartUtils {
-    /**
-     * Labels for each month.
-     */
-    static readonly monthLabels: Array<DateMonth> = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
 
     /**
      * TODO find colors
@@ -66,45 +35,49 @@ export default class ChartUtils {
      */
     static readonly categoryColor = ChartUtils.monthColor;
 
-    static readonly daysPerMonth = 31;
-
-    /**
-     * Returns the labels for the days of a month. Currently only returns their number.
-     */
-    static getDayLabels(): Array<string> {
-        const days = new Array<string>();
-
-        for (let i = 0; i < this.daysPerMonth; i++) {
-            days.push(`${i + 1}`);
-        }
-
-        return days;
-    }
-
-    /**
-     * Returns the month of the current date.
-     */
-    static getCurrentMonth(): DateMonth {
-        const currentDate = new Date();
-        return this.monthLabels[currentDate.getMonth()] as DateMonth;
-    }
-
     /**
      * Returns data points for a graph from a given array of budget items.
      * @param budgetItems
+     * @param fillMissingWithZero whether or not missing sums in the month should be filled with '0'
+     * @param daysCount
      */
-    static getDataPointsForBudgetItems(budgetItems: Array<BudgetItem>): Array<number> {
-        const sumPerDayOfMonth = new Array<number>(31);
-        sumPerDayOfMonth.fill(0);
+    static getDataPointsForBudgetItems(budgetItems: Array<BudgetItem>, fillMissingWithZero: boolean, daysCount: number): Array<number> {
+        const sumPerDayOfMonth = new Array<number>(daysCount);
+        if (fillMissingWithZero) {
+            sumPerDayOfMonth.fill(0);
+        } else {
+            sumPerDayOfMonth.fill(NaN);
+        }
 
         for (const budgetItem of budgetItems) {
             const date = budgetItem.date;
+
+            // checks if the sum for this item's month is NaNs and resets it to '0'
+            // equivalent of 'NaN !== NaN', which is always true
+            if (sumPerDayOfMonth[date.getDate()] !== sumPerDayOfMonth[date.getDate()]) {
+                sumPerDayOfMonth[date.getDate()] = 0;
+            }
+
             sumPerDayOfMonth[date.getDate()] += budgetItem.totalPrice;
+        }
+
+        if (!fillMissingWithZero) {
+            // finds the last sum in the array that is not NaN, i.e. a budget item contributed to that sum
+            // and replaces all NaN sums until that sum with 0, to maintain a continuous graph line
+            for (let i = sumPerDayOfMonth.length - 1; i >= 0; i--) {
+                if (sumPerDayOfMonth[i] === sumPerDayOfMonth[i]) {
+                    for (let j = 0; j < i; j++) {
+                        if (sumPerDayOfMonth[j] !== sumPerDayOfMonth[j]) {
+                            sumPerDayOfMonth[j] = 0;
+                        }
+                    }
+                    break;
+                }
+            }
         }
 
         return sumPerDayOfMonth;
     }
-
 
     /**
      * Returns category-oriented data points for a given list of budget items.
@@ -116,15 +89,12 @@ export default class ChartUtils {
 
         for (let category of categories) {
             const categoryItems = budgetItems.filter(budgetItem => budgetItem.categoryList.includes(category));
-            console.log(categoryItems);
 
             const categoryTotal = categoryItems.reduce((previousTotal, currentItem) => {
                 return previousTotal + currentItem.totalPrice;
             }, 0);
 
-            console.log(categoryTotal);
-
-            sumPerCategory.push(categoryTotal);
+            sumPerCategory.push(Math.abs(categoryTotal));
         }
 
         return sumPerCategory;

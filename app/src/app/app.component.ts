@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
         await this.authActions.setSessionUser();
 
         this.service.subscribeLoggedIn(isLoggedIn => {
-            this.sidebarEnabled = isLoggedIn;
+            this.sidebarEnabled = this.sidebarOpen = isLoggedIn;
 
             if (isLoggedIn) {
                 this.dataActions.retrieveData();

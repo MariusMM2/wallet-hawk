@@ -66,27 +66,32 @@ export class RouterService {
             {
                 label: 'Search',
                 url: this.searchUrl,
-                icon: 'search'
+                icon: 'search',
+                disabled: true
             },
             {
                 label: 'Gallery',
                 url: this.galleryUrl,
-                icon: 'collections'
+                icon: 'collections',
+                disabled: true
             },
             {
                 label: 'Recurrences',
                 url: this.recurrencesUrl,
-                icon: 'payments'
+                icon: 'payments',
+                disabled: true
             },
             {
                 label: 'Statistics',
                 url: this.statisticsUrl,
-                icon: 'bar_chart'
+                icon: 'bar_chart',
+                disabled: true
             },
             {
                 label: 'Settings',
                 url: this.settingsUrl,
-                icon: 'settings'
+                icon: 'settings',
+                disabled: true
             },
             {
                 label: 'Logout',

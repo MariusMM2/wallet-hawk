@@ -1,6 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {BudgetItem} from '../../core/models/budgetItem';
 import ChartUtils from '../utilities/chart.utils';
+import {DateUtils} from '../utilities/date.utils';
 
 /**
  * Angular Pipe that wraps ChartUtil's getDataPointsForBudgetItems.
@@ -10,8 +11,13 @@ import ChartUtils from '../utilities/chart.utils';
 })
 export class DataPointsPipe implements PipeTransform {
 
-    transform(budgetItems: Array<BudgetItem>): Array<number> {
-        return ChartUtils.getDataPointsForBudgetItems(budgetItems);
+    /**
+     *
+     * @param budgetItems
+     * @param fillMissingWithZero
+     * @param daysCount
+     */
+    transform(budgetItems: Array<BudgetItem>, fillMissingWithZero: boolean = true, daysCount: number = DateUtils.daysPerMonth): Array<number> {
+        return ChartUtils.getDataPointsForBudgetItems(budgetItems, fillMissingWithZero, daysCount);
     }
-
 }

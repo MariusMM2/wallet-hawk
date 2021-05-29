@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import ChartUtils, {Dataset} from '../../utilities/chart.utils';
 import {v4 as uuidv4} from 'uuid';
 import {Chart, ChartOptions} from 'chart.js';
+import {locale} from '../../../app.config';
 
 @Component({
     selector: 'app-pie-chart',
@@ -13,6 +14,7 @@ export class PieChartComponent implements OnInit {
     @Input() toggleableDatasets: boolean = true;
     @Input() budgetItemDataPoints: Array<Dataset> = [];
     @Input() labels: Array<string> = [];
+    @Input() title: string | null = null;
 
     private chart: Chart;
 
@@ -31,12 +33,17 @@ export class PieChartComponent implements OnInit {
         };
 
         let options: ChartOptions<'pie'> = {
+            locale,
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: this.toggleableDatasets ? {} : {
                     onClick() {
                     }
+                },
+                title: {
+                    display: !!this.title,
+                    text: this.title
                 }
             }
         };

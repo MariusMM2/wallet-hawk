@@ -16,4 +16,5 @@ import {Component, Input} from '@angular/core';
 })
 export class SidebarItemComponent {
     @Input() isActive: boolean;
+    @Input() disabled: boolean = false;
 }

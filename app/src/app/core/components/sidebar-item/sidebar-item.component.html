@@ -1,6 +1,7 @@
 <div class="row align-items-center sidebar-item-container font-weight-medium"
      [class.active]="isActive"
-     [matRippleDisabled]="isActive"
+     [class.disabled]="disabled"
+     [matRippleDisabled]="isActive || disabled"
      matRipple>
   <span class="d-flex pr-3 justify-content-center">
     <ng-content select="mat-icon"></ng-content>

@@ -4,7 +4,8 @@
   <div class="container-fluid">
     <app-sidebar-item *ngFor="let route of router.routes;trackBy: routesTrackBy"
                       [isActive]="activeUrl === route.url"
-                      (click)="onClick(route.url)">
+                      [disabled]="route.disabled"
+                      (click)="!route.disabled && onClick(route.url)">
       <mat-icon class="material-icons-outlined">{{route.icon}}</mat-icon>
       {{route.label}}
     </app-sidebar-item>

@@ -12,7 +12,7 @@ import {BudgetItemComponent} from './components/budget-item/budget-item.componen
 import {AbsolutePipe} from './pipes/absolute.pipe';
 import {LimitLabelsPipe} from './pipes/limit-labels.pipe';
 import {LineChartComponent} from './components/line-chart/line-chart.component';
-import {MonthPipe} from './pipes/month.pipe';
+import {OfMonthPipe} from './pipes/of-month.pipe';
 import {DataPointsPipe} from './pipes/data-points.pipe';
 import {DivideByMonthPipe} from './pipes/divide-by-month.pipe';
 
@@ -20,6 +20,11 @@ import {Chart, registerables} from 'chart.js';
 import {PieChartComponent} from './components/pie-chart/pie-chart.component';
 import {CategoryPointsPipe} from './pipes/category-points.pipe';
 import {LabelArrayPipe} from './pipes/label-array.pipe';
+import {OfYearPipe} from './pipes/of-year.pipe';
+import {OfCurrentMonthPipe} from './pipes/of-current-month.pipe';
+import {OfCurrentYearPipe} from './pipes/of-current-year.pipe';
+import {ExpensePipe} from './pipes/expense.pipe';
+import {IncomePipe} from './pipes/income.pipe';
 
 Chart.register(...registerables);
 
@@ -35,8 +40,13 @@ Chart.register(...registerables);
         NotFoundComponent,
         BudgetItemComponent,
         AbsolutePipe,
+        ExpensePipe,
+        IncomePipe,
         LimitLabelsPipe,
-        MonthPipe,
+        OfMonthPipe,
+        OfCurrentMonthPipe,
+        OfYearPipe,
+        OfCurrentYearPipe,
         DataPointsPipe,
         CategoryPointsPipe,
         DivideByMonthPipe,
@@ -58,8 +68,13 @@ Chart.register(...registerables);
         ReactiveFormsModule,
         BudgetItemComponent,
         AbsolutePipe,
+        ExpensePipe,
+        IncomePipe,
         LimitLabelsPipe,
-        MonthPipe,
+        OfMonthPipe,
+        OfCurrentMonthPipe,
+        OfYearPipe,
+        OfCurrentYearPipe,
         DataPointsPipe,
         CategoryPointsPipe,
         DivideByMonthPipe,
@@ -69,7 +84,9 @@ Chart.register(...registerables);
     ],
     providers: [
         DataPointsPipe,
-        MonthPipe
+        OfMonthPipe,
+        OfCurrentMonthPipe,
+        OfYearPipe
     ]
 })
 export class SharedModule {
