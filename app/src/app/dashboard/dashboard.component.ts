@@ -5,7 +5,12 @@ import {CoreState} from '../core/core.store';
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Category} from '../core/models/category';
-import {DateMonth, DateUtils} from '../shared/utilities/date.utils';
+import {DateUtils} from '../shared/utilities/date.utils';
+import {BudgetItemModalComponent} from './components/budget-item-add-modal/budget-item-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {DialogBudgetItemData} from './types/dialogData';
+import {ConfirmationModalComponent} from '../shared/components/confirmation-modal/confirmation-modal.component';
+import {DataActions} from '../core/actions/data.actions';
 
 /**
  * Angular Component that manages budget overviews.
@@ -19,11 +24,13 @@ export class DashboardComponent implements OnInit {
     budgetItems$: Observable<Array<BudgetItem>>;
     categories$: Observable<Array<Category>>;
 
-    readonly currentMonth: DateMonth = DateUtils.getCurrentMonth();
-    readonly daysCountOfCurrentMonth: number = DateUtils.getDateCountOfCurrentMonth();
-    readonly previousYear: number = DateUtils.getPreviousYear();
+    readonly currentMonth = DateUtils.getCurrentMonth();
+    readonly daysCountOfCurrentMonth = DateUtils.getDateCountOfCurrentMonth();
+    readonly previousYear = DateUtils.getPreviousYear();
 
-    constructor(private store: ObservableStore<CoreState>) {
+    constructor(private store: ObservableStore<CoreState>,
+                private dialog: MatDialog,
+                private actions: DataActions) {
     }
 
     ngOnInit(): void {
@@ -50,5 +57,42 @@ export class DashboardComponent implements OnInit {
         }
 
         return item.id;
+    }
+
+    async addBudgetItem() {
+        this.dialog.open(BudgetItemModalComponent, {
+            disableClose: true,
+            autoFocus: true,
+            data: {
+                allCategories: this.store.getState(state => state.data.categoryList),
+            } as DialogBudgetItemData
+        });
+    }
+
+    onBudgetItemEdit(budgetItem: BudgetItem) {
+        this.dialog.open(BudgetItemModalComponent, {
+            disableClose: true,
+            autoFocus: true,
+            data: {
+                ...budgetItem,
+                allCategories: this.store.getState(state => state.data.categoryList),
+            } as DialogBudgetItemData
+        });
+    }
+
+    async onBudgetItemDelete(budgetItem: BudgetItem) {
+        const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+            autoFocus: true,
+            data: {
+                title: 'Deleting Budget Item',
+                message: `Are you sure you want to delete '${budgetItem.name || 'No title'}'?`,
+            }
+        });
+
+        const confirmed = await dialogRef.afterClosed().toPromise();
+
+        if (confirmed) {
+            await this.actions.deleteUserBudgetItem(budgetItem);
+        }
     }
 }

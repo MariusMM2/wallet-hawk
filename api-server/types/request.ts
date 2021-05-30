@@ -7,7 +7,9 @@ export interface RequestSession extends Request {
 }
 
 export interface RequestCreator extends Request {
-    creator?: UserDAO | ReceiptDAO;
-    user?: UserDAO | ReceiptDAO;
-    receipt?: UserDAO | ReceiptDAO;
+    creator?: CreatorDAO;
+    user?: UserDAO;
+    receipt?: ReceiptDAO;
 }
+
+export type CreatorDAO = UserDAO | ReceiptDAO;

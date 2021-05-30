@@ -1,13 +1,26 @@
 import {
     BelongsToGetAssociationMixin,
     BelongsToGetAssociationMixinOptions,
-    BelongsToManyAddAssociationMixin,
     BelongsToManyAddAssociationsMixin,
     BelongsToManyGetAssociationsMixin,
     BelongsToManyGetAssociationsMixinOptions,
+    BelongsToManyRemoveAssociationsMixin,
     Optional
 } from 'sequelize';
-import {AfterFind, AllowNull, BelongsTo, BelongsToMany, Column, DataType, Default, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {
+    AfterFind,
+    AllowNull,
+    BeforeCreate,
+    BeforeUpdate,
+    BelongsTo,
+    BelongsToMany,
+    Column,
+    DataType,
+    Default,
+    Model,
+    PrimaryKey,
+    Table
+} from 'sequelize-typescript';
 import {User} from './user.dao';
 import {Receipt} from './receipt.dao';
 import {Category} from './category.dao';
@@ -66,8 +79,14 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     public categories?: Array<Category & { BudgetItemCategory?: BudgetItemCategory } | string>;
 
     public getCategories!: BelongsToManyGetAssociationsMixin<Category>;
-    public addCategory!: BelongsToManyAddAssociationMixin<Category, string>;
+    public removeCategories!: BelongsToManyRemoveAssociationsMixin<Category, string>;
     public addCategories!: BelongsToManyAddAssociationsMixin<Category, string>;
+
+    public async updateCategories(categoryIds: Array<string>): Promise<void> {
+        await this.removeCategories(await this.getCategories());
+
+        await this.addCategories(categoryIds);
+    }
 
     public async getStrippedCategories(options?: BelongsToManyGetAssociationsMixinOptions): Promise<Array<string>> {
         return (await this.getCategories({
@@ -142,5 +161,24 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
             // @ts-ignore
             budgetItem.dataValues.categoryIds = await budgetItem.getStrippedCategories();
         }
+    }
+
+    @AfterFind
+    static async formatPriceToDecimal(findResult: Array<BudgetItem> | BudgetItem) {
+        if (!Array.isArray(findResult)) {
+            findResult = [findResult];
+        }
+
+        for (const budgetItem of findResult) {
+            budgetItem.setDataValue('totalPrice', budgetItem.totalPrice / 100);
+        }
+    }
+
+    @BeforeCreate
+    @BeforeUpdate
+    static async formatPriceToInteger(budgetItem: BudgetItem) {
+        console.log('budgetItem', budgetItem);
+
+        budgetItem.setDataValue('totalPrice', Math.floor(budgetItem.totalPrice * 100));
     }
 }

@@ -55,6 +55,7 @@ tryUntilSuccessful(async () => {
 
     // TODO reuse in receipt creation for bulk budget items
     // ..and if user creates multiple at once?
+    console.log('user');
     let transaction: Transaction = await dbInstance.transaction();
 
     async function budgetItemsGenerator(creator: UserDAO | ReceiptDAO, transaction: Transaction, max = 500) {
@@ -68,13 +69,9 @@ tryUntilSuccessful(async () => {
         const currentYear = 2021;
 
         for (let i = 0; i < max; i++) {
-            // const random = Math.random();
-            // const dateRandom = Math.random();
             const date = new Date();
             // TODO find better implementation
-            // Random month that intentionally overflow, to end up changing the year
-
-            date.setFullYear(Math.floor(Math.random() * 2) + currentYear - 1);
+            date.setFullYear(currentYear - Math.floor(Math.random() * 2));
             date.setMonth(Math.floor(Math.random() * 12));
             date.setDate(Math.floor(Math.random() * 31) + 1);
             await creator.createBudgetItem({
@@ -82,7 +79,7 @@ tryUntilSuccessful(async () => {
                 quantity: Math.random() * 100,
                 description: `${creatorTag}.no. ${i}`,
                 date
-            }, {transaction, logging: false});
+            }, {transaction});
         }
     }
 
@@ -97,7 +94,7 @@ tryUntilSuccessful(async () => {
             totalPrice: 30000,
             quantity: 1,
             date
-        }, {transaction, logging: false});
+        }, {transaction});
 
         await transaction.commit();
     } catch (e) {
@@ -105,11 +102,12 @@ tryUntilSuccessful(async () => {
     }
 
     // galleries for current user
+    console.log('galleries user');
     transaction = await dbInstance.transaction();
 
     try {
         for (const gallery of galleries) {
-            await currentUser.createGallery(gallery, {transaction, logging: false});
+            await currentUser.createGallery(gallery, {transaction});
         }
 
         await transaction.commit();
@@ -120,6 +118,7 @@ tryUntilSuccessful(async () => {
     // receipts for galleries of current user
     const userGalleries = await currentUser.getGalleries();
 
+    console.log('receipts user');
     transaction = await dbInstance.transaction();
 
     try {
@@ -131,7 +130,7 @@ tryUntilSuccessful(async () => {
             });
 
             for (const galleryReceipt of galleryReceipts) {
-                await userGallery.createReceipt(galleryReceipt, {transaction, logging: false});
+                await userGallery.createReceipt(galleryReceipt, {transaction});
             }
         }
 
@@ -141,6 +140,7 @@ tryUntilSuccessful(async () => {
     }
 
     // budget items for receipts for galleries of current user
+    console.log('galleries user');
     transaction = await dbInstance.transaction();
 
     try {
@@ -173,7 +173,7 @@ tryUntilSuccessful(async () => {
             const deduplicatedItemCategories: Array<string> = new Array(...new Set(itemCategories));
 
 
-            await budgetItem.addCategories(deduplicatedItemCategories, {transaction, logging: false});
+            await budgetItem.addCategories(deduplicatedItemCategories, {transaction});
         }
 
         await transaction.commit();

@@ -25,6 +25,8 @@ import {OfCurrentMonthPipe} from './pipes/of-current-month.pipe';
 import {OfCurrentYearPipe} from './pipes/of-current-year.pipe';
 import {ExpensePipe} from './pipes/expense.pipe';
 import {IncomePipe} from './pipes/income.pipe';
+import {SortPipe} from './pipes/sort.pipe';
+import {ConfirmationModalComponent} from './components/confirmation-modal/confirmation-modal.component';
 
 Chart.register(...registerables);
 
@@ -51,8 +53,10 @@ Chart.register(...registerables);
         CategoryPointsPipe,
         DivideByMonthPipe,
         LabelArrayPipe,
+        SortPipe,
         LineChartComponent,
-        PieChartComponent
+        PieChartComponent,
+        ConfirmationModalComponent
     ],
     imports: [
         CommonModule,
@@ -79,8 +83,10 @@ Chart.register(...registerables);
         CategoryPointsPipe,
         DivideByMonthPipe,
         LabelArrayPipe,
+        SortPipe,
         LineChartComponent,
-        PieChartComponent
+        PieChartComponent,
+        ConfirmationModalComponent
     ],
     providers: [
         DataPointsPipe,

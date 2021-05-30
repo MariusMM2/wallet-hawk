@@ -12,13 +12,15 @@
               data: budgetItems | ofCurrentYear | ofCurrentMonth | dataPoints : false : daysCountOfCurrentMonth
               }]"></app-line-chart>
         </div>
-        <div class="row h-75 debug-rectangle">
-          <div class="col h-100 vertical-overflow">
-            <app-budget-item *ngFor="let budgetItem of budgetItems$ | async;trackBy: trackItems"
+        <div class="row h-75">
+          <div class="col h-100 vertical-overflow items-container">
+            <app-budget-item *ngFor="let budgetItem of budgetItems$ | async | sort : 'date';trackBy: trackItems"
                              [item]="budgetItem"
+                             (edit)="onBudgetItemEdit(budgetItem)"
+                             (delete)="onBudgetItemDelete(budgetItem)"
             ></app-budget-item>
           </div>
-          <button class="budget-item-add" mat-fab>
+          <button class="budget-item-add" mat-fab (click)="addBudgetItem()">
             <mat-icon>add</mat-icon>
           </button>
         </div>

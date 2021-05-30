@@ -1,0 +1,64 @@
+<form class="container-fluid justify-content-center align-items-center" [formGroup]="budgetItemForm"
+      (ngSubmit)="onSubmit($event)">
+  <div class="" mat-dialog-content>
+    <h1 class="row" mat-dialog-title>Budget Item</h1>
+    <div class="row">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Description</mat-label>
+        <input type="text" matInput formControlName="description">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="col pl-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Total Price</mat-label>
+          <input type="number" matInput formControlName="totalPrice" min="1" required>
+        </mat-form-field>
+      </div>
+      <div class="col pr-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Price Type</mat-label>
+          <mat-select formControlName="priceType" required>
+            <mat-option *ngFor="let priceType of priceTypes" [value]="priceType.value">
+              {{priceType.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col pl-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Quantity</mat-label>
+          <input type="number" matInput formControlName="quantity" min="0" required>
+        </mat-form-field>
+      </div>
+      <div class="col pr-0">
+        <mat-form-field appearance="outline" color="accent">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" required disabled>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <app-category-picker class="w-100" [allCategories]="item.allCategories"
+                           [(categories)]="categories"></app-category-picker>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-content-between">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <app-submit-button [disabled]="budgetItemForm.invalid" [isSubmitting]="isLoading">Save</app-submit-button>
+  </div>
+</form>

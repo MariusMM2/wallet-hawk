@@ -85,3 +85,7 @@ mat-form-field {
 .font-weight-medium {
   font-weight: 500;
 }
+
+div.mat-menu-content:not(:empty) {
+  padding: 0;
+}

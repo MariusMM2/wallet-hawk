@@ -300,7 +300,7 @@ export function isCurrentUser(id: any, {req}: Meta) {
     } else {
         throw new Error('must be the id of the user making the request');
     }
-};
+}
 
 /**
  * Checks if the Date is after the provided Date.

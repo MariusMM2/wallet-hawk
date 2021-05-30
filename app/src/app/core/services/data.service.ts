@@ -4,6 +4,7 @@ import {Category} from '../models/category';
 import {API_BASE} from '../../shared/constants';
 import {AuthService} from './auth.service';
 import {BudgetItem} from '../models/budgetItem';
+import {Creator} from '../types/creator';
 
 /**
  * Angular Service responsible for communicating with the backend
@@ -46,5 +47,32 @@ export class DataService {
         }
 
         return budgetItems;
+    }
+
+    async updateBudgetItem(creatorId: string, creatorType: Creator, budgetItem: BudgetItem): Promise<BudgetItem> {
+        const url = `${API_BASE}/data/${creatorType}/${creatorId}/budget-item`;
+        console.log(url);
+        let resultBudgetItem: BudgetItem = null;
+        try {
+            resultBudgetItem = await this.http.put<BudgetItem>(url, budgetItem);
+        } catch (response) {
+            console.log(response);
+            throw AuthService.handleGenericErrors(response);
+        }
+
+        resultBudgetItem.date = new Date(resultBudgetItem.date);
+
+        return resultBudgetItem;
+    }
+
+    async deleteBudgetItem(creatorId: string, creatorType: Creator, budgetItem: BudgetItem): Promise<void> {
+        const url = `${API_BASE}/data/${creatorType}/${creatorId}/budget-item/${budgetItem.id}`;
+        console.log(url);
+        try {
+            await this.http.delete(url);
+        } catch (response) {
+            console.log(response);
+            throw AuthService.handleGenericErrors(response);
+        }
     }
 }

@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {dateFormat} from 'src/app/app.config';
 import {BudgetItem} from '../../../core/models/budgetItem';
 
 @Component({
@@ -11,7 +10,14 @@ import {BudgetItem} from '../../../core/models/budgetItem';
 export class BudgetItemComponent {
     @Input() item: BudgetItem;
 
-    @Output() menuClicked = new EventEmitter<string>();
+    @Output() edit = new EventEmitter<void>();
+    @Output() delete = new EventEmitter<void>();
 
-    readonly dateFormat = dateFormat;
+    onEdit() {
+        this.edit.emit();
+    }
+
+    onDelete() {
+        this.delete.emit();
+    }
 }
