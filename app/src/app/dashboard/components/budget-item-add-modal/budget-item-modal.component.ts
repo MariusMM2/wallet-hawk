@@ -2,13 +2,11 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DialogBudgetItemData} from '../../types/dialogData';
-import {ObservableStore} from '../../../shared/utilities/redux.utils';
-import {CoreState} from '../../../core/core.store';
-import {Category} from '../../../core/models/category';
-import {DataActions} from '../../../core/actions/data.actions';
+import {StoreService} from '../../../core/services/store.service';
+import {Category} from '../../../core/models';
+import {DataActionsService} from '../../../core/services/data-actions.service';
 
 @Component({
-    selector: 'app-budget-item-modal',
     templateUrl: './budget-item-modal.component.html',
     styleUrls: ['./budget-item-modal.component.scss']
 })
@@ -31,8 +29,8 @@ export class BudgetItemModalComponent implements OnInit {
     ];
 
     constructor(private formBuilder: FormBuilder,
-                private actions: DataActions,
-                private store: ObservableStore<CoreState>,
+                private actions: DataActionsService,
+                private store: StoreService,
                 private dialogRef: MatDialogRef<BudgetItemModalComponent>,
                 @Inject(MAT_DIALOG_DATA) public item: DialogBudgetItemData) {
     }

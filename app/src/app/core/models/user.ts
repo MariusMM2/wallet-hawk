@@ -1,6 +1,5 @@
-import {Identifiable} from './identifiable';
-
-export interface User extends Identifiable {
+export interface User {
+    id: string;
     email: string;
     firstName: string;
     lastName: string;

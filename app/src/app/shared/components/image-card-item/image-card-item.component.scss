@@ -1,0 +1,64 @@
+@import "src/app/styles/colors";
+@import "src/app/styles/pure-classes";
+@import "src/app/styles/variables";
+
+$image-header-height: $imageCardWidth;
+
+mat-card {
+  width: $imageCardWidth;
+
+  // Item is selected
+  &.mat-elevation-z16 {
+    .content {
+      background-color: $accent;
+
+      .title,
+      .subtitle {
+        color: $light;
+      }
+    }
+  }
+
+  .image-header {
+    width: 100%;
+    //height: $image-header-height;
+
+    &.three-quarters {
+      height: $image-header-height * 3/4;
+    }
+
+    &.half {
+      height: $image-header-height / 2;
+    }
+
+    &.one-quarter {
+      height: $image-header-height / 4;
+    }
+  }
+
+  .content {
+    padding: 8px 4px 8px 8px;
+
+    .title {
+      color: $dark;
+
+      &.empty {
+        font-style: italic;
+      }
+    }
+
+    .subtitle {
+      color: $secondary-text-color;
+
+      &.empty {
+        font-style: italic;
+      }
+    }
+  }
+
+  button[mat-icon-button] {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

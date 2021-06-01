@@ -1,7 +1,7 @@
 import {tassign} from 'tassign';
 import {TypeGuards} from '../actions/data.actions';
 import {DataState} from '../core.store';
-import {BudgetItem} from '../models/budgetItem';
+import {BudgetItem} from '../models';
 import {Creator} from '../types/creator';
 
 

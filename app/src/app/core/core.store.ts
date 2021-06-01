@@ -1,13 +1,7 @@
 import {combineReducers} from 'redux';
 import {authReducer} from './reducers/auth.reducer';
 import {dataReducer} from './reducers/data.reducer';
-import {User} from './models/user';
-import {Category} from './models/category';
-import {Gallery} from './models/gallery';
-import {Receipt} from './models/receipt';
-import {BudgetItem} from './models/budgetItem';
-import {Recurrence} from './models/recurrence';
-import {Goal} from './models/goal';
+import {BudgetItem, Category, Gallery, Goal, Receipt, Recurrence, User} from './models';
 
 export interface AuthState {
     user: User | null;

@@ -1,5 +1,4 @@
-import {BudgetItem} from '../../core/models/budgetItem';
-import {Category} from '../../core/models/category';
+import {BudgetItem, Category} from '../../core/models';
 
 export interface Dataset {
     label?: string;
@@ -54,11 +53,11 @@ export default class ChartUtils {
 
             // checks if the sum for this item's month is NaNs and resets it to '0'
             // equivalent of 'NaN !== NaN', which is always true
-            if (sumPerDayOfMonth[date.getDate()] !== sumPerDayOfMonth[date.getDate()]) {
-                sumPerDayOfMonth[date.getDate()] = 0;
+            if (sumPerDayOfMonth[date.getDate() - 1] !== sumPerDayOfMonth[date.getDate() - 1]) {
+                sumPerDayOfMonth[date.getDate() - 1] = 0;
             }
 
-            sumPerDayOfMonth[date.getDate()] += budgetItem.totalPrice;
+            sumPerDayOfMonth[date.getDate() - 1] += budgetItem.totalPrice;
         }
 
         if (!fillMissingWithZero) {

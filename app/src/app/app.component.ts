@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './core/services/auth.service';
-import {AuthActions} from './core/actions/auth.actions';
-import {DataActions} from './core/actions/data.actions';
+import {AuthActionsService} from './core/services/auth-actions.service';
+import {DataActionsService} from './core/services/data-actions.service';
 
 /**
  * Angular Component that manages the top-level elements in the application.
@@ -17,8 +17,8 @@ export class AppComponent implements OnInit {
 
     constructor(
         private service: AuthService,
-        private authActions: AuthActions,
-        private dataActions: DataActions) {
+        private authActions: AuthActionsService,
+        private dataActions: DataActionsService) {
     }
 
     async ngOnInit() {

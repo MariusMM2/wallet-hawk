@@ -122,10 +122,18 @@ tryUntilSuccessful(async () => {
     transaction = await dbInstance.transaction();
 
     try {
+        const currentYear = 2021;
         for (const userGallery of userGalleries) {
             const galleryReceipts = receipts.map((receipt) => {
+                const date = new Date();
+                // TODO find better implementation
+                date.setFullYear(currentYear - Math.floor(Math.random() * 2));
+                date.setMonth(Math.floor(Math.random() * 12));
+                date.setDate(Math.floor(Math.random() * 31) + 1);
+
                 return {
-                    description: `${userGallery.name}.${receipt.description}`
+                    description: `${userGallery.name}.${receipt.description}`,
+                    date
                 };
             });
 
@@ -146,7 +154,7 @@ tryUntilSuccessful(async () => {
     try {
         const receipts = await ReceiptDAO.findAll();
         for (const receipt of receipts) {
-            await budgetItemsGenerator(receipt, transaction, 5);
+            await budgetItemsGenerator(receipt, transaction, 15);
         }
 
         await transaction.commit();

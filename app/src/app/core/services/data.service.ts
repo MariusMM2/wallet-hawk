@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
-import {Category} from '../models/category';
+import {BudgetItem, Category} from '../models';
 import {API_BASE} from '../../shared/constants';
 import {AuthService} from './auth.service';
-import {BudgetItem} from '../models/budgetItem';
 import {Creator} from '../types/creator';
+import {GalleryResponseData} from '../types/galleryResponseData';
+import {ModelUtils} from '../../shared/utilities/model.utils';
 
 /**
  * Angular Service responsible for communicating with the backend
@@ -31,6 +32,22 @@ export class DataService {
         }
     }
 
+    async getUserGalleries(userId: string): Promise<GalleryResponseData> {
+        const url = `${API_BASE}/data/user/${userId}/gallery`;
+        console.log(url);
+        let galleryResponseData: GalleryResponseData;
+        try {
+            galleryResponseData = await this.http.get<GalleryResponseData>(url);
+        } catch (response) {
+            console.log(response);
+            throw AuthService.handleGenericErrors(response);
+        }
+
+        ModelUtils.parseBudgetItemDates(galleryResponseData.budgetItemList);
+
+        return galleryResponseData;
+    }
+
     async getUserBudgetItems(userId: string): Promise<Array<BudgetItem>> {
         const url = `${API_BASE}/data/user/${userId}/budget-item`;
         console.log(url);
@@ -42,9 +59,7 @@ export class DataService {
             throw AuthService.handleGenericErrors(response);
         }
 
-        for (let budgetItem of budgetItems) {
-            budgetItem.date = new Date(budgetItem.date);
-        }
+        ModelUtils.parseBudgetItemDates(budgetItems);
 
         return budgetItems;
     }

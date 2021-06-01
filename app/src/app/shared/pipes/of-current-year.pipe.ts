@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {OfYearPipe} from './of-year.pipe';
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem} from '../../core/models';
 import {DateUtils} from '../utilities/date.utils';
 
 /**

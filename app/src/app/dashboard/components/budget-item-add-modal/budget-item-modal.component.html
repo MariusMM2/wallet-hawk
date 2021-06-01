@@ -45,7 +45,7 @@
       <div class="col pr-0">
         <mat-form-field appearance="outline" color="accent">
           <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" required disabled>
+          <input matInput [matDatepicker]="picker" formControlName="date" required [disabled]="true">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker disabled="false"></mat-datepicker>
         </mat-form-field>

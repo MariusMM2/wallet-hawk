@@ -63,7 +63,7 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     public description!: string | null;
 
     @AllowNull(false)
-    @Column(DataType.INTEGER)
+    @Column(DataType.BIGINT)
     public totalPrice!: number;
 
     @AllowNull(false)

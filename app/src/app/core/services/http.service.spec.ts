@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 
 import {HttpService} from './http.service';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 describe('HttpService', () => {
     let service: HttpService;
@@ -10,6 +10,9 @@ describe('HttpService', () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientModule
+            ],
+            providers: [
+                HttpClient
             ]
         });
         service = TestBed.inject(HttpService);

@@ -1,6 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CategoryPickerComponent} from './category-picker.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 describe('CategoryPickerComponent', () => {
     let component: CategoryPickerComponent;
@@ -8,7 +9,10 @@ describe('CategoryPickerComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [CategoryPickerComponent]
+            declarations: [CategoryPickerComponent],
+            imports: [
+                MatAutocompleteModule
+            ]
         })
             .compileComponents();
     });

@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {AuthenticateComponent} from './authenticate.component';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
+import {routes} from '../app-routing.module';
 
 describe('AuthenticateComponent', () => {
     let component: AuthenticateComponent;
@@ -12,7 +13,7 @@ describe('AuthenticateComponent', () => {
         await TestBed.configureTestingModule({
             imports: [
                 HttpClientModule,
-                RouterModule.forRoot([])
+                RouterModule.forRoot(routes)
             ],
             declarations: [
                 AuthenticateComponent

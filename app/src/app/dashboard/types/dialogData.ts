@@ -1,5 +1,4 @@
-import {BudgetItem} from '../../core/models/budgetItem';
-import {Category} from '../../core/models/category';
+import {BudgetItem, Category} from '../../core/models';
 
 export interface DialogBudgetItemData extends BudgetItem {
     id: string | null;

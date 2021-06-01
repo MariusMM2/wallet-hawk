@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Category} from '../../core/models/category';
+import {Category} from '../../core/models';
 import StringUtils from '../utilities/string.utils';
 
 // margin * 2 + border * 2 + padding * 2
@@ -14,7 +14,11 @@ const MAX_WIDTH = 350 - 2 - 24 - 4;// 320
     name: 'limitLabels'
 })
 export class LimitLabelsPipe implements PipeTransform {
-    transform(categories: Array<Category>, chipWidth?: number, maxWidth?: number): unknown {
+    transform(categories: Array<Category>, chipWidth?: number, maxWidth?: number): Array<String> | null {
+        if (!categories) {
+            return null;
+        }
+
         // Width of a chip, excluding the text inside it
         const _chipWidth = chipWidth || CHIP_WIDTH;
         // Maximum width allowed

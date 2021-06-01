@@ -1,4 +1,4 @@
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem} from '../../core/models';
 
 export type DateMonth =
     'January'

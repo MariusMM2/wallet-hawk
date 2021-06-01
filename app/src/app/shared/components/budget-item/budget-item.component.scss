@@ -1,5 +1,6 @@
 @import "src/app/styles/colors";
 @import "src/app/styles/pure-classes";
+@import "src/app/styles/variables";
 
 $category-item-height: 28px;
 $category-item-vertical-margin: 4px;
@@ -7,7 +8,7 @@ $item-header-padding-top: 4px;
 $item-header-height: $category-item-height + $category-item-vertical-margin * 2 + $item-header-padding-top;
 
 mat-card {
-  width: 350px;
+  width: $budgetItemWidth;
   height: 83px;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -22,7 +23,6 @@ mat-card {
       padding: 0;
 
       .category-item {
-        @extend .shadow-4;
         padding: 0 8px;
         margin: $category-item-vertical-margin 2.5px;
         height: $category-item-height;
@@ -62,7 +62,6 @@ mat-card {
 
     .item-date {
       color: $secondary-text-color;
-      font-size: 10px;
 
       &.empty {
         font-style: italic;

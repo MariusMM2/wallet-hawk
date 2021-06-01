@@ -1,5 +1,4 @@
-import {Identifiable} from './identifiable';
-
-export interface Goal extends Identifiable {
+export interface Goal {
+    id: string;
     maxAmount: number;
 }

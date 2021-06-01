@@ -3,7 +3,7 @@ import {FormControl} from '@angular/forms';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Category} from '../../../core/models/category';
+import {Category} from '../../../core/models';
 
 @Component({
     selector: 'app-category-picker',

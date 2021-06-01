@@ -3,6 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {AnonGuard} from './anon.guard';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
+import {routes} from '../../app-routing.module';
 
 describe('AnonGuard', () => {
     let guard: AnonGuard;
@@ -11,7 +12,7 @@ describe('AnonGuard', () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientModule,
-                RouterModule.forRoot([])
+                RouterModule.forRoot(routes)
             ]
         });
         guard = TestBed.inject(AnonGuard);

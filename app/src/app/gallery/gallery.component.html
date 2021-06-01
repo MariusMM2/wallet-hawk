@@ -1,1 +1,34 @@
-<p>gallery works!</p>
+<div class="container-fluid h-100 px-0">
+  <div class="row h-100">
+    <ng-container *ngIf="galleryList$ | async as galleryList else loading">
+      <app-item-list class="col-auto h-100" title="Galleries" listItemType="ImageCard">
+        <app-image-card-item *ngFor="let gallery of galleryList | sort : 'name' : false"
+                             class="m-3"
+                             [title]="gallery.name"
+                             [description]="gallery.description"
+                             [selected]="((selectedGallery$ | async)?.id === gallery.id)"
+                             (click)="selectedGallery$.next(gallery)">
+          <img src="assets/placeholder-image.png">
+        </app-image-card-item>
+      </app-item-list>
+      <app-item-list class="col-auto h-100" title="Receipts" listItemType="ImageCard">
+        <app-image-card-item *ngFor="let receipt of galleryReceipts | sort : 'date'"
+                             class="m-3"
+                             [title]="receipt.date | date"
+                             [description]="receipt.description"
+                             [selected]="((selectedReceipt$ | async)?.id === receipt.id)"
+                             (click)="selectedReceipt$.next(receipt)">
+          <img src="assets/placeholder-image.png">
+        </app-image-card-item>
+      </app-item-list>
+      <app-receipt-preview class="col h-100"
+                           [receipt]="selectedReceipt$ | async"
+                           [budgetItems]="receiptBudgetItems">
+      </app-receipt-preview>
+    </ng-container>
+
+    <ng-template #loading>
+      <mat-spinner class="m-auto"></mat-spinner>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="container-fluid h-100 px-0">
+  <div class="row h-100">
+    <div class="col">
+
+    </div>
+    <app-item-list class="col-auto h-100" readOnly="true" title="Generated Entries">
+      <app-budget-item *ngFor="let budgetItem of budgetItems | sort : 'date'"
+                       [item]="budgetItem"
+                       readOnly="true"
+      ></app-budget-item>
+    </app-item-list>
+  </div>
+</div>

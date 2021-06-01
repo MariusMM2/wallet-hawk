@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem} from '../../core/models';
 import {DateMonth, DateUtils} from '../utilities/date.utils';
 
 /**
@@ -22,10 +22,14 @@ export class OfMonthPipe implements PipeTransform {
 
         let endDate = new Date(startDate.getTime());
         if (endDay) {
-            endDate.setDate(endDay);
+            if (endDay === startDay) {
+                endDate.setDate(endDay + 1);
+            } else {
+                endDate.setDate(endDay);
+            }
         } else {
             endDate.setMonth(endDate.getMonth() + 1);
-            endDate.setDate(0);
+            endDate.setDate(1);
         }
 
         return DateUtils.filterBudgetItems(budgetItems, startDate, endDate);

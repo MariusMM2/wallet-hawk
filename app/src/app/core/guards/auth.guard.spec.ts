@@ -3,6 +3,7 @@ import {TestBed} from '@angular/core/testing';
 import {AuthGuard} from './auth.guard';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
+import {routes} from '../../app-routing.module';
 
 describe('AuthGuard', () => {
     let guard: AuthGuard;
@@ -11,7 +12,7 @@ describe('AuthGuard', () => {
         TestBed.configureTestingModule({
             imports: [
                 HttpClientModule,
-                RouterModule.forRoot([])
+                RouterModule.forRoot(routes)
             ]
         });
         guard = TestBed.inject(AuthGuard);

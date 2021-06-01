@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {NavigationBehaviorOptions, Router, UrlTree} from '@angular/router';
-import {AuthActions} from '../actions/auth.actions';
+import {AuthActionsService} from './auth-actions.service';
 import {AuthService} from './auth.service';
 
 /**
@@ -32,7 +32,7 @@ export class RouterService {
     public readonly settingsUrl: UrlTree;
     public readonly logoutUrl: UrlTree;
 
-    constructor(private router: Router, private actions: AuthActions, private service: AuthService) {
+    constructor(private router: Router, private actions: AuthActionsService, private service: AuthService) {
         this.homeUrl = router.parseUrl(RouterService.HOME);
         this.loginUrl = router.parseUrl(RouterService.LOGIN);
 
@@ -72,8 +72,7 @@ export class RouterService {
             {
                 label: 'Gallery',
                 url: this.galleryUrl,
-                icon: 'collections',
-                disabled: true
+                icon: 'collections'
             },
             {
                 label: 'Recurrences',

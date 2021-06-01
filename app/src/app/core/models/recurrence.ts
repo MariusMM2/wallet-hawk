@@ -1,7 +1,7 @@
-import {Identifiable} from './identifiable';
 import {BudgetItem} from './budgetItem';
 
-export interface Recurrence extends Identifiable {
+export interface Recurrence {
+    id: string;
     originalBudgetItem: BudgetItem;
     active: boolean;
 }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import {ObservableStore} from '../../shared/utilities/redux.utils';
-import {CoreState} from '../core.store';
-import {User} from '../models/user';
+import {StoreService} from './store.service';
+import {User} from '../models';
 import {LoginForm} from '../../authenticate/types/loginForm';
 import {RegisterForm} from '../../authenticate/types/registerForm';
 import {API_BASE} from '../../shared/constants';
@@ -20,7 +19,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class AuthService {
     constructor(
-        private redux: ObservableStore<CoreState>,
+        private store: StoreService,
         private http: HttpService) {
     }
 
@@ -94,11 +93,11 @@ export class AuthService {
     }
 
     isLoggedIn(): boolean {
-        return this.redux.getState(state => state.auth).user !== null;
+        return this.store.getState(state => state.auth).user !== null;
     }
 
     subscribeLoggedIn(next?: (value: boolean) => void, error?: (error: any) => void, complete?: () => void): Unsubscribable {
-        return this.redux.select(state => state.auth.user)
+        return this.store.select(state => state.auth.user)
             .pipe(map(user => user !== null))
             .subscribe(next, error, complete);
     }

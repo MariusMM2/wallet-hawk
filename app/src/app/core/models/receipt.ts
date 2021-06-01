@@ -1,6 +1,6 @@
-import {Identifiable} from './identifiable';
-
-export interface Receipt extends Identifiable {
+export interface Receipt {
+    id: string;
+    galleryId: string;
     description: string;
     date: Date;
     image: string;
