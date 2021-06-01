@@ -1,16 +1,4 @@
-.shadow-12 {
-  box-shadow: 0 12px 17px rgba(0, 0, 0, 0.14),
-  0 5px 22px rgba(0, 0, 0, 0.12),
-  0 7px 8px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-4 {
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.14),
-  0 1px 10px rgba(0, 0, 0, 0.12),
-  0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.shadow-12-reversed {
+.mat-elevation-z12-reversed {
   box-shadow: 0 -12px 17px rgba(0, 0, 0, 0.14),
   0 -5px 22px rgba(0, 0, 0, 0.12),
   0 -7px 8px rgba(0, 0, 0, 0.2);
@@ -35,4 +23,22 @@ mat-error {
 
 mat-hint {
   @extend .field-hint;
+}
+
+.font-weight-medium {
+  font-weight: 500;
+}
+
+.font-10 {
+  font-size: 10px;
+}
+
+.font-14 {
+  font-size: 14px;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

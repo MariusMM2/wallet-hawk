@@ -1,77 +1,81 @@
 import {Router} from 'express';
-import {CreatorDAO, RequestCreator} from '../../types/request';
-import {BudgetItemDAO} from '../../database';
+import {FullRequest, RequestBudgetItem, RequestCreator} from '../../types/request';
+import {BudgetItemDAO, CreatorDAO} from '../../database';
 
 export const budgetItemRouter = Router({mergeParams: true});
 
+/**
+ * Retrieves all budget items for the provided creator.
+ */
 budgetItemRouter.get('/',
     async (req: RequestCreator, res) => {
+        const creator: CreatorDAO = req.creator!;
         let budgetItems: Array<BudgetItemDAO> | null = null;
         try {
-            budgetItems = await req.creator?.getBudgetItems() || null;
-        } catch (e) {
-            console.log(e);
+            budgetItems = await creator.getBudgetItems() ?? null;
+        } catch (error) {
+            console.log(error);
             return res.sendStatus(500);
         }
 
         res.json(budgetItems);
     });
 
-budgetItemRouter.put('/',
-    async (req: RequestCreator, res) => {
+/**
+ * Updates an existing budget item, or creates a new one if it does not exist.
+ */
+budgetItemRouter.put(['/', '/:budgetItemId'],
+    async (req: FullRequest, res) => {
         const creator: CreatorDAO = req.creator!;
         const budgetItem = req.body;
-        console.log(budgetItem);
 
-        let id = budgetItem.id;
+        let storedBudgetItem = req.budgetItem;
         try {
-            if (!id) {
-                const newBudgetItem = await creator.createBudgetItem(budgetItem);
-                await newBudgetItem.addCategories(budgetItem.categoryIds);
-
-                id = newBudgetItem.id;
+            if (!storedBudgetItem) {
+                storedBudgetItem = await creator.createBudgetItem(budgetItem);
             } else {
-                const existingBudgetItem = await BudgetItemDAO.findByPk(id);
-                if (!existingBudgetItem) {
-                    return res.sendStatus(500);
-                }
-
-                await existingBudgetItem.update(budgetItem, {
-                    where: {
-                        id
-                    }
-                });
-
-                await existingBudgetItem!.updateCategories(budgetItem.categoryIds);
+                await storedBudgetItem.update(budgetItem);
             }
-        } catch (e) {
-            console.log(e);
+
+            await storedBudgetItem.setCategories(budgetItem.categoryIds);
+        } catch (error) {
+            console.log(error);
             return res.sendStatus(500);
         }
 
-        const resultBudgetItem = await BudgetItemDAO.findByPk(id);
-
-        res.json(resultBudgetItem);
+        res.json(storedBudgetItem);
     });
 
-budgetItemRouter.delete('/:id',
-    async (req, res) => {
-        const id = req.params.id;
-        let result;
-        try {
-            result = await BudgetItemDAO.destroy({
-                where: {
-                    id
-                }
-            });
-        } catch (e) {
-            console.log(e);
-            return res.sendStatus(500);
-        }
+/**
+ * Deletes an existing budget item.
+ */
+budgetItemRouter.delete('/:budgetItemId',
+    async (req: RequestBudgetItem, res) => {
+        const budgetItem = req.budgetItem!;
 
-        if (result === 0) {
-            return res.sendStatus(404);
+        try {
+            await budgetItem.destroy();
+        } catch (error) {
+            console.log(error);
+            return res.sendStatus(500);
         }
 
         return res.sendStatus(204);
+    });
+
+/**
+ * Adds the user DAO as req.creator in the request. Intended to be used to reuse the budgetItem
+ * router with the user DAO.
+ */
+budgetItemRouter.param('budgetItemId',
+    async function(req: RequestBudgetItem, res, next, budgetItemId) {
+        const budgetItem = await BudgetItemDAO.findByPk(budgetItemId);
+
+        if (budgetItem) {
+            req.budgetItem = budgetItem;
+
+            return next();
+        }
+
+        res.status(404).send('budget item not found');
     });

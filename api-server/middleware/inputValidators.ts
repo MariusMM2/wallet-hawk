@@ -293,8 +293,6 @@ export function inputValidator(req: Request, res: Response, next: NextFunction) 
  * @returns {Error|boolean} True if the id matches the current user, throws Error otherwise
  */
 export function isCurrentUser(id: any, {req}: Meta) {
-    console.log(id);
-    console.log(req.session.userId);
     if (id === req.session?.userId) {
         return true;
     } else {

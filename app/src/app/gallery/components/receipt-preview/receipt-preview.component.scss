@@ -1,0 +1,26 @@
+@import "src/app/styles/variables";
+@import "src/app/styles/colors";
+@import "src/app/styles/pure-classes";
+
+div.header {
+  height: $genericHeaderHeight;
+  z-index: 1032;
+  background-color: $light;
+}
+
+form {
+  padding-top: $genericHeaderHeight;
+}
+
+.fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+  }
+}

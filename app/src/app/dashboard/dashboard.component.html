@@ -13,16 +13,13 @@
               }]"></app-line-chart>
         </div>
         <div class="row h-75">
-          <div class="col h-100 vertical-overflow items-container">
+          <app-item-list class="col-auto h-100" title="Latest entries" (add)="addBudgetItem()">
             <app-budget-item *ngFor="let budgetItem of budgetItems$ | async | sort : 'date';trackBy: trackItems"
                              [item]="budgetItem"
                              (edit)="onBudgetItemEdit(budgetItem)"
                              (delete)="onBudgetItemDelete(budgetItem)"
             ></app-budget-item>
-          </div>
-          <button class="budget-item-add" mat-fab (click)="addBudgetItem()">
-            <mat-icon>add</mat-icon>
-          </button>
+          </app-item-list>
         </div>
       </div>
       <div class="col h-100 vertical-overflow">
@@ -52,7 +49,7 @@
     </ng-container>
 
     <ng-template #loading>
-      <mat-spinner></mat-spinner>
+      <mat-spinner class="m-auto"></mat-spinner>
     </ng-template>
   </div>
 </div>

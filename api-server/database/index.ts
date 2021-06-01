@@ -31,3 +31,4 @@ export {Gallery as GalleryDAO};
 export {Receipt as ReceiptDAO};
 export {BudgetItem as BudgetItemDAO};
 export {Category as CategoryDAO};
+export type CreatorDAO = User | Receipt;

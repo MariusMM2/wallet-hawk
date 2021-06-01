@@ -1,10 +1,17 @@
-@import "src/styles";
+@import "variables";
 
-.app-bar {
-  z-index: 10;
-  position: relative;
+.vertical-overflow {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 16px - $scrollbarWidth;
+}
 
-  .spacer {
-    @extend .flex-fill;
-  }
+.items-container {
+  padding-bottom: $fabDiameter + 16px;
+}
+
+.fab-add-button {
+  position: absolute;
+  right: 32px;
+  bottom: 16px;
 }

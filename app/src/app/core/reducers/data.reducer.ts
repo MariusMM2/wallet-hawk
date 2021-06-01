@@ -1,7 +1,7 @@
 import {tassign} from 'tassign';
 import {TypeGuards} from '../actions/data.actions';
 import {DataState} from '../core.store';
-import {BudgetItem} from '../models/budgetItem';
+import {BudgetItem} from '../models';
 import {Creator} from '../types/creator';
 
 
@@ -23,7 +23,6 @@ const INITIAL_STATE: DataState = {
  */
 export function dataReducer(state: DataState = INITIAL_STATE, action): DataState {
     if (TypeGuards.isInitializeData(action)) {
-        console.log('initializing', action.payload);
         return tassign(state, {
             categoryList: action.payload.categoryList,
             galleryList: action.payload.galleryList,
@@ -56,6 +55,59 @@ export function dataReducer(state: DataState = INITIAL_STATE, action): DataState
         budgetItems = budgetItems.filter(budgetItem => budgetItem.id !== action.payload.id);
 
         return replaceBudgetItemsOfCreator(state, budgetItems, action.payload.creator);
+    } else if (TypeGuards.isUpsertGallery(action)) {
+        let galleryList = [...state.galleryList];
+
+        if (action.payload.isFresh) {
+            galleryList.push(action.payload.gallery);
+        } else {
+            galleryList = galleryList.map(gallery => {
+                if (gallery.id === action.payload.gallery.id) {
+                    return action.payload.gallery;
+                }
+
+                return gallery;
+            });
+
+        }
+
+        return tassign(state, {
+            galleryList
+        });
+    } else if (TypeGuards.isDeleteGallery(action)) {
+        let galleryList = [...state.galleryList];
+
+        galleryList = galleryList.filter(gallery => gallery.id !== action.payload);
+
+        return tassign(state, {
+            galleryList
+        });
+    } else if (TypeGuards.isUpsertReceipt(action)) {
+        let receiptList = [...state.receiptList];
+
+        if (action.payload.isFresh) {
+            receiptList.push(action.payload.receipt);
+        } else {
+            receiptList = receiptList.map(receipt => {
+                if (receipt.id === action.payload.receipt.id) {
+                    return action.payload.receipt;
+                }
+
+                return receipt;
+            });
+        }
+
+        return tassign(state, {
+            receiptList
+        });
+    } else if (TypeGuards.isDeleteReceipt(action)) {
+        let receiptList = [...state.receiptList];
+
+        receiptList = receiptList.filter(receipt => receipt.id !== action.payload);
+
+        return tassign(state, {
+            receiptList
+        });
     }
 
     return state;

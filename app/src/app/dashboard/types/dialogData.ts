@@ -1,13 +1,20 @@
-import {BudgetItem} from '../../core/models/budgetItem';
-import {Category} from '../../core/models/category';
+import {BudgetItem, Category, Gallery} from '../../core/models';
 
-export interface DialogBudgetItemData extends BudgetItem {
-    id: string | null;
+export interface DialogBudgetItemData {
+    budgetItem: Partial<BudgetItem>;
+    returnInsteadOfDispatch: boolean | null;
     allCategories: Array<Category>;
-    priceType: string | null;
 }
 
 export interface ConfirmationDialogData {
     title: string;
     message: string;
+}
+
+export interface DialogGalleryData extends Gallery {
+    id: string | null;
+}
+
+export interface DialogReceiptData {
+    galleryId: string;
 }

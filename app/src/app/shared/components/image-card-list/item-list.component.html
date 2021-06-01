@@ -1,0 +1,10 @@
+<app-generic-header *ngIf="title" [style.z-index]="10000" [absolute]="true">{{title}}</app-generic-header>
+<div class="row items-container-wrapper">
+  <div class="col h-100 vertical-overflow items-container"
+       [class.padded-top]="!!title">
+    <ng-content></ng-content>
+  </div>
+  <button *ngIf="!readOnly" class="fab-add-button" mat-fab (click)="onAdd($event)">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

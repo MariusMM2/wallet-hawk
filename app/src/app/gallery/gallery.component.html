@@ -1,1 +1,40 @@
-<p>gallery works!</p>
+<div class="container-fluid h-100 px-0">
+  <div class="row h-100">
+    <ng-container *ngIf="galleryList$ | async as galleryList else loading">
+      <app-item-list class="col-auto h-100" title="Galleries" listItemType="ImageCard" (add)="addGallery()">
+        <app-image-card-item *ngFor="let gallery of galleryList | sort : 'name' : false"
+                             class="m-3"
+                             [title]="gallery.name"
+                             [description]="gallery.description"
+                             [selected]="selectedGallery?.id === gallery.id"
+                             (click)="onGallerySelect(gallery)"
+                             (edit)="onGalleryEdit(gallery)"
+                             (delete)="onGalleryDelete(gallery)">
+          <img src="assets/placeholder-image.png" alt="placeholder">
+        </app-image-card-item>
+      </app-item-list>
+      <app-item-list class="col-auto h-100" title="Receipts" listItemType="ImageCard" (add)="addReceipt()"
+                     [readOnly]="selectedGallery === null">
+        <app-image-card-item
+          *ngFor="let receipt of receiptList$ | async | filterBy: 'galleryId' : selectedGallery?.id | sort : 'date'"
+          class="m-3"
+          [title]="receipt.date | date"
+          [description]="receipt.description"
+          [selected]="selectedReceipt?.id === receipt.id"
+          readOnly="true"
+          (click)="onReceiptSelect(receipt)"
+          (delete)="onReceiptDelete(receipt)">
+          <img src="assets/placeholder-image.png" alt="placeholder">
+        </app-image-card-item>
+      </app-item-list>
+      <app-receipt-preview *ngIf="selectedReceipt" class="col h-100 p-0"
+                           [receipt]="selectedReceipt"
+                           [budgetItems]="receiptBudgetItems">
+      </app-receipt-preview>
+    </ng-container>
+
+    <ng-template #loading>
+      <mat-spinner class="m-auto"></mat-spinner>
+    </ng-template>
+  </div>
+</div>

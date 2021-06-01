@@ -21,6 +21,10 @@ export class HttpService {
         return await this.http.post<T>(url, body, options).toPromise();
     }
 
+    async patch<T>(url: string, body: any | null, options = HttpService.options) {
+        return await this.http.patch<T>(url, body, options).toPromise();
+    }
+
     async put<T>(url: string, body: any | null, options = HttpService.options) {
         return await this.http.put<T>(url, body, options).toPromise();
     }

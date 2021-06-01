@@ -1,0 +1,23 @@
+<form class="container-fluid justify-content-center align-items-center" [formGroup]="galleryForm"
+      (ngSubmit)="onSubmit($event)">
+  <div mat-dialog-content>
+    <h1 class="row" mat-dialog-title>Gallery</h1>
+    <div class="row">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Name</mat-label>
+        <input type="text" matInput formControlName="name">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="justify-content-between">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <app-submit-button [disabled]="galleryForm.invalid" [isSubmitting]="isLoading">Save</app-submit-button>
+  </div>
+</form>

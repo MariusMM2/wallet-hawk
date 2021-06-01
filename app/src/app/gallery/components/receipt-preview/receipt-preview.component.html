@@ -1,0 +1,34 @@
+<div class="container-fluid h-100">
+  <!--  TODO align properly-->
+  <!--  <div class="row header w-100 py-2 pl-4 font-weight-medium font-14 align-items-center mat-elevation-z12 position-absolute">-->
+  <!--    {{receipt.date | date}}-->
+  <!--  </div>-->
+  <form class="row h-100" [formGroup]="receiptForm" (ngSubmit)="onSubmit($event)">
+
+    <div class="col-lg h-100">
+      <div class="fill h-50">
+        <img src="assets/placeholder-image.png" alt="placeholder">
+      </div>
+      <div class="h-50 d-flex flex-column justify-content-between">
+        <mat-form-field class="w-100" appearance="outline" color="accent">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+
+        <div class="d-flex pb-4">
+          <button mat-raised-button type="button" (click)="onRevert()" [disabled]="!canRevert">Revert</button>
+          <div class="flex-fill"></div>
+          <button mat-raised-button class="mr-2" type="button" color="warn" (click)="onDelete()">Delete</button>
+          <app-submit-button [disabled]="receiptForm.invalid" [isSubmitting]="isLoading">Save</app-submit-button>
+        </div>
+      </div>
+    </div>
+
+    <app-item-list class="col-lg-auto h-100" readOnly="true" title="Generated Entries">
+      <app-budget-item *ngFor="let budgetItem of budgetItems  | sort : 'name' : false"
+                       [item]="budgetItem"
+                       readOnly="true"
+      ></app-budget-item>
+    </app-item-list>
+  </form>
+</div>

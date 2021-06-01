@@ -1,4 +1,4 @@
-import * as stringUtils from './string.utils';
+import StringUtils from './string.utils';
 import {ValidationError} from '../types/validationError';
 
 describe('StringUtils', () => {
@@ -19,6 +19,6 @@ describe('StringUtils', () => {
             'The Password must contain letters, numbers and special characters.'
         ];
 
-        expect(stringUtils.parseErrorArray(input)).toEqual(output);
+        expect(StringUtils.parseErrorArray(input)).toEqual(output);
     });
 });

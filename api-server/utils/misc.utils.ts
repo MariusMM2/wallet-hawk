@@ -14,8 +14,8 @@ export async function tryUntilSuccessful(errorProneFunc: () => Promise<void>, in
             await errorProneFunc();
             logging && console.log(`tryUntilSuccessful: Success`);
             return;
-        } catch (e) {
-            logging && console.log(`tryUntilSuccessful: Failed: ${e}`);
+        } catch (error) {
+            logging && console.log(`tryUntilSuccessful: Failed: ${error}`);
         }
 
         await sleep(interval);

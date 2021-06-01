@@ -75,7 +75,7 @@ tryUntilSuccessful(async () => {
             date.setMonth(Math.floor(Math.random() * 12));
             date.setDate(Math.floor(Math.random() * 31) + 1);
             await creator.createBudgetItem({
-                totalPrice: Math.random() * 10000 - 5000,
+                totalPrice: Math.random() * 1000000 - 500000,
                 quantity: Math.random() * 100,
                 description: `${creatorTag}.no. ${i}`,
                 date
@@ -91,7 +91,7 @@ tryUntilSuccessful(async () => {
         date.setDate(1);
         // dummy item for the salary at the beginning of a month
         await currentUser.createBudgetItem({
-            totalPrice: 30000,
+            totalPrice: 3000000,
             quantity: 1,
             date
         }, {transaction});
@@ -122,10 +122,18 @@ tryUntilSuccessful(async () => {
     transaction = await dbInstance.transaction();
 
     try {
+        const currentYear = 2021;
         for (const userGallery of userGalleries) {
             const galleryReceipts = receipts.map((receipt) => {
+                const date = new Date();
+                // TODO find better implementation
+                date.setFullYear(currentYear - Math.floor(Math.random() * 2));
+                date.setMonth(Math.floor(Math.random() * 12));
+                date.setDate(Math.floor(Math.random() * 31) + 1);
+
                 return {
-                    description: `${userGallery.name}.${receipt.description}`
+                    description: `${userGallery.name}.${receipt.description}`,
+                    date
                 };
             });
 
@@ -146,7 +154,7 @@ tryUntilSuccessful(async () => {
     try {
         const receipts = await ReceiptDAO.findAll();
         for (const receipt of receipts) {
-            await budgetItemsGenerator(receipt, transaction, 5);
+            await budgetItemsGenerator(receipt, transaction, 15);
         }
 
         await transaction.commit();
@@ -177,8 +185,8 @@ tryUntilSuccessful(async () => {
         }
 
         await transaction.commit();
-    } catch (e) {
-        console.log(e);
+    } catch (error) {
+        console.log(error);
         await transaction.rollback();
     }
 

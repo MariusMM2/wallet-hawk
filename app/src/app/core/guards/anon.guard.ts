@@ -17,12 +17,7 @@ export class AnonGuard implements CanActivate {
     async canActivate(): Promise<boolean | UrlTree> {
         const authenticated = await this.authService.isLoggedIn();
 
-        if (authenticated) {
-            console.log('anonGuard denied');
-            return this.routerService.homeUrl;
-        }
+        return authenticated ? this.routerService.homeUrl : true;
 
-        console.log('anonGuard approved');
-        return true;
     }
 }

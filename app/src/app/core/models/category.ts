@@ -1,5 +1,4 @@
-import {Identifiable} from './identifiable';
-
-export interface Category extends Identifiable {
+export interface Category {
+    id: string;
     label: string;
 }

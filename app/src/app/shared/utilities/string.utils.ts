@@ -15,7 +15,7 @@ export default class StringUtils {
      */
     static getTextWidth(text: string, font: string = '500 12px Roboto'): number {
         // Re-uses canvas object for better performance
-        const canvasElement = this.canvasElement || (this.canvasElement = document.createElement('canvas'));
+        const canvasElement = this.canvasElement ?? (this.canvasElement = document.createElement('canvas'));
         const renderingContext2D = canvasElement.getContext('2d');
         renderingContext2D.font = font;
         const textMetrics = renderingContext2D.measureText(text);

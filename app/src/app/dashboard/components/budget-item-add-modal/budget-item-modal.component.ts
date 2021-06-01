@@ -2,13 +2,11 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DialogBudgetItemData} from '../../types/dialogData';
-import {ObservableStore} from '../../../shared/utilities/redux.utils';
-import {CoreState} from '../../../core/core.store';
-import {Category} from '../../../core/models/category';
-import {DataActions} from '../../../core/actions/data.actions';
+import {StoreService} from '../../../core/services/store.service';
+import {Category} from '../../../core/models';
+import {DataActionsService} from '../../../core/services/data-actions.service';
 
 @Component({
-    selector: 'app-budget-item-modal',
     templateUrl: './budget-item-modal.component.html',
     styleUrls: ['./budget-item-modal.component.scss']
 })
@@ -17,7 +15,7 @@ export class BudgetItemModalComponent implements OnInit {
     budgetItemForm: FormGroup;
 
     categories: Array<Category> = [];
-    isLoading: boolean = false;
+    isLoading = false;
 
     priceTypes: Array<PriceType> = [
         {
@@ -31,26 +29,30 @@ export class BudgetItemModalComponent implements OnInit {
     ];
 
     constructor(private formBuilder: FormBuilder,
-                private actions: DataActions,
-                private store: ObservableStore<CoreState>,
+                private actions: DataActionsService,
+                private store: StoreService,
                 private dialogRef: MatDialogRef<BudgetItemModalComponent>,
-                @Inject(MAT_DIALOG_DATA) public item: DialogBudgetItemData) {
+                @Inject(MAT_DIALOG_DATA) public data: DialogBudgetItemData) {
     }
 
     ngOnInit(): void {
+        const item = this.data.budgetItem;
         this.budgetItemForm = this.formBuilder.group({
-            name: [this.item.name || ''],
-            description: [this.item.description || ''],
-            totalPrice: [Math.abs(this.item.totalPrice || 1),
-                Validators.required],
-            quantity: [this.item.quantity || 1,
-                Validators.required],
-            date: [this.item.date || new Date(),
-                Validators.required],
-            priceType: [(this.item.totalPrice || 1) > 0 ? this.priceTypes[0].value : this.priceTypes[1].value]
+            name: [item?.name ?? ''],
+            description: [item?.description ?? ''],
+            totalPrice: [Math.abs(item?.totalPrice ?? 100) / 100,
+                Validators.required
+            ],
+            quantity: [item?.quantity ?? 1,
+                Validators.required
+            ],
+            date: [{value: item?.date ?? new Date(), disabled: true},
+                Validators.required
+            ],
+            priceType: [(item?.totalPrice ?? 1) > 0 ? this.priceTypes[0].value : this.priceTypes[1].value]
         });
 
-        this.categories = this.item.categoryList || [];
+        this.categories = item?.categoryList ?? [];
     }
 
     onCancel(): void {
@@ -58,27 +60,32 @@ export class BudgetItemModalComponent implements OnInit {
     }
 
     async onSubmit(event: Event): Promise<void> {
+        event.preventDefault();
         if (this.isLoading) {
             return;
         }
 
         this.isLoading = true;
-        event.preventDefault();
         if (this.budgetItemForm.valid) {
-            const budgetItem: DialogBudgetItemData = {...this.item, ...this.budgetItemForm.value};
+            const budgetItem = {...this.data.budgetItem, ...this.budgetItemForm.value};
 
             budgetItem.name = budgetItem.name.trim();
             budgetItem.description = budgetItem.description.trim();
 
             budgetItem.categoryIds = this.categories.map(category => category.id);
-            delete budgetItem.allCategories;
 
-            budgetItem.totalPrice = budgetItem.totalPrice * (budgetItem.priceType === 'expense' && -1 || 1);
+            budgetItem.totalPrice = budgetItem.totalPrice * 100 * (budgetItem.priceType === 'expense' && -1 || 1);
             delete budgetItem.priceType;
 
-            const result = await this.actions.updateUserBudgetItem(budgetItem);
-            if (result) {
-                this.dialogRef.close();
+            delete budgetItem.returnInsteadOfDispatch;
+            if (this.data.returnInsteadOfDispatch) {
+                budgetItem.categoryList = this.categories;
+                this.dialogRef.close(budgetItem);
+            } else {
+                const result = await this.actions.upsertUserBudgetItem(budgetItem);
+                if (result) {
+                    this.dialogRef.close();
+                }
             }
         }
 

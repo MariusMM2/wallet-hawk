@@ -1,5 +1,4 @@
-import {BudgetItem} from '../../core/models/budgetItem';
-import {Category} from '../../core/models/category';
+import {BudgetItem, Category} from '../../core/models';
 
 export interface Dataset {
     label?: string;
@@ -54,11 +53,11 @@ export default class ChartUtils {
 
             // checks if the sum for this item's month is NaNs and resets it to '0'
             // equivalent of 'NaN !== NaN', which is always true
-            if (sumPerDayOfMonth[date.getDate()] !== sumPerDayOfMonth[date.getDate()]) {
-                sumPerDayOfMonth[date.getDate()] = 0;
+            if (sumPerDayOfMonth[date.getDate() - 1] !== sumPerDayOfMonth[date.getDate() - 1]) {
+                sumPerDayOfMonth[date.getDate() - 1] = 0;
             }
 
-            sumPerDayOfMonth[date.getDate()] += budgetItem.totalPrice;
+            sumPerDayOfMonth[date.getDate() - 1] += budgetItem.totalPrice / 100;
         }
 
         if (!fillMissingWithZero) {
@@ -91,7 +90,7 @@ export default class ChartUtils {
             const categoryItems = budgetItems.filter(budgetItem => budgetItem.categoryList.includes(category));
 
             const categoryTotal = categoryItems.reduce((previousTotal, currentItem) => {
-                return previousTotal + currentItem.totalPrice;
+                return previousTotal + currentItem.totalPrice / 100;
             }, 0);
 
             sumPerCategory.push(Math.abs(categoryTotal));

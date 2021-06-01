@@ -11,11 +11,7 @@ export const userRouter = Router();
  */
 userRouter.param('userId',
     async function(req: RequestCreator, res, next, userId) {
-        const user = await UserDAO.findOne({
-            where: {
-                id: userId
-            }
-        });
+        const user = await UserDAO.findByPk(userId);
 
         if (user) {
             req.creator = user;
@@ -24,7 +20,7 @@ userRouter.param('userId',
             return next();
         }
 
-        res.sendStatus(500);
+        res.status(404).send('user not found');
     });
 
 /**

@@ -1,8 +1,16 @@
-import {Identifiable} from './identifiable';
+import {BudgetItem} from './budgetItem';
 
-export interface Receipt extends Identifiable {
+export interface Receipt {
+    id: string;
+    galleryId: string;
     description: string;
     date: Date;
-    image: string;
+    image: File | string;
     budgetItemIds: string[];
+}
+
+export interface SubmissionReceipt extends Receipt {
+    id: string | null;
+    image: File;
+    budgetItems: Array<Partial<BudgetItem>>;
 }

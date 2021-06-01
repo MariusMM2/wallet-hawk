@@ -1,7 +1,7 @@
-import {Identifiable} from './identifiable';
 import {Category} from './category';
 
-export interface BudgetItem extends Identifiable {
+export interface BudgetItem {
+    id: string;
     name: string;
     description: string;
     totalPrice: number;

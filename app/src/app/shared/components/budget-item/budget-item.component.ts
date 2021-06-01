@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {BudgetItem} from '../../../core/models/budgetItem';
+import {BudgetItem} from '../../../core/models';
 
 @Component({
     selector: 'app-budget-item',
@@ -8,7 +8,9 @@ import {BudgetItem} from '../../../core/models/budgetItem';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BudgetItemComponent {
-    @Input() item: BudgetItem;
+
+    @Input() item: Partial<BudgetItem>;
+    @Input() readOnly: boolean = false;
 
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();

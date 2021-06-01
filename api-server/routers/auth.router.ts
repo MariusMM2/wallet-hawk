@@ -71,9 +71,9 @@ authRouter.post('/register',
             await UserDAO.create(req.body, {
                 fields: ['firstName', 'lastName', 'email', 'password']
             });
-        } catch (e) {
-            console.log(e);
-            return res.status(500).json(e);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json(error);
         }
 
         res.sendStatus(204);
@@ -106,9 +106,9 @@ authRouter.get('/authenticated-user',
 authRouter.get('/logout',
     authGuard,
     (req, res) => {
-        req.session.destroy((err) => {
-            if (err) {
-                console.log(err);
+        req.session.destroy((error) => {
+            if (error) {
+                console.log(error);
                 res.sendStatus(500);
             } else {
                 res.sendStatus(204);

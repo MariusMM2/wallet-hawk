@@ -1,0 +1,56 @@
+<form class="dialog-container container-fluid" [formGroup]="receiptForm"
+      (ngSubmit)="onSubmit($event)">
+  <h1 class="row title">Receipt</h1>
+  <div class="row contents">
+    <div class="col-4 col-md-6 h-100">
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Description</mat-label>
+        <textarea type="text" matInput formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="w-100" appearance="outline" color="accent">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <div class="image-container d-flex justify-content-center align-items-center overflow-hidden"
+           [class.no-image]="!selectedImageContents"
+           (click)="openImagePicker()">
+        <img *ngIf="selectedImageContents; else placeholderImage" [src]="selectedImageContents" alt=""
+             class="real-image">
+        <ng-template #placeholderImage>
+          <div class="placeholder-wrapper d-flex justify-content-center align-items-center h-100 w-100">
+            <img class="placeholder-image" src="assets/image-upload-placeholder.png" alt="">
+          </div>
+        </ng-template>
+      </div>
+      <ng-template [ngIf]="scanningStatus">
+        <ng-template [ngIf]="scanningStatus.status === 'recognizing text'">
+          <mat-progress-bar color="accent" mode="determinate"
+                            [value]="scanningStatus.progress | percentage"></mat-progress-bar>
+          <div class="w-100 text-center">{{scanningStatus.progress | percentage}}%</div>
+        </ng-template>
+
+        <ng-template [ngIf]="scanningStatus.status !== 'recognizing text'">
+          <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+        </ng-template>
+      </ng-template>
+    </div>
+
+    <app-item-list class="col-8 col-md-6 h-100" title="Generated entries"
+                   [readOnly]="budgetItems?.length === 0"
+                   (add)="openBudgetItemDialog()">
+      <app-budget-item *ngFor="let budgetItem of budgetItems | sort : 'name' : false"
+                       [item]="budgetItem"
+                       (edit)="openBudgetItemDialog(budgetItem)"
+                       (delete)="deleteBudgetItem(budgetItem)">
+      </app-budget-item>
+    </app-item-list>
+  </div>
+  <div class="actions d-flex align-items-center justify-content-between">
+    <button mat-button type="button" (click)="cancelDialog()">Cancel</button>
+    <app-submit-button [disabled]="receiptForm.invalid" [isSubmitting]="isLoading">Save</app-submit-button>
+  </div>
+</form>

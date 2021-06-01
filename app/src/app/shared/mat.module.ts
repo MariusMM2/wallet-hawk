@@ -15,6 +15,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 /**
  * Angular Module that contains imports for Material Design features used in the application.
@@ -37,7 +38,8 @@ import {MatMenuModule} from '@angular/material/menu';
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
-        MatMenuModule
+        MatMenuModule,
+        MatProgressBarModule
     ],
     providers: [
         MatDatepickerModule

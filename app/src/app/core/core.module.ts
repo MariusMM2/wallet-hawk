@@ -3,8 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {SidebarComponent} from './components/sidebar/sidebar.component';
 import {AuthService} from './services/auth.service';
-import {ObservableStore} from '../shared/utilities/redux.utils';
-import {CoreState, rootReducer} from './core.store';
+import {StoreService} from './services/store.service';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {RouterService} from './services/router.service';
@@ -29,14 +28,10 @@ import {SidebarItemComponent} from './components/sidebar-item/sidebar-item.compo
     ],
     providers: [
         AuthService,
-        ObservableStore,
+        StoreService,
         RouterService,
         HttpService
     ]
 })
 export class CoreModule {
-    constructor(private redux: ObservableStore<CoreState>) {
-        // @ts-ignore
-        this.redux.configureStore(rootReducer, {}, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-    }
 }

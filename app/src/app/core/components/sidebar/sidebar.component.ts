@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {RouterService} from '../../services/router.service';
 import {UrlTree} from '@angular/router';
-import {AuthActions} from '../../actions/auth.actions';
+import {AuthActionsService} from '../../services/auth-actions.service';
 
 /**
  * Angular Component that manages the application sidebar.
@@ -13,11 +13,11 @@ import {AuthActions} from '../../actions/auth.actions';
 })
 export class SidebarComponent {
 
-    activeUrl: UrlTree = this.router.dashboardUrl;
+    activeUrl: UrlTree = this.router.galleryUrl;
 
     constructor(
         public router: RouterService,
-        private actions: AuthActions) {
+        private actions: AuthActionsService) {
     }
 
     async onClick(nextUrl: UrlTree) {

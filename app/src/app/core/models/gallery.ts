@@ -1,6 +1,5 @@
-import {Identifiable} from './identifiable';
-
-export interface Gallery extends Identifiable {
+export interface Gallery {
+    id: string;
     name: string;
     description: string;
     receiptIds: string[];

@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import ChartUtils, {Dataset} from '../../utilities/chart.utils';
-import {v4 as uuidv4} from 'uuid';
+import uuid from 'uuid';
 import {Chart, ChartOptions} from 'chart.js';
 import {DateUtils} from '../../utilities/date.utils';
 import {locale} from '../../../app.config';
@@ -10,7 +10,7 @@ import {locale} from '../../../app.config';
     templateUrl: './line-chart.component.html',
     styleUrls: ['./line-chart.component.scss']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent implements OnInit, OnChanges {
 
     @Input() daysCount: number = DateUtils.daysPerMonth;
     @Input() toggleableDatasets: boolean = true;
@@ -19,12 +19,13 @@ export class LineChartComponent implements OnInit {
 
     private chart: Chart;
 
-    ngOnInit() {
-        const data = {
-            labels: DateUtils.getDayLabels().slice(0, this.daysCount),
-            datasets: this.getColoredDatasets(),
-        };
+    ngOnChanges() {
+        if (this.chart) {
+            this.updateChart();
+        }
+    }
 
+    ngOnInit() {
         let options: ChartOptions<'line'> = {
             locale,
             responsive: true,
@@ -43,12 +44,26 @@ export class LineChartComponent implements OnInit {
 
         const element = <HTMLCanvasElement> document.getElementById('chart');
         // give the canvas element a unique id
-        element.id = uuidv4();
+        element.id = uuid.v4();
         this.chart = new Chart(element, {
             type: 'line',
-            data,
+            data: {
+                labels: DateUtils.getDayLabels().slice(0, this.daysCount),
+                datasets: []
+            },
             options
         });
+
+        this.updateChart();
+    }
+
+    private updateChart() {
+        if (this.chart) {
+            const datasets = this.chart.data.datasets;
+            datasets.splice(0, datasets.length, ...this.getColoredDatasets());
+
+            this.chart.update();
+        }
     }
 
     private getColoredDatasets() {

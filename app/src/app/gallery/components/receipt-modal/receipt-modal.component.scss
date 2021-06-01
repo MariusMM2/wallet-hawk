@@ -1,0 +1,36 @@
+.dialog-container {
+  height: 650px;
+
+  .title {
+    height: 10%;
+  }
+
+  .contents {
+    height: 80%;
+  }
+
+  .actions {
+    height: 10%;
+  }
+}
+
+.image-container {
+  height: 300px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  .placeholder-wrapper {
+    background-color: #AAAAAA;
+
+    .placeholder-image {
+      flex-shrink: 1;
+      width: 160px;
+      height: auto;
+    }
+  }
+
+  .real-image {
+    width: auto;
+    height: 100%;
+  }
+}

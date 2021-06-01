@@ -1,0 +1,33 @@
+@import "src/app/styles/classes";
+@import "src/app/styles/pure-classes";
+@import "src/app/styles/colors";
+@import "src/app/styles/variables";
+
+:host {
+  &.image-card {
+    width: $imageCardWidth + 16 * 2;
+  }
+
+  &.budget-item {
+    width: $budgetItemWidth + 16 * 2;
+  }
+}
+
+.items-container-wrapper {
+  height: 100%;
+
+  .items-container {
+    // TODO fix 2-column grid layout
+    //width: $image-card-width * 2 + 4 * 16px + 2px;
+
+    &.padded-top {
+      padding-top: $genericHeaderHeight;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 1rem;
+      background: $divider-color;
+      margin: $genericHeaderHeight + 12px 0 12px 0;
+    }
+  }
+}

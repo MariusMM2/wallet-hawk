@@ -1,16 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {BudgetItem} from '../core/models/budgetItem';
-import {ObservableStore} from '../shared/utilities/redux.utils';
-import {CoreState} from '../core/core.store';
+import {BudgetItem, Category} from '../core/models';
+import {StoreService} from '../core/services/store.service';
 import {combineLatest, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Category} from '../core/models/category';
 import {DateUtils} from '../shared/utilities/date.utils';
 import {BudgetItemModalComponent} from './components/budget-item-add-modal/budget-item-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogBudgetItemData} from './types/dialogData';
 import {ConfirmationModalComponent} from '../shared/components/confirmation-modal/confirmation-modal.component';
-import {DataActions} from '../core/actions/data.actions';
+import {DataActionsService} from '../core/services/data-actions.service';
 
 /**
  * Angular Component that manages budget overviews.
@@ -28,9 +26,9 @@ export class DashboardComponent implements OnInit {
     readonly daysCountOfCurrentMonth = DateUtils.getDateCountOfCurrentMonth();
     readonly previousYear = DateUtils.getPreviousYear();
 
-    constructor(private store: ObservableStore<CoreState>,
+    constructor(private store: StoreService,
                 private dialog: MatDialog,
-                private actions: DataActions) {
+                private actions: DataActionsService) {
     }
 
     ngOnInit(): void {
@@ -59,7 +57,7 @@ export class DashboardComponent implements OnInit {
         return item.id;
     }
 
-    async addBudgetItem() {
+    addBudgetItem() {
         this.dialog.open(BudgetItemModalComponent, {
             disableClose: true,
             autoFocus: true,
@@ -74,7 +72,7 @@ export class DashboardComponent implements OnInit {
             disableClose: true,
             autoFocus: true,
             data: {
-                ...budgetItem,
+                budgetItem,
                 allCategories: this.store.getState(state => state.data.categoryList),
             } as DialogBudgetItemData
         });
@@ -85,14 +83,14 @@ export class DashboardComponent implements OnInit {
             autoFocus: true,
             data: {
                 title: 'Deleting Budget Item',
-                message: `Are you sure you want to delete '${budgetItem.name || 'No title'}'?`,
+                message: `Are you sure you want to delete '${budgetItem.name ?? 'No title'}'?`,
             }
         });
 
         const confirmed = await dialogRef.afterClosed().toPromise();
 
         if (confirmed) {
-            await this.actions.deleteUserBudgetItem(budgetItem);
+            await this.actions.deleteUserBudgetItem(budgetItem.id);
         }
     }
 }

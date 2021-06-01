@@ -1,5 +1,17 @@
-import {HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, Optional} from 'sequelize';
-import {AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, HasMany, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {BelongsToManyGetAssociationsMixinOptions, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, Optional} from 'sequelize';
+import {
+    AfterFind,
+    AllowNull,
+    BelongsTo,
+    Column,
+    DataType,
+    Default,
+    ForeignKey,
+    HasMany,
+    Model,
+    PrimaryKey,
+    Table
+} from 'sequelize-typescript';
 import {Gallery} from './gallery.dao';
 import {BudgetItem} from './budgetItem.dao';
 
@@ -55,4 +67,26 @@ export class Receipt extends Model<ReceiptAttributes, ReceiptCreationAttributes>
 
     public createBudgetItem!: HasManyCreateAssociationMixin<BudgetItem>;
     public getBudgetItems!: HasManyGetAssociationsMixin<BudgetItem>;
+
+    public async getStrippedBudgetItems(options?: BelongsToManyGetAssociationsMixinOptions): Promise<Array<string>> {
+        const budgetItems = await this.getBudgetItems({
+            attributes: ['id'],
+            ...options
+        });
+        return budgetItems.map(budgetItem => budgetItem.id);
+    }
+
+    public budgetItemIds?: Array<string>;
+
+    @AfterFind
+    static async stripBudgetItems(findResult: Array<Receipt> | Receipt) {
+        if (!Array.isArray(findResult)) {
+            findResult = [findResult];
+        }
+
+        for (const receipt of findResult) {
+            // @ts-ignore
+            receipt.dataValues.budgetItemIds = await receipt.getStrippedBudgetItems();
+        }
+    }
 }

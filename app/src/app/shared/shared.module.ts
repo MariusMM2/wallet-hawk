@@ -27,6 +27,11 @@ import {ExpensePipe} from './pipes/expense.pipe';
 import {IncomePipe} from './pipes/income.pipe';
 import {SortPipe} from './pipes/sort.pipe';
 import {ConfirmationModalComponent} from './components/confirmation-modal/confirmation-modal.component';
+import {ImageCardItemComponent} from './components/image-card-item/image-card-item.component';
+import {ItemListComponent} from './components/image-card-list/item-list.component';
+import {GenericHeaderComponent} from './components/text-header/generic-header.component';
+import {FilterByPipe} from './pipes/filter-by.pipe';
+import {PercentagePipe} from './pipes/percentage.pipe';
 
 Chart.register(...registerables);
 
@@ -54,9 +59,14 @@ Chart.register(...registerables);
         DivideByMonthPipe,
         LabelArrayPipe,
         SortPipe,
+        FilterByPipe,
+        PercentagePipe,
         LineChartComponent,
         PieChartComponent,
-        ConfirmationModalComponent
+        ConfirmationModalComponent,
+        ImageCardItemComponent,
+        ItemListComponent,
+        GenericHeaderComponent
     ],
     imports: [
         CommonModule,
@@ -84,9 +94,14 @@ Chart.register(...registerables);
         DivideByMonthPipe,
         LabelArrayPipe,
         SortPipe,
+        FilterByPipe,
+        PercentagePipe,
         LineChartComponent,
         PieChartComponent,
-        ConfirmationModalComponent
+        ConfirmationModalComponent,
+        ImageCardItemComponent,
+        ItemListComponent,
+        GenericHeaderComponent
     ],
     providers: [
         DataPointsPipe,

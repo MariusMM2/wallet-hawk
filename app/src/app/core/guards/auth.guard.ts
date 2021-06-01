@@ -17,11 +17,6 @@ export class AuthGuard implements CanActivate {
     async canActivate(): Promise<boolean | UrlTree> {
         const authenticated = await this.authService.isLoggedIn();
 
-        if (!authenticated) {
-            console.log('authGuard denied');
-            return this.routerService.loginUrl;
-        }
-        console.log('authGuard approved');
-        return true;
+        return authenticated || this.routerService.loginUrl;
     }
 }

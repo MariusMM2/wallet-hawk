@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {isLoginForm, LoginForm} from './types/loginForm';
 import {RegisterForm} from './types/registerForm';
-import {AuthActions} from '../core/actions/auth.actions';
-import {ObservableStore} from '../shared/utilities/redux.utils';
-import {CoreState} from '../core/core.store';
+import {AuthActionsService} from '../core/services/auth-actions.service';
+import {StoreService} from '../core/services/store.service';
 import {Observable} from 'rxjs';
 import {AuthService} from '../core/services/auth.service';
 
@@ -20,12 +19,12 @@ export class AuthenticateComponent implements OnInit {
 
     submitErrors$: Observable<Array<String>>;
 
-    isLoading: boolean = false;
+    isLoading = false;
 
     constructor(
-        private actions: AuthActions,
+        private actions: AuthActionsService,
         private service: AuthService,
-        private store: ObservableStore<CoreState>) {
+        private store: StoreService) {
     }
 
     ngOnInit(): void {
@@ -38,7 +37,6 @@ export class AuthenticateComponent implements OnInit {
         }
 
         this.isLoading = true;
-        console.log(authForm);
         if (isLoginForm(authForm)) {
             await this.actions.attemptLogin(authForm);
         } else {

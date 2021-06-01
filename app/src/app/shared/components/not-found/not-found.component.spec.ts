@@ -2,6 +2,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NotFoundComponent} from './not-found.component';
 import {RouterModule} from '@angular/router';
+import {HttpClientModule} from '@angular/common/http';
+import {routes} from '../../../app-routing.module';
 
 describe('NotFoundComponent', () => {
     let component: NotFoundComponent;
@@ -9,11 +11,12 @@ describe('NotFoundComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [
-                RouterModule.forRoot([])
-            ],
             declarations: [
                 NotFoundComponent
+            ],
+            imports: [
+                RouterModule.forRoot(routes),
+                HttpClientModule
             ]
         })
             .compileComponents();

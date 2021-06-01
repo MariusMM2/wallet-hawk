@@ -1,6 +1,6 @@
 import {Request} from 'express';
 import {UserSession} from './userSession';
-import {ReceiptDAO, UserDAO} from '../database';
+import {BudgetItemDAO, CreatorDAO, GalleryDAO, ReceiptDAO, UserDAO} from '../database';
 
 export interface RequestSession extends Request {
     session: UserSession;
@@ -12,4 +12,13 @@ export interface RequestCreator extends Request {
     receipt?: ReceiptDAO;
 }
 
-export type CreatorDAO = UserDAO | ReceiptDAO;
+export interface RequestGallery extends Request {
+    gallery?: GalleryDAO;
+}
+
+export interface RequestBudgetItem extends Request {
+    budgetItem?: BudgetItemDAO,
+}
+
+export interface FullRequest extends RequestCreator, RequestGallery, RequestBudgetItem {
+}

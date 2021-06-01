@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem} from '../../core/models';
 
 /**
  * Angular Pipe that filters only budget items with a positive amount.

@@ -1,6 +1,6 @@
 <form class="container-fluid justify-content-center align-items-center" [formGroup]="budgetItemForm"
       (ngSubmit)="onSubmit($event)">
-  <div class="" mat-dialog-content>
+  <div mat-dialog-content>
     <h1 class="row" mat-dialog-title>Budget Item</h1>
     <div class="row">
       <mat-form-field class="w-100" appearance="outline" color="accent">
@@ -45,7 +45,7 @@
       <div class="col pr-0">
         <mat-form-field appearance="outline" color="accent">
           <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date" required disabled>
+          <input matInput [matDatepicker]="picker" formControlName="date" required>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker disabled="false"></mat-datepicker>
         </mat-form-field>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="row">
-      <app-category-picker class="w-100" [allCategories]="item.allCategories"
+      <app-category-picker class="w-100" [allCategories]="data.allCategories"
                            [(categories)]="categories"></app-category-picker>
     </div>
   </div>

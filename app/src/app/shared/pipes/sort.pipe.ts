@@ -5,7 +5,10 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class SortPipe implements PipeTransform {
 
-    transform<T>(list: Array<T>, sortField: string, desc: boolean = true): Array<T> {
+    transform<T>(list: Array<T> | null, sortField: string, desc: boolean = true): Array<T> | null {
+        if (!list) {
+            return null;
+        }
         return list.slice().sort((a, b) => {
             const aElement = a[sortField];
             const bElement = b[sortField];

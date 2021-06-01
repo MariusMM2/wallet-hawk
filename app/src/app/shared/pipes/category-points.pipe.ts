@@ -1,7 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem, Category} from '../../core/models';
 import ChartUtils from '../utilities/chart.utils';
-import {Category} from '../../core/models/category';
 
 /**
  * Angular Pipe that wraps ChartUtil's getCategoryPointsForBudgetItems.

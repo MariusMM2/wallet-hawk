@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {BudgetItem} from '../../core/models/budgetItem';
+import {BudgetItem} from '../../core/models';
 import {Dataset} from '../utilities/chart.utils';
 import {OfMonthPipe} from './of-month.pipe';
 import {DataPointsPipe} from './data-points.pipe';
