@@ -9,8 +9,8 @@ import {TesseractService} from '../../services/tesseract.service';
 import {TesseractMessage} from '../../types/tesseractMessage';
 import {ConfirmationModalComponent} from '../../../shared/components/confirmation-modal/confirmation-modal.component';
 import {BudgetItemModalComponent} from '../../../dashboard/components/budget-item-add-modal/budget-item-modal.component';
-import uuid from 'uuid';
 import {Subscription} from 'rxjs';
+import uuid from 'uuid';
 
 @Component({
     templateUrl: './receipt-modal.component.html',
@@ -43,7 +43,10 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.receiptForm = this.formBuilder.group({
             description: [''],
-            date: [{value: new Date(), disabled: true}, Validators.required]
+            // do not add disabled: true here, it will break the form submission as the date will not show up
+            date: [new Date(),
+                Validators.required
+            ]
         });
 
         this.budgetItems = [];
@@ -76,19 +79,21 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
             } as DialogBudgetItemData
         });
 
-        const updatedBudgetItem = await dialogRef.afterClosed().toPromise();
+        const resultBudgetItem = await dialogRef.afterClosed().toPromise();
 
-        if (!updatedBudgetItem) {
+        if (!resultBudgetItem) {
             return;
         }
 
         if (this.budgetItems.includes(budgetItem)) {
+            // an existing item was edited
             this.budgetItems = this.budgetItems.map(budgetItem => {
-                return budgetItem.id === updatedBudgetItem.id ? updatedBudgetItem : budgetItem;
+                return budgetItem.id === resultBudgetItem.id ? resultBudgetItem : budgetItem;
             });
         } else {
-            updatedBudgetItem.id = uuid.v4();
-            this.budgetItems = [...this.budgetItems, updatedBudgetItem];
+            // a new item was created
+            resultBudgetItem.id = uuid.v4();
+            this.budgetItems = [...this.budgetItems, resultBudgetItem];
         }
     }
 
@@ -120,15 +125,17 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
 
             receipt.description = receipt.description.trim();
 
-            console.log(receipt);
-
             receipt.budgetItems = [...this.budgetItems];
             receipt.budgetItems = this.budgetItems.map(budgetItem => {
-                return {
+                const newBudgetItem = {
                     ...budgetItem,
                     categoryList: undefined,
                     categoryIds: budgetItem.categoryIds ?? budgetItem.categoryList.map(category => category.id),
+                    id: undefined
                 };
+
+                delete newBudgetItem.id;
+                return newBudgetItem;
             });
 
             receipt.image = this.selectedImage;
@@ -179,8 +186,8 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
 
         this.budgetItems = budgetItems.map(budgetItem => {
             return {
-                date: this.receiptForm.get('date').value,
                 id: uuid.v4(),
+                date: this.receiptForm.get('date').value,
                 categoryList: [],
                 quantity: 1,
                 ...budgetItem

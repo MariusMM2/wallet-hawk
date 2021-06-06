@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {BudgetItem} from '../../../core/models';
 
 @Component({
@@ -7,13 +7,21 @@ import {BudgetItem} from '../../../core/models';
     styleUrls: ['./budget-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BudgetItemComponent {
+export class BudgetItemComponent implements OnChanges {
 
     @Input() item: Partial<BudgetItem>;
     @Input() readOnly: boolean = false;
 
     @Output() edit = new EventEmitter<void>();
     @Output() delete = new EventEmitter<void>();
+
+    ngOnChanges(changes: SimpleChanges) {
+        const newItem: Partial<BudgetItem> = changes['item']?.currentValue;
+
+        if (newItem?.creatorType === 'receipt') {
+            this.readOnly = true;
+        }
+    }
 
     onEdit() {
         this.edit.emit();

@@ -57,15 +57,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
         this.receiptBudgetItems = null;
     }
 
-    onReceiptSelect(receipt: Receipt): void {
-        this.selectedReceipt = receipt;
-
-        const receiptBudgetItemIds = receipt.budgetItemIds;
-        this.receiptBudgetItems = this.store.getState(state => state.data.budgetItemList).filter(budgetItem => {
-            return receiptBudgetItemIds.includes(budgetItem.id);
-        });
-    }
-
     addGallery() {
         this.dialog.open(GalleryModalComponent, {
             width: '400px',
@@ -99,6 +90,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
         }
     }
 
+    onReceiptSelect(receipt: Receipt): void {
+        this.selectedReceipt = receipt;
+
+        const receiptBudgetItemIds = receipt.budgetItemIds;
+        this.receiptBudgetItems = this.store.getState(state => state.data.budgetItemList).filter(budgetItem => {
+            return receiptBudgetItemIds.includes(budgetItem.id);
+        });
+    }
+
     addReceipt() {
         this.dialog.open(ReceiptModalComponent, {
             disableClose: true,
@@ -107,22 +107,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
                 galleryId: this.selectedGallery?.id
             }
         });
-    }
-
-    async onReceiptDelete(receipt: Receipt) {
-        const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-            autoFocus: true,
-            data: {
-                title: 'Deleting Receipt',
-                message: `Are you sure you want to delete '${receipt.date ?? 'No date'}', and its associated budget items?`,
-            }
-        });
-
-        const confirmed = await dialogRef.afterClosed().toPromise();
-
-        if (confirmed) {
-            await this.actions.deleteReceipt(receipt);
-        }
     }
 
     trackItems(_index: number, item: Gallery) {

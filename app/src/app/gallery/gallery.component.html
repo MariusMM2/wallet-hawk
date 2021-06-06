@@ -22,8 +22,7 @@
           [description]="receipt.description"
           [selected]="selectedReceipt?.id === receipt.id"
           readOnly="true"
-          (click)="onReceiptSelect(receipt)"
-          (delete)="onReceiptDelete(receipt)">
+          (click)="onReceiptSelect(receipt)">
           <img src="assets/placeholder-image.png" alt="placeholder">
         </app-image-card-item>
       </app-item-list>

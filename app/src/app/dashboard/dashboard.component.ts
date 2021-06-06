@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {BudgetItem, Category} from '../core/models';
 import {StoreService} from '../core/services/store.service';
 import {combineLatest, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {DateUtils} from '../shared/utilities/date.utils';
 import {BudgetItemModalComponent} from './components/budget-item-add-modal/budget-item-modal.component';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogBudgetItemData} from './types/dialogData';
+import {DialogBudgetItemData, OkDialogData} from './types/dialogData';
 import {ConfirmationModalComponent} from '../shared/components/confirmation-modal/confirmation-modal.component';
 import {DataActionsService} from '../core/services/data-actions.service';
+import {OkModalComponent} from '../shared/components/ok-modal/ok-modal.component';
 
 /**
  * Angular Component that manages budget overviews.
@@ -32,19 +33,29 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const receiptBudgetItems = this.store.select(state => state.data.budgetItemList);
-        const userBudgetItems = this.store.select(state => state.data.user.budgetItemList);
+        const mapCreatorToItems = (creatorType) => {
+            return map((budgetItemList: Array<BudgetItem>) => {
+                if (!budgetItemList) {
+                    return budgetItemList;
+                }
+                return budgetItemList.map(budgetItem => {
+                    return {
+                        ...budgetItem,
+                        creatorType: creatorType
+                    } as BudgetItem;
+                });
+            });
+        };
+
+        const receiptBudgetItems = this.store.select(state => state.data.budgetItemList)
+            .pipe(mapCreatorToItems('receipt'));
+        const userBudgetItems = this.store.select(state => state.data.user.budgetItemList)
+            .pipe(mapCreatorToItems('user'));
         this.budgetItems$ = combineLatest([receiptBudgetItems, userBudgetItems])
             .pipe(
-                map(([receiptItems, userItems]) => {
-                    if (receiptItems === null || userItems === null) {
-                        return null;
-                    }
-                    return [
-                        ...(receiptItems),
-                        ...(userItems)
-                    ];
-                }));
+                filter(([receiptItems, userItems]) => !!receiptItems && !!userItems),
+                map(([receiptItems, userItems]) => [...(receiptItems), ...(userItems)])
+            );
 
         this.categories$ = this.store.select(state => state.data.categoryList);
     }
@@ -92,5 +103,14 @@ export class DashboardComponent implements OnInit {
         if (confirmed) {
             await this.actions.deleteUserBudgetItem(budgetItem.id);
         }
+    }
+
+    openEntriesInfoModal() {
+        this.dialog.open(OkModalComponent, {
+            autoFocus: true,
+            data: {
+                message: 'Budget items added automatically by receipts cannot be deleted here. If needed, visit the Gallery page and remove the corresponding receipt from there.'
+            } as OkDialogData
+        });
     }
 }

@@ -17,7 +17,6 @@ export class DataActionsService {
     }
 
     /**
-     * TODO implement
      * Initializes store with data retrieved for the current user.
      */
     async retrieveData(): Promise<void> {
@@ -79,19 +78,27 @@ export class DataActionsService {
      * Updates an existing budget item of a user, or creates a new one if it does not exist.
      * @param {BudgetItem} budgetItem
      */
-    async upsertUserBudgetItem(budgetItem: Partial<BudgetItem>): Promise<boolean> {
+    async upsertUserBudgetItem(budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
         const userId = this.getUserId();
 
         return this.upsertBudgetItem(userId, 'user', budgetItem);
     }
 
-    private async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: Partial<BudgetItem>): Promise<boolean> {
+    /**
+     * Updates an existing budget item of a receipt, or creates a new one if it does not exist.
+     * @param receiptId
+     * @param {BudgetItem} budgetItem
+     */
+    async upsertReceiptBudgetItem(receiptId: string, budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
+        return this.upsertBudgetItem(receiptId, 'receipt', budgetItem);
+    }
+
+    private async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
         let resultBudgetItem;
         try {
             resultBudgetItem = await this.service.upsertBudgetItem(creatorId, creatorType, budgetItem);
         } catch (errors) {
             console.log(errors);
-            return false;
         }
 
         const categoryList: Array<Category> = this.store.getState(state => state.data.categoryList);
@@ -107,7 +114,7 @@ export class DataActionsService {
             }
         });
 
-        return true;
+        return resultBudgetItem;
     }
 
     /**
@@ -216,7 +223,7 @@ export class DataActionsService {
         for (const budgetItem of budgetItems) {
             let resultBudgetItem;
             try {
-                resultBudgetItem = await this.upsertBudgetItem(resultReceipt.id, 'receipt', budgetItem);
+                resultBudgetItem = await this.upsertReceiptBudgetItem(resultReceipt.id, budgetItem);
             } catch (errors) {
                 console.log(errors);
                 return false;
@@ -235,17 +242,6 @@ export class DataActionsService {
             }
         });
 
-        for (const resultBudgetItem of resultBudgetItems) {
-            this.store.dispatch({
-                type: DataActions.UPSERT_BUDGET_ITEM,
-                payload: {
-                    budgetItem: resultBudgetItem,
-                    creator: 'receipt',
-                    isFresh: true
-                }
-            });
-        }
-
         return true;
     }
 
@@ -254,7 +250,7 @@ export class DataActionsService {
      * @param receiptId
      * @param {Partial<Receipt>} partialReceipt
      */
-    async updateReceipt(receiptId: string, partialReceipt: Partial<Receipt>): Promise<void> {
+    async updateReceipt(receiptId: string, partialReceipt: Partial<Receipt>): Promise<boolean> {
         const userId = this.getUserId();
 
         let resultReceipt;
@@ -262,7 +258,7 @@ export class DataActionsService {
             resultReceipt = await this.service.updateReceipt(userId, receiptId, partialReceipt);
         } catch (errors) {
             console.log(errors);
-            return;
+            return false;
         }
 
         this.store.dispatch({
@@ -272,6 +268,8 @@ export class DataActionsService {
                 isFresh: false
             }
         });
+
+        return true;
     }
 
     /**
@@ -284,9 +282,8 @@ export class DataActionsService {
         const {budgetItemIds} = receipt;
 
         for (const budgetItemId of budgetItemIds) {
-            let resultBudgetItem;
             try {
-                resultBudgetItem = await this.deleteBudgetItem(receipt.id, 'receipt', budgetItemId);
+                await this.service.deleteBudgetItem(receipt.id, 'receipt', budgetItemId);
             } catch (errors) {
                 console.log(errors);
                 return false;

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title class="d-flex align-items-center">
+  <mat-icon>info</mat-icon>
+  <span class="pl-2">
+    {{content.title || 'Info'}}
+  </span>
+</h1>
+<div mat-dialog-content>{{content.message}}</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</div>

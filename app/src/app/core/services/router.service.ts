@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {NavigationBehaviorOptions, Router, UrlTree} from '@angular/router';
+import {NavigationBehaviorOptions, NavigationEnd, Router, UrlTree} from '@angular/router';
 import {AuthActionsService} from './auth-actions.service';
 import {AuthService} from './auth.service';
+import {Observable} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
 /**
  * Angular Service that is responsible for managing
@@ -163,5 +165,12 @@ export class RouterService {
      */
     async logout(): Promise<void> {
         await this.actions.logout();
+    }
+
+    navigationEndEvents(): Observable<NavigationEnd> {
+        return this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd),
+            map(event => event as NavigationEnd)
+        );
     }
 }

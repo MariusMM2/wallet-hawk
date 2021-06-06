@@ -32,6 +32,7 @@ import {ItemListComponent} from './components/image-card-list/item-list.componen
 import {GenericHeaderComponent} from './components/text-header/generic-header.component';
 import {FilterByPipe} from './pipes/filter-by.pipe';
 import {PercentagePipe} from './pipes/percentage.pipe';
+import {OkModalComponent} from './components/ok-modal/ok-modal.component';
 
 Chart.register(...registerables);
 
@@ -64,6 +65,7 @@ Chart.register(...registerables);
         LineChartComponent,
         PieChartComponent,
         ConfirmationModalComponent,
+        OkModalComponent,
         ImageCardItemComponent,
         ItemListComponent,
         GenericHeaderComponent
@@ -99,6 +101,7 @@ Chart.register(...registerables);
         LineChartComponent,
         PieChartComponent,
         ConfirmationModalComponent,
+        OkModalComponent,
         ImageCardItemComponent,
         ItemListComponent,
         GenericHeaderComponent

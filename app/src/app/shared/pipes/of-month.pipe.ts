@@ -22,11 +22,7 @@ export class OfMonthPipe implements PipeTransform {
 
         let endDate = new Date(startDate.getTime());
         if (endDay) {
-            if (endDay === startDay) {
-                endDate.setDate(endDay + 1);
-            } else {
-                endDate.setDate(endDay);
-            }
+            endDate.setDate(endDay + 1);
         } else {
             endDate.setMonth(endDate.getMonth() + 1);
             endDate.setDate(1);

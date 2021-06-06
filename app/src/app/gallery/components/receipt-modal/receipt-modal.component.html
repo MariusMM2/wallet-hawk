@@ -10,7 +10,7 @@
 
       <mat-form-field class="w-100" appearance="outline" color="accent">
         <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" required>
+        <input matInput [matDatepicker]="picker" formControlName="date" required disabled>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker disabled="false"></mat-datepicker>
       </mat-form-field>
@@ -39,7 +39,8 @@
       </ng-template>
     </div>
 
-    <app-item-list class="col-8 col-md-6 h-100" title="Generated entries"
+    <app-item-list class="col-8 col-md-6 h-100"
+                   title="Generated entries"
                    [readOnly]="budgetItems?.length === 0"
                    (add)="openBudgetItemDialog()">
       <app-budget-item *ngFor="let budgetItem of budgetItems | sort : 'name' : false"
@@ -50,7 +51,8 @@
     </app-item-list>
   </div>
   <div class="actions d-flex align-items-center justify-content-between">
-    <button mat-button type="button" (click)="cancelDialog()">Cancel</button>
-    <app-submit-button [disabled]="receiptForm.invalid" [isSubmitting]="isLoading">Save</app-submit-button>
+    <button mat-button type="button" (click)="cancelDialog()" [disabled]="!!scanningStatus">Cancel</button>
+    <app-submit-button [disabled]="receiptForm.invalid" [isSubmitting]="isLoading || !!scanningStatus">Save
+    </app-submit-button>
   </div>
 </form>

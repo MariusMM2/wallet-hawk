@@ -33,7 +33,6 @@ export class ReceiptPreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         const descriptionFieldSubscription = this.receiptForm.get('description').valueChanges.subscribe(description => {
-            // TODO fix revert button not disabling itself after a successful save
             this.canRevert = description !== this.receipt.description;
         });
         this._subscriptions.push(descriptionFieldSubscription);

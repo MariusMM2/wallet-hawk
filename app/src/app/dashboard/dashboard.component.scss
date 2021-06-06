@@ -1,5 +1,10 @@
 @import "src/app/styles/classes";
 
+.entries-info-button {
+  z-index: 1032;
+  left: -40px;
+}
+
 app-line-chart {
   width: 90%;
 }

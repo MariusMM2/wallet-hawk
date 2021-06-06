@@ -44,10 +44,8 @@ export const routes: Routes = [
         loadChildren: () => import('./recurrence/recurrence.module').then(m => m.RecurrenceModule),
         canActivate: [AuthGuard]
     },
-    {path: 'home', redirectTo: '/home/gallery', pathMatch: 'full'},
-    // {path: 'home', redirectTo: '/home/dashboard', pathMatch: 'full'},
-    {path: '', redirectTo: '/home/gallery', pathMatch: 'full'},
-    // {path: '', redirectTo: '/home/dashboard', pathMatch: 'full'},
+    {path: 'home', redirectTo: '/home/dashboard', pathMatch: 'full'},
+    {path: '', redirectTo: '/home/dashboard', pathMatch: 'full'},
     {path: '**', component: NotFoundComponent}
 ];
 

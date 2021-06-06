@@ -87,7 +87,7 @@ export default class ChartUtils {
         const sumPerCategory = new Array<number>();
 
         for (let category of categories) {
-            const categoryItems = budgetItems.filter(budgetItem => budgetItem.categoryList.includes(category));
+            const categoryItems = budgetItems.filter(budgetItem => budgetItem.categoryList?.includes(category));
 
             const categoryTotal = categoryItems.reduce((previousTotal, currentItem) => {
                 return previousTotal + currentItem.totalPrice / 100;

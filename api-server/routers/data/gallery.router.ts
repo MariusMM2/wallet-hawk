@@ -64,7 +64,7 @@ galleryRouter.put(['/', '/:galleryId'],
         let storedGallery = req.gallery;
         try {
             if (!storedGallery) {
-                storedGallery = await user.createGallery(storedGallery);
+                storedGallery = await user.createGallery(gallery);
             } else {
                 await storedGallery.update(gallery);
             }

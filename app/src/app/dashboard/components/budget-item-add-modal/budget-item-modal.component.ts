@@ -19,12 +19,12 @@ export class BudgetItemModalComponent implements OnInit {
 
     priceTypes: Array<PriceType> = [
         {
-            value: 'income',
-            viewValue: 'Income'
-        },
-        {
             value: 'expense',
             viewValue: 'Expense'
+        },
+        {
+            value: 'income',
+            viewValue: 'Income'
         }
     ];
 
@@ -46,10 +46,11 @@ export class BudgetItemModalComponent implements OnInit {
             quantity: [item?.quantity ?? 1,
                 Validators.required
             ],
-            date: [{value: item?.date ?? new Date(), disabled: true},
+            // do not add disabled: true here, it will break the form submission as the date will not show up
+            date: [item?.date ?? new Date(),
                 Validators.required
             ],
-            priceType: [(item?.totalPrice ?? 1) > 0 ? this.priceTypes[0].value : this.priceTypes[1].value]
+            priceType: [(item?.totalPrice ?? -1) > 0 ? this.priceTypes[1].value : this.priceTypes[0].value]
         });
 
         this.categories = item?.categoryList ?? [];

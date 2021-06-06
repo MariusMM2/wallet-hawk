@@ -38,6 +38,7 @@ budgetItemRouter.put(['/', '/:budgetItemId'],
             }
 
             await storedBudgetItem.setCategories(budgetItem.categoryIds);
+            await storedBudgetItem.reload();
         } catch (error) {
             console.log(error);
             return res.sendStatus(500);

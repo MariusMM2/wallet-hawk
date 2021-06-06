@@ -20,6 +20,10 @@
                              (delete)="onBudgetItemDelete(budgetItem)"
             ></app-budget-item>
           </app-item-list>
+          <button mat-icon-button class="entries-info-button position-relative"
+                  (click)="openEntriesInfoModal()">
+            <mat-icon>info</mat-icon>
+          </button>
         </div>
       </div>
       <div class="col h-100 vertical-overflow">

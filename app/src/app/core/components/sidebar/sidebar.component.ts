@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterService} from '../../services/router.service';
 import {UrlTree} from '@angular/router';
 import {AuthActionsService} from '../../services/auth-actions.service';
@@ -11,13 +11,26 @@ import {AuthActionsService} from '../../services/auth-actions.service';
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
 
-    activeUrl: UrlTree = this.router.galleryUrl;
+    activeUrl: UrlTree = this.router.dashboardUrl;
 
     constructor(
         public router: RouterService,
         private actions: AuthActionsService) {
+    }
+
+    ngOnInit() {
+        const endpoints = this.router.routes.map(route => route.url);
+        this.router.navigationEndEvents().subscribe(navigationEndEvent => {
+            const endpointUrlTree = endpoints.find(urlTree => {
+                return urlTree.toString() === navigationEndEvent.urlAfterRedirects;
+            });
+
+            if (endpointUrlTree) {
+                this.activeUrl = endpointUrlTree;
+            }
+        });
     }
 
     async onClick(nextUrl: UrlTree) {
