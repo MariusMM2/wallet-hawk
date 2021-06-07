@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Angular CI
 
 # Controls when the action will run. 
 on:
@@ -14,12 +14,12 @@ on:
 jobs:
   angular-tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Cd into the Angular directory
-        run: cd app/
 
       - name: Use Node.js 14.0
         uses: actions/setup-node@v1
