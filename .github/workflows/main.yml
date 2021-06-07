@@ -11,30 +11,24 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  angular-tests:
     runs-on: ubuntu-latest
-    
-#     strategy:
-#       matrix:
-#         node-version: [14.0]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      - name: Cd into the Angular directory
+        run: cd app/
+
       - name: Use Node.js 14.0
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
+
       - name: Setup
         run: npm ci
-      
+
       - name: Test
         run: |
           npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
