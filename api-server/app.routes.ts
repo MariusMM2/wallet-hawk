@@ -1,11 +1,7 @@
 import Router from 'express';
-import {authRouter} from './routers/auth.router';
-import {categoryRouter} from './routers/data/category.router';
+import {authRouter, budgetItemRouter, categoryRouter, galleryRouter, receiptRouter, userRouter} from './routers';
 import {authGuard, notImplemented} from './middleware/auth';
-import {userRouter} from './routers/data/user.router';
-import {budgetItemRouter} from './routers/data/budgetItem.router';
-import {galleryRouter} from './routers/data/gallery.router';
-import {receiptRouter} from './routers/data/receipt.router';
+import {debugRouter} from './debug/debug.router';
 
 export const rootRouter = Router();
 
@@ -29,3 +25,8 @@ dataRouter.use('/user', userRouter);
 rootRouter.use('/data',
     authGuard,
     dataRouter);
+
+
+if (!process.env.PRODUCTION) {
+    rootRouter.use('/debug', debugRouter);
+}

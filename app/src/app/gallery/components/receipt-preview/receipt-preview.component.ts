@@ -29,11 +29,11 @@ export class ReceiptPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.receiptForm = this.formBuilder.group({
-            description: [this.receipt.description ?? ''],
+            description: [this.receipt?.description ?? ''],
         });
 
         const descriptionFieldSubscription = this.receiptForm.get('description').valueChanges.subscribe(description => {
-            this.canRevert = description !== this.receipt.description;
+            this.canRevert = description !== this.receipt?.description;
         });
         this._subscriptions.push(descriptionFieldSubscription);
     }
@@ -43,7 +43,6 @@ export class ReceiptPreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.receiptForm) {
             this.receiptForm.get('description').setValue(newReceipt.description);
-            // this.canRevert = description !== this.receipt.description;
         }
     }
 

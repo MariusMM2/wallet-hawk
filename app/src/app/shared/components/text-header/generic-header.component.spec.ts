@@ -1,6 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {GenericHeaderComponent} from './generic-header.component';
+import {SharedModule} from '../../shared.module';
 
 describe('GenericHeaderComponent', () => {
     let component: GenericHeaderComponent;
@@ -8,7 +9,9 @@ describe('GenericHeaderComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [GenericHeaderComponent]
+            imports: [
+                SharedModule
+            ]
         })
             .compileComponents();
     });
