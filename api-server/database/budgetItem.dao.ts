@@ -71,12 +71,6 @@ export class BudgetItem extends Model<BudgetItemAttributes, BudgetItemCreationAt
     public addCategories!: BelongsToManyAddAssociationsMixin<Category, string>;
     public setCategories!: BelongsToManySetAssociationsMixin<Category, string>;
 
-    public async updateCategories(categoryIds: Array<string>): Promise<void> {
-        await this.removeCategories(await this.getCategories());
-
-        await this.addCategories(categoryIds);
-    }
-
     public async getStrippedCategories(options?: BelongsToManyGetAssociationsMixinOptions): Promise<Array<string>> {
         return (await this.getCategories({
             attributes: {

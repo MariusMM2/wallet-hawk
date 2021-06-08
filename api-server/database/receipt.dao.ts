@@ -16,7 +16,7 @@ import {Gallery} from './gallery.dao';
 import {BudgetItem} from './budgetItem.dao';
 
 /**
- * These are all the attributes in the Gallery model.
+ * These are all the attributes in the Receipt model.
  */
 interface ReceiptAttributes {
     id: string,

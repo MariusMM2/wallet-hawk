@@ -3,7 +3,7 @@ import {BudgetItem} from './budgetItem.dao';
 import {Category} from './category.dao';
 
 /**
- * These are all the attributes in the Category model.
+ * These are all the attributes in the BudgetItemCategory model.
  */
 interface BudgetItemCategoryAttributes {
     budgetItemId: string,

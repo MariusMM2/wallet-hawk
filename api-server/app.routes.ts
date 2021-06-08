@@ -22,9 +22,7 @@ userRouter.use('/:userId/budget-item', budgetItemRouter);
 userRouter.use('/:userId/goal', notImplemented);
 dataRouter.use('/user', userRouter);
 
-rootRouter.use('/data',
-    authGuard,
-    dataRouter);
+rootRouter.use('/data', authGuard, dataRouter);
 
 
 if (!process.env.PRODUCTION) {

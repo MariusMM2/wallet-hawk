@@ -18,7 +18,6 @@ export function authGuard(req: RequestSession, res: Response, next: NextFunction
         return next();
     } else {
         // user is not signed in
-        // set HTTP status to 401 "Unauthorized"
         res.status(401).json({error: 'user is not authenticated'});
     }
 }

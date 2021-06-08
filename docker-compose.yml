@@ -46,7 +46,7 @@ services:
     networks:
       - backend
     volumes:
-      - wallet-hawk-db:/data/db
+      - wallet-hawk-db:/var/lib/mysql
 
 #  api:
 #    build:
