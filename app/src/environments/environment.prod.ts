@@ -1,5 +1,9 @@
+const API_PORT = 8000;
+
 // noinspection JSUnusedGlobalSymbols
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:3000'
+    port: 80,
+    apiPort: API_PORT,
+    apiUrl: `http://localhost:${API_PORT}`
 };

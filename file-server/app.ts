@@ -1,11 +1,12 @@
 import express from 'express';
+import {port} from './app.config';
 
 const app = express();
 
 app.get('/', (req, res) => {
-    res.send('Well done!');
+    res.sendStatus(204);
 });
 
-app.listen(3000, () => {
-    console.log('The application is listening on port hello 3000!');
+app.listen(port, () => {
+    console.log(`The application is listening on port ${port}!`);
 });
