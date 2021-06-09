@@ -23,7 +23,7 @@ import {
 } from 'sequelize-typescript';
 import {Gallery} from './gallery.dao';
 import {Goal} from './goal.dao';
-import {generateHash} from '../utils/crypto.utils';
+import {confirmHash, generateHash} from '../utils/crypto.utils';
 import {BudgetItem} from './budgetItem.dao';
 
 /**
@@ -106,6 +106,11 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
     public createBudgetItem!: HasManyCreateAssociationMixin<BudgetItem>;
     public getBudgetItems!: HasManyGetAssociationsMixin<BudgetItem>;
+
+    // noinspection JSUnusedGlobalSymbols
+    public validPassword(password: string) {
+        return confirmHash(password, this.password);
+    }
 
     @BeforeCreate
     @BeforeBulkCreate
