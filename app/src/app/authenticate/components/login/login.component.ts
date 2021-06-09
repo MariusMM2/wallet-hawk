@@ -30,12 +30,12 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.authForm = this.formBuilder.group({
-            email: ['asd1@asdf', [
+            email: ['', [
                 Validators.required,
                 Validators.maxLength(emailMaximumLength),
                 Validators.email
             ]],
-            password: ['asd1@asdf', [
+            password: ['', [
                 Validators.required,
                 Validators.minLength(passwordMinimumLength),
                 Validators.maxLength(passwordMaximumLength)

@@ -47,20 +47,20 @@ export class RegisterComponent implements OnInit {
             lastName: ['', [
                 Validators.maxLength(nameMaximumLength)
             ]],
-            email: ['asd1@asdf', [
+            email: ['', [
                 Validators.required,
                 Validators.maxLength(emailMaximumLength),
                 Validators.pattern(emailRegExp)
             ], [
                 emailAvailable // async validators must be the third parameter of a form control
             ]],
-            password: ['asd1@asdf', [
+            password: ['', [
                 Validators.required,
                 Validators.minLength(passwordMinimumLength),
                 Validators.maxLength(passwordMaximumLength),
                 Validators.pattern(passwordRegExp)
             ]],
-            confirmPassword: ['asd1@asdf', [
+            confirmPassword: ['', [
                 Validators.required
             ]]
         }, {
