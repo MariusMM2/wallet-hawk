@@ -53,4 +53,12 @@ export default class StringUtils {
 
         return formattedErrors;
     }
+
+    /**
+     * Returns the localized date (day, month, year) portion of a date object.
+     * @param date
+     */
+    static normalizeDate(date: Date | string): string {
+        return date instanceof Date ? date.toLocaleDateString() : date;
+    }
 }

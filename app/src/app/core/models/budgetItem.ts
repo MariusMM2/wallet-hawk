@@ -12,3 +12,16 @@ export interface BudgetItem {
     categoryList?: Array<Category>;
     categoryIds?: Array<string>;
 }
+
+export interface SubmissionBudgetItem {
+    id: string;
+    name: string;
+    description: string;
+    totalPrice: number;
+    quantity: number;
+    date: Date | string;
+    categoryList?: Array<Category>;
+    categoryIds?: Array<string>;
+    priceType?: string;
+    returnInsteadOfDispatch?: boolean;
+}

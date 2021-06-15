@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
-import {BudgetItem, Category, Gallery, Receipt} from '../models';
+import {BudgetItem, Category, Gallery, Receipt, SubmissionBudgetItem, SubmissionReceipt} from '../models';
 import {API_BASE} from '../../shared/constants';
 import {AuthService} from './auth.service';
 import {Creator} from '../types/creator';
@@ -67,7 +67,7 @@ export class DataService {
         return budgetItems;
     }
 
-    async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
+    async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: SubmissionBudgetItem): Promise<BudgetItem> {
         const url = `${API_BASE}/data/${creatorType}/${creatorId}/budget-item/${budgetItem.id ?? ''}`;
         let resultBudgetItem: BudgetItem = null;
         try {
@@ -112,7 +112,7 @@ export class DataService {
         }
     }
 
-    async createReceipt(userId: string, galleryId: string, receipt: Receipt): Promise<Receipt> {
+    async createReceipt(userId: string, galleryId: string, receipt: SubmissionReceipt): Promise<Receipt> {
         const url = `${API_BASE}/data/user/${userId}/gallery/${galleryId}/receipt`;
         try {
             return await this.http.post<Receipt>(url, receipt);

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {StoreService} from './store.service';
 import {DataService} from './data.service';
-import {BudgetItem, Category, Gallery, Receipt, SubmissionReceipt} from '../models';
+import {BudgetItem, Category, Gallery, Receipt, SubmissionBudgetItem, SubmissionReceipt} from '../models';
 import {ModelUtils} from '../../shared/utilities/model.utils';
 import {Creator} from '../types/creator';
 import {DataActions} from '../actions/data.actions';
 import {GalleryResponseData} from '../types/galleryResponseData';
+import StringUtils from '../../shared/utilities/string.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -78,7 +79,7 @@ export class DataActionsService {
      * Updates an existing budget item of a user, or creates a new one if it does not exist.
      * @param {BudgetItem} budgetItem
      */
-    async upsertUserBudgetItem(budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
+    async upsertUserBudgetItem(budgetItem: SubmissionBudgetItem): Promise<BudgetItem> {
         const userId = this.getUserId();
 
         return this.upsertBudgetItem(userId, 'user', budgetItem);
@@ -89,11 +90,12 @@ export class DataActionsService {
      * @param receiptId
      * @param {BudgetItem} budgetItem
      */
-    async upsertReceiptBudgetItem(receiptId: string, budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
+    async upsertReceiptBudgetItem(receiptId: string, budgetItem: SubmissionBudgetItem): Promise<BudgetItem> {
         return this.upsertBudgetItem(receiptId, 'receipt', budgetItem);
     }
 
-    private async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: Partial<BudgetItem>): Promise<BudgetItem> {
+    private async upsertBudgetItem(creatorId: string, creatorType: Creator, budgetItem: SubmissionBudgetItem): Promise<BudgetItem> {
+        budgetItem.date = StringUtils.normalizeDate(budgetItem.date);
         let resultBudgetItem;
         try {
             resultBudgetItem = await this.service.upsertBudgetItem(creatorId, creatorType, budgetItem);
@@ -211,6 +213,7 @@ export class DataActionsService {
         const {budgetItems} = receipt;
 
         delete receipt.budgetItems;
+        receipt.date = StringUtils.normalizeDate(receipt.date);
         let resultReceipt;
         try {
             resultReceipt = await this.service.createReceipt(userId, galleryId, receipt);

@@ -4,7 +4,7 @@ import {DataActionsService} from '../../../core/services/data-actions.service';
 import {StoreService} from '../../../core/services/store.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogBudgetItemData, DialogReceiptData} from '../../../dashboard/types/dialogData';
-import {BudgetItem, SubmissionReceipt} from '../../../core/models';
+import {BudgetItem, SubmissionBudgetItem, SubmissionReceipt} from '../../../core/models';
 import {TesseractService} from '../../services/tesseract.service';
 import {TesseractMessage} from '../../types/tesseractMessage';
 import {ConfirmationModalComponent} from '../../../shared/components/confirmation-modal/confirmation-modal.component';
@@ -125,18 +125,16 @@ export class ReceiptModalComponent implements OnInit, OnDestroy {
 
             receipt.description = receipt.description.trim();
 
-            receipt.budgetItems = [...this.budgetItems];
             receipt.budgetItems = this.budgetItems.map(budgetItem => {
                 const newBudgetItem = {
                     ...budgetItem,
-                    categoryList: undefined,
                     categoryIds: budgetItem.categoryIds ?? budgetItem.categoryList.map(category => category.id),
                     id: undefined
                 };
 
                 delete newBudgetItem.id;
                 return newBudgetItem;
-            });
+            }) as Array<SubmissionBudgetItem>;
 
             receipt.image = this.selectedImage;
 

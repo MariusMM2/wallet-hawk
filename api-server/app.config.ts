@@ -1,6 +1,7 @@
 export const port = process.env.PORT || 3001;
 export const appPort = process.env.APP_PORT || 4200;
 export const databasePort = process.env.DB_PORT || 3306;
+export const databaseHost = process.env.DB_HOST || 'localhost';
 export const corsWhitelist = [`http://localhost:${appPort}`, `http://localhost`];
 
 export const locale = 'da-DK';

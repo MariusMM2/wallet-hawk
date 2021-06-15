@@ -1,4 +1,4 @@
-export {BudgetItem} from './budgetItem';
+export {BudgetItem, SubmissionBudgetItem} from './budgetItem';
 export {Category} from './category';
 export {Gallery} from './gallery';
 export {Goal} from './goal';

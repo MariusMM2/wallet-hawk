@@ -19,8 +19,8 @@ export const categories = [
 export const users = [
     {
         id: '9b1829c8-0f09-4867-b47e-43d39855ba9b',
-        email: 'asd1@asdf',
-        password: 'asd1@asdf'
+        email: 'dummy@email.com',
+        password: 'dummy1@asdf'
     }
 ];
 
@@ -59,6 +59,6 @@ export const receipts = [
         description: 'tomorrday'
     },
     {
-        description: 'yeetday'
+        description: 'Monday'
     }
 ];

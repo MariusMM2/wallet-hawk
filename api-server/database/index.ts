@@ -1,5 +1,5 @@
 import {Sequelize} from 'sequelize-typescript';
-import {databasePort} from '../app.config';
+import {databaseHost, databasePort} from '../app.config';
 
 import {User} from './user.dao';
 import {Goal} from './goal.dao';
@@ -9,7 +9,7 @@ import {BudgetItem} from './budgetItem.dao';
 import {Category} from './category.dao';
 import {BudgetItemCategory} from './budgetItemCategory.bridge';
 
-const sequelize = new Sequelize(`mysql://user:password@database:${databasePort}/wallet-hawk`, {
+const sequelize = new Sequelize(`mysql://user:password@${databaseHost}:${databasePort}/wallet-hawk`, {
     define: {
         freezeTableName: true,
         timestamps: false

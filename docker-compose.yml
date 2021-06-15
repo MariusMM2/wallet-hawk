@@ -18,6 +18,7 @@ services:
       - PORT=8000
       - APP_PORT=80
       - DB_PORT=3306
+      - DB_HOST=database
     networks:
       - backend-api
       - backend
@@ -47,7 +48,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=password
     ports:
-      - "3306"
+      - "3306:3306"
     networks:
       - backend
     volumes:

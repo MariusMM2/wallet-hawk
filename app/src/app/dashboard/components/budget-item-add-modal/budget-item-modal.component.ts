@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {DialogBudgetItemData} from '../../types/dialogData';
 import {StoreService} from '../../../core/services/store.service';
-import {Category} from '../../../core/models';
+import {Category, SubmissionBudgetItem} from '../../../core/models';
 import {DataActionsService} from '../../../core/services/data-actions.service';
 
 @Component({
@@ -68,7 +68,7 @@ export class BudgetItemModalComponent implements OnInit {
 
         this.isLoading = true;
         if (this.budgetItemForm.valid) {
-            const budgetItem = {...this.data.budgetItem, ...this.budgetItemForm.value};
+            const budgetItem: SubmissionBudgetItem = {...this.data.budgetItem, ...this.budgetItemForm.value};
 
             budgetItem.name = budgetItem.name.trim();
             budgetItem.description = budgetItem.description.trim();

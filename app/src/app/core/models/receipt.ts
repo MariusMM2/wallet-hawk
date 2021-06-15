@@ -1,4 +1,4 @@
-import {BudgetItem} from './budgetItem';
+import {SubmissionBudgetItem} from './budgetItem';
 
 export interface Receipt {
     id: string;
@@ -9,8 +9,12 @@ export interface Receipt {
     budgetItemIds: string[];
 }
 
-export interface SubmissionReceipt extends Receipt {
+export interface SubmissionReceipt {
     id: string | null;
+    galleryId: string;
+    description: string;
+    date: Date | string;
     image: File;
-    budgetItems: Array<Partial<BudgetItem>>;
+    budgetItemIds: string[];
+    budgetItems: Array<SubmissionBudgetItem>;
 }
