@@ -7,7 +7,7 @@ export const debugRouter = Router();
 
 debugRouter.post('/empty-database',
     async (_req, res) => {
-        await dbInstance.sync({force: true});
+        await resetDatabase();
 
         res.sendStatus(204);
     });
@@ -15,13 +15,13 @@ debugRouter.post('/empty-database',
 debugRouter.post('/replace-with-dummy-database',
     async (_req, res) => {
         // reset the database instance
-        await dbInstance.sync({force: true});
+        await resetDatabase();
 
         // users
         const currentUser: UserDAO = (await UserDAO.bulkCreate(users))[0];
 
         // categories
-        const globalCategories: Array<CategoryDAO> = await CategoryDAO.bulkCreate(categories);
+        const globalCategories: Array<CategoryDAO> = await CategoryDAO.findAll();
 
         console.log('user');
         let transaction: Transaction = await dbInstance.transaction();
@@ -161,4 +161,9 @@ function getRandomDate(currentYear: number): Date {
     date.setMonth(Math.floor(Math.random() * 12));
     date.setDate(Math.floor(Math.random() * 31) + 1);
     return date;
+}
+
+async function resetDatabase() {
+    await dbInstance.sync({force: true});
+    await CategoryDAO.bulkCreate(categories);
 }
